@@ -5,10 +5,17 @@
   "description": "This extension demonstrates a 'browser action' with kittens.",
   "version": "1.0",
   "background": { "scripts": ["background.js"] },
+  "content_scripts": [ 
+	{
+		"matches": ["http://*/*", "https://*/*"],
+		"js": ["jquery.js", "control.js"]
+	}
+  ],
   "browser_action": {
     "default_icon": "icon.png"
   },
   "permissions": [
     "https://secure.flickr.com/"
-  ]
+  ],
+  "web_accessible_resources": ["jquery-1.10.2.min.map"]
 }
