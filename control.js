@@ -1,3 +1,5 @@
+var map_is_on = false;
+
 function isScrolledIntoView(elem)
 {
 	var docViewTop = $(window).scrollTop();
@@ -11,25 +13,37 @@ function isScrolledIntoView(elem)
 }
 
 var speakToMe = function() {
-	var n = 1;
-	$('a').each(function(){
-		if (isScrolledIntoView(this)){
-			var id = n;
-			var a = $(this).offset();
-			$('body').append('<span class="numTag" id="' + id + '" style="background:white; position:absolute; z-index:999;">' + id + '</span>');
-			$('#'+id).css({left: a.left, top: a.top});
-			n++;
-		}
+
+	chrome.runtime.sendMessage({greeting: "hello"}, function(response) {
+	console.log(response.farewell);
 	});
+
+	// if (!map_is_on){
+		// var n = 1;
+		// $('a').each(function(){
+			// if (isScrolledIntoView(this) /*&& isn't hidden slash is visible*/){
+				// var id = n;
+				// var a = $(this).offset();
+				// var destination = $(this).attr('href');
+				// $('body').append('<span class="numTag" id="' + id + '" style="background:white; position:absolute; z-index:999;">' + id + '</span>');
+				// $('#'+id).css({left: a.left, top: a.top});
+				// $('#'+id).click(function(){
+					// window.location.href = destination;
+				// });					
+				// n++;
+			// }
+		// });
+		// map_is_on = true;
+	// }
+	// else {
+		// $('.numTag').remove();
+		// map_is_on = false;
+	// }
 };
-/*
-append a buttom to the DOM--
-when clicked, activate map.
-*/
 /*
 if that works, messaging is next. background.js picks up the messages and
 distributes them. try to establish communication between background.js
-and the content script.
+and the content script. this is the hardest part.
 */
 /*once that works, try detecting what page we're on.
 background.js needs to be in some sort of continuous event loop,
