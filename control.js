@@ -40,6 +40,11 @@ var speakToMe = function() {
 		// map_is_on = false;
 	// }
 };
+
+chrome.runtime.onMessage.addListener(
+  function(request, sender, sendResponse) {
+	console.log(request);
+  });
 /*
 if that works, messaging is next. background.js picks up the messages and
 distributes them. try to establish communication between background.js

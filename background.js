@@ -9,32 +9,36 @@ chrome.browserAction.onClicked.addListener(function() {
    },
    function(window) {
    });
+   //after creating the window, use chrome.windows.update ({focus:true")
+   //(or something like that) to go back to main window
+   //apparently we can still take mic input with the window in the background
 });
 
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
-	
 	if(sender.tab){
 		console.log("Sender URL: " + sender.tab.url);
 		if(sender.tab.url == "https://www.google.com/"){
 			//send message to active tab of other window.
-			var n = 1;
+			//var n = 1;
 			chrome.windows.getAll({populate:true},function(windows){
 				windows.forEach(function(window){
-					console.log(n);
-					console.log(window.id);
-					n++;
-					window.tabs.forEach(function(tab){
-						console.log(tab.url);
-						chrome.tabs.query({
+					//console.log(n);
+					//console.log(window.id);
+					//n++;
+					chrome.tabs.query({
 							active: true,
 							windowId: window.id
 						}, function( array_of_one_tab ){
 							var tab = array_of_one_tab[0];
 							var url = tab.url;
-							console.log("Active: " + url);
+							var id = tab.id;
+							console.log("Active: " + url + " Id: " + id);
+							chrome.tabs.sendMessage(id, "did you get my message, dear?");
 						});
-					});
+					// window.tabs.forEach(function(tab){
+						// console.log(tab.url);
+					// });
 				});
 			});
 		}
