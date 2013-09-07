@@ -13,19 +13,48 @@ chrome.browserAction.onClicked.addListener(function() {
 
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
-	// console.log(chrome.tabs);
-	console.log(chrome.windows.getAll());
 	
-	chrome.tabs.getAllInWindow(null, function(tabs){
-		for (var i = 0; i < tabs.length; i++) {
-			//chrome.tabs.sendRequest(tabs[i].id, { action: "xxx" });
-			console.log(tabs[i]);
+	if(sender.tab){
+		console.log("Sender URL: " + sender.tab.url);
+		if(sender.tab.url == "https://www.google.com/"){
+			//send message to active tab of other window.
+			var n = 1;
+			chrome.windows.getAll({populate:true},function(windows){
+				windows.forEach(function(window){
+					console.log(n);
+					console.log(window.id);
+					n++;
+					window.tabs.forEach(function(tab){
+						console.log(tab.url);
+						chrome.tabs.query({
+							active: true,
+							windowId: window.id
+						}, function( array_of_one_tab ){
+							var tab = array_of_one_tab[0];
+							var url = tab.url;
+							console.log("Active: " + url);
+						});
+					});
+				});
+			});
 		}
-	});
+	}
 	
-    // console.log(sender.tab ?
-                // "from a content script:" + sender.tab.url :
-                // "from the extension");
+	// chrome.tabs.getAllInWindow(null, function(tabs){
+		// for (var i = 0; i < tabs.length; i++) {
+		//	chrome.tabs.sendRequest(tabs[i].id, { action: "xxx" });
+			// console.log(tabs[i]);
+		// }
+	// });
+
     if (request.greeting == "hello")
       sendResponse({farewell: "goodbye2"});
   });
+  
+  
+  
+  
+  
+  
+  
+  
