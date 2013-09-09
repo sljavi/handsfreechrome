@@ -1,0 +1,62 @@
+-scroll up
+-scroll down
+-back
+-forward
+-map (links first, then forms...then numbers and special characters)
+	-cancel map.
+-map2 - creates tags on all elements with text inside them.
+	for use on sophisticated pages like gmail.
+-auto-turn-on voice control (when extension is active) for yes/no boxes
+-zoom in
+-zoom out
+-zoom / enhance (this would be HILARIOUS...fuzz things and wait for second command)
+-bookmarks map
+-close tab
+-exit
+-url
+-new tab
+-switch (reposition tags to allow readability)
+
+Let other people tackle making this multi-lingual.
+
+"I also added Levenshtein distance to provide better more accurate results. This works by calculating the distance between what is recognized to actual commands. If it finds a direct match it uses that if not it tries to find a command that is close to what you said."
+
+This should all be adjustable in a settings box, really.
+
+-----------
+
+url -> place focus in URL box
+
+up -> scroll up
+down -> scroll down
+
+start scrolling down
+start scrolling up
+stop
+faster
+slower
+
+page down
+page up
+
+back -> last page
+forward -> next page
+
+map -> links, forms, buttons
+map2 -> spans, imgs
+
+submit -> submits form
+next -> next form box (equivalent of pressing tab)
+
+help -> display box with all commands (this should fit on one screen, but scrollable if not)
+done -> hide help
+
+off -> deactivate voice control
+
+zoom in
+zoom out
+close tab
+exit -> close chrome
+new tab
+switch -> switches tab
+jiggle -> repositions tags to allow readability

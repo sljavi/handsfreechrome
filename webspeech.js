@@ -13,18 +13,6 @@
 			}
 		</script>
 		
-		/*
-		*
-		* You're going to have to user the browser action to set the initial
-		* speech object running...how the hell are you going to set it running
-		* again on each successive page load? FUCK. when a link is loaded, open
-		* new tab...send message to that tab to start that tab's speech object...
-		* then end current speech object. when we switch tab, same thing. we just
-		* need that initial push from the browser action. :) although, with this
-		* scheme, any manual link clicking would cancel out the chain. hmm.
-		*
-		*/
-		
 		<script type="text/javascript">
 			if ('webkitSpeechRecognition' in window) {			
 				var recognition = new webkitSpeechRecognition();
