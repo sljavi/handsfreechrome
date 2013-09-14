@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	<script type="text/javascript">
+		$(function() {
+			if ('webkitSpeechRecognition' in window) {			
+				var recognition = new webkitSpeechRecognition();
+				var result = null;
+				recognition.onresult = function(event) {
+				  if (event.results.length > 0) {
+					result = event.results[0][0].transcript;
+				  }
+				}
+			}
+			/*loop to repeatedly accept input and examine it for
+				viability and send a message to background.js */
+		});
+		/*
+		on page load, start speech recognition.
+		[system to repeatedly accept input]
+		on input:
+			send message to extension with our extension's ID
+			wait for new input
+		*/
+	</script>
+</head>
+<body>
+	<p> This is the microphone input window for the Hands Free extension for Chrome.
+		If you close it by accident, it can be reopened by clicking the HandsFree icon
+		in the corner of your screen.
+	</p>
+</body>
+</html>

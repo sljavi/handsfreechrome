@@ -1,7 +1,7 @@
 chrome.browserAction.onClicked.addListener(function() {
    chrome.windows.create(
    {
-	   'url': 'http://www.google.com',
+	   'url': 'https://handsfreechrome.com',
 	   'height': 50, 
 	   'width': 50,
 	   'left': screen.width - 100,
@@ -18,7 +18,7 @@ chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
 	if(sender.tab){
 		console.log("Sender URL: " + sender.tab.url);
-		if(sender.tab.url == "https://www.google.com/"){
+		if(sender.tab.url == "https://www.handsfreechrome.com"){
 			//send message to active tab of other window.
 			//var n = 1;
 			chrome.windows.getAll({populate:true},function(windows){

@@ -17,7 +17,7 @@ var speakToMe = function() {
 	chrome.runtime.sendMessage({greeting: "hello"}, function(response) {
 	console.log(response.farewell);
 	});
-
+	//if (command == "map") //
 	// if (!map_is_on){
 		// var n = 1;
 		// $('a').each(function(){
@@ -45,11 +45,6 @@ chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
 	console.log(request);
   });
-/*
-if that works, messaging is next. background.js picks up the messages and
-distributes them. try to establish communication between background.js
-and the content script. this is the hardest part.
-*/
 /*once that works, try detecting what page we're on.
 background.js needs to be in some sort of continuous event loop,
 picking up messages from handsfree.com window and alerting them.
@@ -65,7 +60,7 @@ publish
 */
 
 $(function() {
-	$('body').prepend('<button id="speaker">CLICK ME</button>');
+	//$('body').prepend('<button id="speaker">CLICK ME</button>');
 	
 	$('#speaker').click(function(){
 		speakToMe();
