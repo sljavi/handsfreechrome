@@ -1,20 +1,67 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 	<script type="text/javascript">
 		$(function() {
-			if ('webkitSpeechRecognition' in window) {			
-				var recognition = new webkitSpeechRecognition();
-				var result = null;
-				recognition.onresult = function(event) {
-				  if (event.results.length > 0) {
-					result = event.results[0][0].transcript;
-				  }
+			var final_transcript = '';
+			var recognizing = false;
+			var start = function() {
+				if ('webkitSpeechRecognition' in window) {
+					var recognition = new webkitSpeechRecognition();
+					recognition.continuous = true;
+					recognition.interimResults = true;
+					recognition.lang = 'en-US';
+					
+					recognition.onstart = function() {
+						recognizing = true;
+						document.getElementById('inputDisplay').innerHTML = "Started";
+					};
+					
+					recognition.onerror = function(event) {
+						if (event.error == 'no-speech') {
+						  document.getElementById('inputDisplay').innerHTML = "no-speech";
+						  start();
+						}
+						if (event.error == 'audio-capture') {
+						  document.getElementById('inputDisplay').innerHTML = "audio-capture";
+						}
+						if (event.error == 'not-allowed') {
+						  alert("not-allowed-error-thing");
+						}
+						
+						recognition.start();
+					};
+					
+					recognition.onend - function() {
+						alert("recognition ended");
+						recognizing = false;
+						return;
+					};
+					
+					recognition.onresult = function(event) {
+						var interim_transcript = '';
+						if (typeof(event.results) == 'undefined') {
+							recognition.onend = null;
+							recognition.stop();
+							alert("results were undefined");
+							return;
+						}
+						for (var i = event.resultIndex; i < event.results.length; ++i) {
+							if (event.results[i].isFinal) {
+								final_transcript += event.results[i][0].transcript;
+							} else {
+								interim_transcript += event.results[i][0].transcript;
+							  }
+						}
+						document.getElementById('inputDisplay').innerHTML = final_transcript;
+						document.getElementById('interimDisplay').innerHTML = interim_transcript;
+					}
+					
+					recognition.start();
 				}
-			}
-			/*loop to repeatedly accept input and examine it for
-				viability and send a message to background.js */
+			};
+			start();
 		});
 		/*
 		on page load, start speech recognition.
@@ -26,9 +73,14 @@
 	</script>
 </head>
 <body>
-	<p> This is the microphone input window for the Hands Free extension for Chrome.
+	<p> 
+		This is the microphone input window for the Hands Free extension for Chrome.
 		If you close it by accident, it can be reopened by clicking the HandsFree icon
 		in the corner of your screen.
 	</p>
+	<hr>
+	<span id="interimDisplay">Waiting for input</span>
+	<hr>
+	<span id="inputDisplay">Waiting for input</span>
 </body>
 </html>
