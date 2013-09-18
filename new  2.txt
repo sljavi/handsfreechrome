@@ -1,0 +1,63 @@
+//for inputting text to forms
+			var dictation_mode = false;
+			//for addressing the computer suddenly without pausing after
+			//any prior speech...won't work as well as "slow" mode.
+			var quick_mode = false;
+			
+			//this will need to be more complex to support other languages
+			var valid_commands = ["map", "up", "down"];
+			for (var i = 1; i <= 100; i++) {
+				valid_commands.push( i.toString() );
+			}
+
+			var matchesValidCommands = function(command) {
+				for (var i = 0; i < valid_commands.length; i++) {
+					if (command == valid_commands[i]) {
+						return true;
+					}
+				}
+				return false;
+			};
+			
+			//this is where the command gets sent to background.js
+			var sendCommand = function(command) {
+				chrome.runtime.sendMessage('nhaknocpionlnlfomgggoahebnjllmlm', {message: command},
+				function(response) {
+					if (!response.success) {
+						alert("failure to send message to background.js");
+						console.log("failure to send message to background.js");
+					}
+				});
+			};
+			
+			var receiveInput = function(input) {
+				if (!dictation_mode) {
+					organizedInput = input.trim().split(" ");
+					non_empty_oi = [];
+					for (var i = 0; i < organizedInput.length; i++) {
+						if ( !(organizedInput[i].trim() === "") ) {
+							non_empty_oi.push(organizedInput[i].trim());
+						}
+					}					
+					if (!quick_mode) {
+						if ( !matchesValidCommands(non_empty_oi[0]) ) {
+							return;
+						}
+						else {
+							console.log("We got a winner!" + non_empty_oi[0]);
+							sendCommand(non_empty_oi[0]);
+							return;
+						}
+					}
+					else {
+						alert("Quick mode has not been implemented.");
+						console.log("Quick mode has not been implemented.");
+						return;
+					}
+				}
+				else {
+					alert("Dictation mode has not been implemented.");
+					console.log("Quick mode has not been implemented.");
+					return;
+				}
+			};

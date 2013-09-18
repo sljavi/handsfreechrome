@@ -4,6 +4,77 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 	<script type="text/javascript">
 		$(function() {
+			//for inputting text to forms
+			var dictation_mode = false;
+			//for addressing the computer abruptly, without pausing after
+			//any prior speech...won't work as well as "slow" mode.
+			var quick_mode = false;
+			
+			//map - paints numbers next to links/buttons/forms on page
+			//number commands - select corresponding link/button/form and simulate a click event
+			//up - scroll up
+			//down - scroll down
+			//many more to come.
+			var valid_commands = ["map", "up", "down"];
+			for (var i = 1; i <= 100; i++) {
+				valid_commands.push( i.toString() );
+			}
+
+			//checks if word is a valid command--
+			//for now only one word commands are passed in
+			var matchesValidCommands = function(command) {
+				for (var i = 0; i < valid_commands.length; i++) {
+					if (command == valid_commands[i]) {
+						return true;
+					}
+				}
+				return false;
+			};
+			
+			//sends spoken command to extension's background script, which sends it to
+			//the active tab, where it is executed by an injected control script.
+			var sendCommand = function(command) {
+				chrome.runtime.sendMessage('nhaknocpionlnlfomgggoahebnjllmlm', {message: command},
+				function(response) {
+					if (!response.success) {
+						alert("failure to send message to background.js");
+						console.log("failure to send message to background.js");
+					}
+				});
+			};
+			
+			//handles spoken input, checking for validity and then sending it to the extension
+			var receiveInput = function(input) {
+				if (!dictation_mode) {
+					organizedInput = input.trim().split(" ");
+					non_empty_oi = [];
+					for (var i = 0; i < organizedInput.length; i++) {
+						if ( !(organizedInput[i].trim() === "") ) {
+							non_empty_oi.push(organizedInput[i].trim());
+						}
+					}					
+					if (!quick_mode) {
+						if ( !matchesValidCommands(non_empty_oi[0]) ) {
+							return;
+						}
+						else {
+							console.log("Valid command recognized: " + non_empty_oi[0]);
+							sendCommand(non_empty_oi[0]);
+							return;
+						}
+					}
+					else {
+						alert("Quick mode has not yet been implemented.");
+						console.log("Quick mode has not yet been implemented.");
+						return;
+					}
+				}
+				else {
+					alert("Dictation mode has not yet been implemented.");
+					console.log("Quick mode has not yet been implemented.");
+					return;
+				}
+			};
 			var final_transcript = '';
 			var recognizing = false;
 			var start = function() {
@@ -20,6 +91,7 @@
 					
 					recognition.onerror = function(event) {
 						if (event.error == 'no-speech') {
+						  console.log("no speech");
 						  document.getElementById('inputDisplay').innerHTML = "no-speech";
 						  start();
 						}
@@ -29,14 +101,12 @@
 						if (event.error == 'not-allowed') {
 						  alert("not-allowed-error-thing");
 						}
-						
-						recognition.start();
 					};
 					
-					recognition.onend - function() {
-						alert("recognition ended");
+					recognition.onend = function() {
+						console.log("recognition ended");
 						recognizing = false;
-						return;
+						start();
 					};
 					
 					recognition.onresult = function(event) {
@@ -50,6 +120,7 @@
 						for (var i = event.resultIndex; i < event.results.length; ++i) {
 							if (event.results[i].isFinal) {
 								final_transcript += event.results[i][0].transcript;
+								receiveInput(event.results[i][0].transcript);
 							} else {
 								interim_transcript += event.results[i][0].transcript;
 							  }
@@ -63,13 +134,6 @@
 			};
 			start();
 		});
-		/*
-		on page load, start speech recognition.
-		[system to repeatedly accept input]
-		on input:
-			send message to extension with our extension's ID
-			wait for new input
-		*/
 	</script>
 </head>
 <body>

@@ -13,6 +13,7 @@ if in control mode:
 				process(command);
 				discard the rest
 			else, discard
-
+if in dictation mode:
+	process_for_dictation(string);
 
 */
