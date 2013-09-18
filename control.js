@@ -1,7 +1,6 @@
 var map_is_on = false;
 
-function isScrolledIntoView(elem)
-{
+function isScrolledIntoView(elem) {
 	var docViewTop = $(window).scrollTop();
 	var docViewBottom = docViewTop + $(window).height();
 
@@ -10,6 +9,11 @@ function isScrolledIntoView(elem)
 
 	return ((elemBottom >= docViewTop) && (elemTop <= docViewBottom)
 	  && (elemBottom <= docViewBottom) &&  (elemTop >= docViewTop) );
+}
+
+function clearMapTags() {
+	$('.numTag').remove();
+	map_is_on = false;
 }
 
 var speakToMe = function(command) {
@@ -29,19 +33,49 @@ var speakToMe = function(command) {
 					$('#'+id).css({left: a.left, top: a.top});
 					$('#'+id).click(function(){
 						window.location.href = destination;
-					});					
+					});
 					n++;
 				}
 			});
 			map_is_on = true;
 		}
 		else {
-			$('.numTag').remove();
-			map_is_on = false;
+			clearMapTags();
 		}
 	}
+	if (command == "down") {
+		clearMapTags();
+		console.log("scrollin'");
+		window.scrollBy(0,200);
+	}
+	if (command == "up") {
+		clearMapTags();
+		console.log("scrollin' up");
+		window.scrollBy(0,-200);
+	}
+	if (command == "fall") {
+		clearMapTags();
+		console.log("falling");
+		window.scrollBy(0, window.innerHeight);
+	}
+	if (command == "rise" || command == "frys") {
+		clearMapTags();
+		console.log("rising");
+		window.scrollBy(0, -window.innerHeight);
+	}
+	if (command == "back") {
+		window.history.back();
+	}
+	if (command == "top") {
+		clearMapTags();
+		window.scrollTo(0, 0);
+	}
+	if (command == "bottom") {
+		clearMapTags();
+		window.scrollTo(0, document.body.scrollHeight);
+	}
 	else {
-		//select link corresponding to number
+		$('#'+command).trigger("click");
 	}
 };
 
@@ -50,24 +84,3 @@ chrome.runtime.onMessage.addListener(
 	console.log(request);
 	speakToMe(request);
   });
-/*once that works, try detecting what page we're on.
-background.js needs to be in some sort of continuous event loop,
-picking up messages from handsfree.com window and alerting them.
-*/
-/*
-write handsfree.com
-*/
-/*
-debug and polish
-*/
-/*
-publish
-*/
-
-$(function() {
-	//$('body').prepend('<button id="speaker">CLICK ME</button>');
-	
-	$('#speaker').click(function(){
-		speakToMe();
-	});
-});
