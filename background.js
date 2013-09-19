@@ -4,7 +4,7 @@ chrome.browserAction.onClicked.addListener(function() {
 	   'url': 'https://handsfreechrome.com/input.html',
 	   'height': 50, 
 	   'width': 50,
-	   'left': screen.width - 100,
+	   'left': screen.width - 400,
 	   'top': -10
    },
    function(window) {

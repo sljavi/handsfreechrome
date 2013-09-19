@@ -17,8 +17,21 @@
 			//rise - page up
 			//fall - page down
 			//many more to come
-			var valid_commands = ["map", "up", "down", "rise", "frys", "fall", "back", "top", "bottom"];
-			for (var i = 1; i <= 100; i++) {
+			var valid_commands = [
+				"map",
+				"up",
+				"down",
+				"rise",
+				"frys", /*misheard word for "rise"*/
+				"rice", /*misheard word for "rise"*/
+				"fall",
+				"song", /*misheard word for "fall"*/
+				"back",
+				"forward",
+				"top",
+				"bottom"
+			];
+			for (var i = 1; i <= 220; i++) {
 				valid_commands.push( i.toString() );
 			}
 
@@ -72,6 +85,13 @@
 					}
 				}
 				else {
+					/*
+					Take input until the word "finish" is found
+					send all input to background js
+					
+					When "finish" is found, end dictation mode,
+					send "finish" to background js as independent message
+					*/
 					alert("Dictation mode has not yet been implemented.");
 					console.log("Quick mode has not yet been implemented.");
 					return;
