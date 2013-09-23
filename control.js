@@ -1,5 +1,7 @@
 $(function() {
 	var map_is_on = false;
+	var zoomLevel = parseFloat(document.body.style.zoom);
+	var bladeRunnerMode = false;
 
 	function isScrolledIntoView(elem) {
 		var docViewTop = $(window).scrollTop();
@@ -22,6 +24,9 @@ $(function() {
 		// chrome.runtime.sendMessage({greeting: "hello"}, function(response) {
 		// console.log(response.farewell);
 		// });
+		if (window.location.origin = 'https://handsfreechrome.com') {
+			return;
+		}
 		if (command == "map") {
 			if (!map_is_on){
 				var n = 1;
@@ -83,7 +88,6 @@ $(function() {
 		if (command == "back") {
 			window.history.back();
 		}
-		/*for some reason this isn't working*/
 		if (command == "forward") {
 			window.history.forward();
 		}
@@ -102,6 +106,21 @@ $(function() {
 				{ scrollTop: $(document).height() },
 				{ duration: 'fast', easing: 'swing'}
 			);
+		}
+		if (command == "reload" || command == "refresh") {
+			location.reload();
+		}
+		if (command == "zoom") {
+			document.body.style.zoom = zoomLevel + 0.2;
+			if (bladeRunnerMode) {
+				//blur page
+			}
+		}
+		if (command == "zoom out") {
+			document.body.style.zoom = zoomLevel - 0.2;
+		}
+		if (bladeRunnerMode && command == "enhance") {
+			//unblur page
 		}
 		else {
 			$('#'+command).trigger("click");

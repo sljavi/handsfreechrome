@@ -1,3 +1,5 @@
+var inputWindowId;
+
 chrome.browserAction.onClicked.addListener(function() {
    chrome.windows.create(
    {
@@ -8,6 +10,7 @@ chrome.browserAction.onClicked.addListener(function() {
 	   'top': -10
    },
    function(window) {
+		inputWindowId = window.id;
    });
    //after creating the window, use chrome.windows.update ({focus:true")
    //(or something like that) to go back to main window
@@ -26,13 +29,20 @@ chrome.runtime.onMessageExternal.addListener(
 	}
     if (request.message) {
 		//send it to the control script
-		console.log(request.message);
 		//var n = 1;
 		chrome.windows.getAll({populate:true},function(windows){
 				windows.forEach(function(window){
+					if (request.message == "new tab") {
+						chrome.tabs.create({ url: 'http://www.google.com', windowId: window.id });
+						return;
+					}
+					if (request.message == "close tab") {
+						chrome.tabs.remove();
+						return;
+					}
 					//console.log(n);
 					//console.log(window.id);
-					//n++;
+					//n++;					
 					chrome.tabs.query({
 							active: true,
 							windowId: window.id
@@ -91,11 +101,3 @@ chrome.runtime.onMessage.addListener(
     if (request.greeting == "hello")
       sendResponse({farewell: "goodbye2"});
   });
-  
-  
-  
-  
-  
-  
-  
-  
