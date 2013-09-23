@@ -32,6 +32,9 @@ chrome.runtime.onMessageExternal.addListener(
 		//var n = 1;
 		chrome.windows.getAll({populate:true},function(windows){
 				windows.forEach(function(window){
+					if (window.tabs[0].url == 'https://handsfreechrome.com/input.html') {
+						return;
+					}
 					if (request.message == "new tab") {
 						chrome.tabs.create({ url: 'http://www.google.com', windowId: window.id });
 						return;

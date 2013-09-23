@@ -24,7 +24,7 @@ $(function() {
 		// chrome.runtime.sendMessage({greeting: "hello"}, function(response) {
 		// console.log(response.farewell);
 		// });
-		if (window.location.origin = 'https://handsfreechrome.com') {
+		if (window.location.origin = 'https://handsfreechrome.com/input.html') {
 			return;
 		}
 		if (command == "map") {
