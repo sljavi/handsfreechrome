@@ -25,6 +25,16 @@ This should all be adjustable in a settings box, really.
 
 -----------
 
+minimize, maximize
+for picking a tab-- prepend a number in every tab title, then pick by number, just like with map
+last tab - like back in history, for tabss...same at ctrl+tab
+downloads
+history
+bookmarks
+find/search
+full screen
+screenshot
+
 url -> place focus in URL box
 
 up -> scroll up
@@ -47,6 +57,8 @@ map2 -> spans, imgs
 
 submit -> submits form
 next -> next form box (equivalent of pressing tab)
+"next" could have unexpected results if it goes to an offscreen form.
+only allow it to work for currently visible forms, require a scroll down to continue
 
 help -> display box with all commands (this should fit on one screen, but scrollable if not)
 done -> hide help

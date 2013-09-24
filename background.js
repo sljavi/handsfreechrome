@@ -1,12 +1,12 @@
-//if we need it later; not presently used
 var inputWindowId;
+var time_of_last_request = 0;
 
 chrome.browserAction.onClicked.addListener(function() {
    chrome.windows.create(
    {
 	   'url': 'https://handsfreechrome.com/input.html',
-	   'height': 50, 
-	   'width': 50,
+	   'height': 300,//50, 
+	   'width': 400,//50,
 	   'left': screen.width - 400,
 	   'top': -10
    },
@@ -20,6 +20,10 @@ chrome.browserAction.onClicked.addListener(function() {
 
 chrome.runtime.onMessageExternal.addListener(
   function(request, sender, sendResponse) {
+	if ( (new Date()).getTime() - time_of_last_request < 1000 ) {
+		return;
+	}
+	time_of_last_request = (new Date()).getTime();
 	console.log("got one");
     if (sender.url != "https://www.handsfreechrome.com/input.html"
 		&& sender.url != "https://handsfreechrome.com/input.html") {
@@ -28,12 +32,20 @@ chrome.runtime.onMessageExternal.addListener(
 		console.log(sender.url);
 		return;  // don't allow access from other pages
 	}
-	//various commented-out stuff is for later window manipulation system
+
     if (request.message) {
 		//send it to the control script
-		//var n = 1;
-		chrome.windows.getAll({populate:true},function(windows){
+		chrome.windows.getAll( {populate:true}, function(windows){
 				windows.forEach(function(window){
+					if (request.message == "quit" || request.message == "exit") {
+						chrome.windows.remove( window.id );
+						return;
+					}
+					if (request.message == "done") {
+						chrome.windows.remove( inputWindowId );
+						return;
+					}
+					//don't let any other commands reach the input window
 					if (window.tabs[0].url == 'https://handsfreechrome.com/input.html') {
 						return;
 					}
@@ -41,9 +53,27 @@ chrome.runtime.onMessageExternal.addListener(
 						chrome.tabs.create({ windowId: window.id });
 						return;
 					}
-					//console.log(n);
-					//console.log(window.id);
-					//n++;					
+					if (request.message == "switch") {
+						now = false;
+						chrome.tabs.query(
+							{windowId: window.id},
+							function( all_tabs ){
+								for (var i = 0; i < all_tabs.length; i++) {
+									if (now) {
+										chrome.tabs.update(all_tabs[i].id, {active: true});
+										break;
+									}
+									if (all_tabs[i].active) {
+										now = true;
+										if (i == all_tabs.length - 1) {
+											chrome.tabs.update(all_tabs[0].id, {active: true});
+											break;
+										}
+									}
+								}							
+							}
+						);
+					}				
 					chrome.tabs.query({
 							active: true,
 							windowId: window.id
@@ -57,10 +87,7 @@ chrome.runtime.onMessageExternal.addListener(
 							}
 							chrome.tabs.sendMessage(id, request.message);
 						});
-					// window.tabs.forEach(function(tab){
-						// console.log(tab.url);
-					// });
-				});
+				});	
 			});
 	}
   });
