@@ -1,3 +1,4 @@
+//if we need it later; not presently used
 var inputWindowId;
 
 chrome.browserAction.onClicked.addListener(function() {
@@ -27,6 +28,7 @@ chrome.runtime.onMessageExternal.addListener(
 		console.log(sender.url);
 		return;  // don't allow access from other pages
 	}
+	//various commented-out stuff is for later window manipulation system
     if (request.message) {
 		//send it to the control script
 		//var n = 1;
@@ -36,11 +38,7 @@ chrome.runtime.onMessageExternal.addListener(
 						return;
 					}
 					if (request.message == "new tab") {
-						chrome.tabs.create({ url: 'http://www.google.com', windowId: window.id });
-						return;
-					}
-					if (request.message == "close tab") {
-						chrome.tabs.remove();
+						chrome.tabs.create({ windowId: window.id });
 						return;
 					}
 					//console.log(n);
@@ -53,7 +51,10 @@ chrome.runtime.onMessageExternal.addListener(
 							var tab = array_of_one_tab[0];
 							var url = tab.url;
 							var id = tab.id;
-							console.log("Active: " + url + " Id: " + id);
+							if (request.message == "close tab") {
+								chrome.tabs.remove(id);
+								return;
+							}
 							chrome.tabs.sendMessage(id, request.message);
 						});
 					// window.tabs.forEach(function(tab){

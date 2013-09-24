@@ -1,6 +1,6 @@
 $(function() {
 	var map_is_on = false;
-	var zoomLevel = parseFloat(document.body.style.zoom);
+	var zoomLevel = 1.0; //parseFloat(document.body.style.zoom); //doesn't work //since this is in the control script, it keeps track for each page automatically and doesn't confuse them
 	var bladeRunnerMode = false;
 
 	function isScrolledIntoView(elem) {
@@ -24,7 +24,7 @@ $(function() {
 		// chrome.runtime.sendMessage({greeting: "hello"}, function(response) {
 		// console.log(response.farewell);
 		// });
-		if (window.location.origin = 'https://handsfreechrome.com/input.html') {
+		if (window.location.origin == 'https://handsfreechrome.com/input.html') {
 			return;
 		}
 		if (command == "map") {
@@ -110,17 +110,22 @@ $(function() {
 		if (command == "reload" || command == "refresh") {
 			location.reload();
 		}
-		if (command == "zoom") {
-			document.body.style.zoom = zoomLevel + 0.2;
+		if (command == "zoom in") {
 			if (bladeRunnerMode) {
-				//blur page
+				//animate page blur and zoom simultaneous
+				//maybe animate zoom anyway?
 			}
+			document.body.style.zoom = zoomLevel + 0.2;
+			zoomLevel = zoomLevel + 0.2;
 		}
 		if (command == "zoom out") {
 			document.body.style.zoom = zoomLevel - 0.2;
+			zoomLevel = zoomLevel - 0.2;
 		}
 		if (bladeRunnerMode && command == "enhance") {
 			//unblur page
+			//there should also be pan left pan right pan down pan up
+			//in bladerunner mode
 		}
 		else {
 			$('#'+command).trigger("click");
