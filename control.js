@@ -137,6 +137,7 @@ $(function() {
 		}
 		else {
 			$('#'+command).trigger("click");
+			clearMapTags();
 		}
 	};
 

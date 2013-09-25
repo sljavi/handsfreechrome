@@ -106,6 +106,7 @@ chrome.runtime.onMessageExternal.addListener(
 			return;
 		}
 		//stop "zoom in" and "zoom out" from being processed too quickly as "zoom"
+		//this can be made into a function to generalize it, when we need to, later
 		if ( request.message == "zoom" ) {
 			if ( (new Date()).getTime() - time_of_last_request < 1000 ) {
 				console.log("noticed time");
@@ -134,7 +135,7 @@ chrome.runtime.onMessageExternal.addListener(
 				zoomInOrOut = true;
 			}
 			//don't double execute commands that are sent twice by mistake
-			if ( request.message == lastRequest && (new Date()).getTime() - time_of_last_request < 1000 ) {
+			if ( request.message == lastRequest && (new Date()).getTime() - time_of_last_request < 1200 ) {
 				console.log("noticed time");
 				return;
 			}
