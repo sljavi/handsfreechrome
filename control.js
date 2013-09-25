@@ -115,7 +115,11 @@ $(function() {
 				//animate page blur and zoom simultaneous
 				//maybe animate zoom anyway?
 			}
-			document.body.style.zoom = zoomLevel + 0.2;
+			$('html, body').animate(
+				{ zoom: zoomLevel + 0.2 },
+				{ duration: 'slow', easing: 'swing' }
+			);
+			//document.body.style.zoom = zoomLevel + 0.2;
 			zoomLevel = zoomLevel + 0.2;
 		}
 		if (command == "zoom in") {
@@ -123,11 +127,19 @@ $(function() {
 				//animate page blur and zoom simultaneous
 				//maybe animate zoom anyway?
 			}
-			document.body.style.zoom = zoomLevel + 0.2;
+			$('html, body').animate(
+				{ zoom: zoomLevel + 0.2 },
+				{ duration: 'slow', easing: 'swing' }
+			);
+			//document.body.style.zoom = zoomLevel + 0.2;
 			zoomLevel = zoomLevel + 0.2;
 		}
 		if (command == "zoom out") {
-			document.body.style.zoom = zoomLevel - 0.2;
+			$('html, body').animate(
+				{ zoom: zoomLevel - 0.2 },
+				{ duration: 'slow', easing: 'swing' }
+			);
+			//document.body.style.zoom = zoomLevel - 0.2;
 			zoomLevel = zoomLevel - 0.2;
 		}
 		if (bladeRunnerMode && command == "enhance") {

@@ -39,12 +39,13 @@ function executeMessage( message ) {
 				return;
 			}
 			if (message == "full screen") {
-				if (window.state == "normal") {
+				if (window.state != "fullscreen") {
 					chrome.windows.update( window.id, { state: "fullscreen" } );
 				}
 				else if (window.state == "fullscreen") {
-					chrome.windows.update( window.id, { state: "normal" } );
+					chrome.windows.update( window.id, { state: "maximized" } );
 				}
+				return;
 			}
 			if (message == "new tab") {
 				chrome.tabs.create({ windowId: window.id });
