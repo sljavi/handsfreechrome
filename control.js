@@ -110,6 +110,14 @@ $(function() {
 		if (command == "reload" || command == "refresh") {
 			location.reload();
 		}
+		if (command == "zoom") {
+			if (bladeRunnerMode) {
+				//animate page blur and zoom simultaneous
+				//maybe animate zoom anyway?
+			}
+			document.body.style.zoom = zoomLevel + 0.2;
+			zoomLevel = zoomLevel + 0.2;
+		}
 		if (command == "zoom in") {
 			if (bladeRunnerMode) {
 				//animate page blur and zoom simultaneous
