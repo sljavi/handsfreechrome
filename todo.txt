@@ -26,6 +26,7 @@ This should all be adjustable in a settings box, really.
 -----------
 Can we clear the interim buffer the MOMENT we get it, to get rid of that delay from bad input like talking?
 split screen, create new tab if only one is open
+zoom normal
 minimize, maximize
 for picking a tab-- prepend a number in every tab title, then pick by number, just like with map
 last tab - like back in history, for tabss...same at ctrl+tab

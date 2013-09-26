@@ -136,7 +136,7 @@ chrome.runtime.onMessageExternal.addListener(
 				zoomInOrOut = true;
 			}
 			//don't double execute commands that are sent twice by mistake
-			if ( request.message == lastRequest && (new Date()).getTime() - time_of_last_request < 1200 ) {
+			if ( request.message == lastRequest && (new Date()).getTime() - time_of_last_request < 1000 ) {
 				console.log("noticed time");
 				return;
 			}

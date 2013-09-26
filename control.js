@@ -1,7 +1,10 @@
 $(function() {
 	var map_is_on = false;
 	var zoomLevel = 1.0; //parseFloat(document.body.style.zoom); //doesn't work //since this is in the control script, it keeps track for each page automatically and doesn't confuse them
-	var bladeRunnerMode = false;
+	var bladeRunnerMode = true;
+	
+	$('body').css({ '-webkit-transition': '0.3s ease-in-out' });
+	var blurred = false;
 
 	function isScrolledIntoView(elem) {
 		var docViewTop = $(window).scrollTop();
@@ -31,7 +34,7 @@ $(function() {
 			if (!map_is_on){
 				var n = 1;
 				$('a').each(function(){
-					if ( isScrolledIntoView(this) /*&& $(this).is(":visible")*/ ) {
+					if ( isScrolledIntoView(this) ) {
 						var id = n;
 						var a = $(this).offset();
 						var destination = $(this).attr('href');
@@ -44,9 +47,11 @@ $(function() {
 					}
 				});
 				map_is_on = true;
+				return;
 			}
 			else {
 				clearMapTags();
+				return;
 			}
 		}
 		if (command == "down") {
@@ -57,6 +62,7 @@ $(function() {
 				{ scrollTop: amount }, 
 				{ duration: 'slow', easing: 'swing' }
 			);
+			return;
 		}
 		if (command == "up") {
 			clearMapTags();
@@ -66,6 +72,25 @@ $(function() {
 				{ scrollTop: amount }, 
 				{ duration: 'slow', easing: 'swing' }
 			);
+			return;
+		}
+		if (command == "right") {
+			clearMapTags();
+			var amount = '+=' + 200;
+				$('html, body').animate(
+				{ scrollLeft: amount }, 
+				{ duration: 'slow', easing: 'swing' }
+			);
+			return;
+		}
+		if (command == "left") {
+			clearMapTags();
+			var amount = '-=' + 200;
+				$('html, body').animate(
+				{ scrollLeft: amount }, 
+				{ duration: 'slow', easing: 'swing' }
+			);
+			return;
 		}
 		if (command == "fall") {
 			clearMapTags();
@@ -75,6 +100,7 @@ $(function() {
 				{ scrollTop: amount }, 
 				{ duration: 'slow', easing: 'swing' }
 			);
+			return;
 		}
 		if (command == "rise" || command == "frys") {
 			clearMapTags();
@@ -84,12 +110,15 @@ $(function() {
 				{ scrollTop: amount }, 
 				{ duration: 'slow', easing: 'swing' }
 			);
+			return;
 		}
 		if (command == "back") {
 			window.history.back();
+			return;
 		}
 		if (command == "forward") {
 			window.history.forward();
+			return;
 		}
 		if (command == "top") {
 			clearMapTags();
@@ -98,6 +127,7 @@ $(function() {
 				{ scrollTop: $('html,body').offset().top },
 				{ duration: 'fast', easing: 'swing'}
 			);
+			return;
 		}
 		if (command == "bottom") {
 			clearMapTags();
@@ -106,51 +136,56 @@ $(function() {
 				{ scrollTop: $(document).height() },
 				{ duration: 'fast', easing: 'swing'}
 			);
+			return;
 		}
 		if (command == "reload" || command == "refresh") {
 			location.reload();
+			return;
 		}
 		if (command == "zoom") {
 			if (bladeRunnerMode) {
-				//animate page blur and zoom simultaneous
-				//maybe animate zoom anyway?
+				$('body').css({ '-webkit-filter': 'blur(5px)' });
 			}
 			$('html, body').animate(
 				{ zoom: zoomLevel + 0.2 },
-				{ duration: 'slow', easing: 'swing' }
+				{ duration: 'slow', easing: 'linear' }
 			);
-			//document.body.style.zoom = zoomLevel + 0.2;
 			zoomLevel = zoomLevel + 0.2;
+			return;
 		}
 		if (command == "zoom in") {
 			if (bladeRunnerMode) {
-				//animate page blur and zoom simultaneous
-				//maybe animate zoom anyway?
+				$('body').css({ '-webkit-filter': 'blur(5px)' });
 			}
 			$('html, body').animate(
 				{ zoom: zoomLevel + 0.2 },
 				{ duration: 'slow', easing: 'swing' }
 			);
-			//document.body.style.zoom = zoomLevel + 0.2;
 			zoomLevel = zoomLevel + 0.2;
+			return;
 		}
 		if (command == "zoom out") {
+			if (bladeRunnerMode) {
+				$('body').css({ '-webkit-filter': 'blur(0px)' });
+			}
 			$('html, body').animate(
 				{ zoom: zoomLevel - 0.2 },
 				{ duration: 'slow', easing: 'swing' }
 			);
 			//document.body.style.zoom = zoomLevel - 0.2;
 			zoomLevel = zoomLevel - 0.2;
+			return;
 		}
 		if (bladeRunnerMode && command == "enhance") {
-			//unblur page
+			$('body').css({ '-webkit-filter': 'blur(0px)' });
 			//there should also be pan left pan right pan down pan up
 			//in bladerunner mode
+			return;
 		}
-		else {
-			$('#'+command).trigger("click");
-			clearMapTags();
-		}
+		
+		$('#'+command).trigger("click");
+		clearMapTags();
+		return;
 	};
 
 	chrome.runtime.onMessage.addListener(
