@@ -13,6 +13,7 @@
 			var valid_single_commands = [
 				"map",		//paints numbers next to anchor tags
 				"up",		//scrolls up 200 pixels
+				"op",		/*misheard word "up"*/
 				"down",		//scrolls down 200 pixels
 				"right",	//scrolls right 200 pixels
 				"left",		//scrolls left 200 pixels
@@ -28,36 +29,56 @@
 				"reload",	//refresh page
 				"refresh",	//refresh page
 				"zoom",		//zoom in
-				"enhance",	//only works in bladeRunnerMode
+				"enhance",	//only works in bladeRunnerMode; removes zoom blur
 				"switch",	//changes to the next tab in the queue
 				"exit",		//closes all Chrome windows
 				"quit",		//closes all Chrome windows
-				"done"		//close voice input window, i.e. close the Hands Free extension
+				"done",		//close help, or turn off extension
+				"faster",	//increases speed of continuous scrolling
+				"slower",	//decreases speed of continuous scrolling
+				"stop",		//stops continuous scrolling
+				"help",		//brings up help page, or hides it
+				"minimize"	//minimize all chrome windows; deactivates extension
 			];
 			
 			var valid_double_commands = [
 				"full screen",	//toggle full screen mode
 				"zoom in",		//zoom in
 				"zoom out", 	//zoom out WHOA WAIT WHAT DO YOU MEAN
+				"zoom normal",	//return to standard level of zoom
 				"new tab",		//opens a new tab
-				"close tab",	//closes current tab
+				"close tab"		//closes current tab				
 			];
 			
-			for (var i = 1; i <= 220; i++) {
+			var valid_triple_commands = [
+				"keep scrolling down",	//sets browser scrolling continuously down until the end of the page
+				"keep scrolling up",	//sets browser scrolling continuously up until the end of the page
+				"keep scrolling left",	//sets browser scrolling continuously left until the end of the page
+				"keep scrolling right",	//sets browser scrolling continuously right until the end of the page
+				"Blade Runner mode"		//toggles zoom/enhance functionality
+			];
+			
+			for (var i = 1; i <= 400; i++) {
 				valid_single_commands.push( i.toString() );
 			}
 
 			/*Checks to see if command is valid.*/
 			/*Checks against two words commands first, then against single word commands*/
-			var matchesValidCommands = function(two_commands) {
+			var matchesValidCommands = function(three_commands) {
+				for (var i = 0; i < valid_triple_commands.length; i++) {
+					if (three_commands[0] + " " + three_commands[1] + " " + three_commands[2] == valid_triple_commands[i]) {
+						console.log(three_commands[0] + " " + three_commands[1] + " " + three_commands[2]);
+						return 3;
+					}
+				}
 				for (var i = 0; i < valid_double_commands.length; i++) {
-					if (two_commands[0] + " " + two_commands[1] == valid_double_commands[i]) {
-						console.log(two_commands[0] + " " + two_commands[1]);
+					if (three_commands[0] + " " + three_commands[1] == valid_double_commands[i]) {
+						console.log(three_commands[0] + " " + three_commands[1]);
 						return 2;
 					}
 				}
 				for (var i = 0; i < valid_single_commands.length; i++) {
-					if (two_commands[0] == valid_single_commands[i]) {
+					if (three_commands[0] == valid_single_commands[i]) {
 						return 1;
 					}
 				}
@@ -87,7 +108,7 @@
 						}
 					}					
 					if (!quick_mode) {
-						var match = matchesValidCommands( [non_empty_oi[0], non_empty_oi[1]] );
+						var match = matchesValidCommands( [ non_empty_oi[0], non_empty_oi[1], non_empty_oi[2] ] );
 						if ( !match ) {
 							return;
 						}
@@ -100,6 +121,11 @@
 							if (match == 2) {
 								console.log("Valid command recognized: " + non_empty_oi[0] + " " + non_empty_oi[1]);
 								sendCommand(non_empty_oi[0] + " " + non_empty_oi[1]);
+								return;
+							}
+							if (match == 3) {
+								console.log("Valid command recognized: " + non_empty_oi[0] + " " + non_empty_oi[1] + " " + non_empty_oi[2]);
+								sendCommand(non_empty_oi[0] + " " + non_empty_oi[1] + " " + non_empty_oi[2]);
 								return;
 							}
 							else {

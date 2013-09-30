@@ -1,7 +1,9 @@
 $(function() {
 	var map_is_on = false;
-	var zoomLevel = 1.0; //parseFloat(document.body.style.zoom); //doesn't work //since this is in the control script, it keeps track for each page automatically and doesn't confuse them
-	var bladeRunnerMode = true;
+	var zoomLevel = 1.0;
+	var bladeRunnerMode = false;
+	var scrollSpeed = 800;
+	var scrollContainer = $('html, body');
 	
 	$('body').css({ '-webkit-transition': '0.3s ease-in-out' });
 	var blurred = false;
@@ -56,7 +58,6 @@ $(function() {
 		}
 		if (command == "down") {
 			clearMapTags();
-			//window.scrollBy(0,200);
 			var amount = '+=' + 200;
 			$('html, body').animate(
 				{ scrollTop: amount }, 
@@ -64,9 +65,8 @@ $(function() {
 			);
 			return;
 		}
-		if (command == "up") {
+		if (command == "up" || command == "op") {
 			clearMapTags();
-			//window.scrollBy(0,-200);
 			var amount = '-=' + 200;
 			$('html, body').animate(
 				{ scrollTop: amount }, 
@@ -94,7 +94,6 @@ $(function() {
 		}
 		if (command == "fall") {
 			clearMapTags();
-			//window.scrollBy(0, window.innerHeight);
 			var amount = '+=' + window.innerHeight;
 			$('html, body').animate(
 				{ scrollTop: amount }, 
@@ -104,7 +103,6 @@ $(function() {
 		}
 		if (command == "rise" || command == "frys") {
 			clearMapTags();
-			//window.scrollBy(0, -window.innerHeight);
 			var amount = '-=' + window.innerHeight;
 			$('html, body').animate(
 				{ scrollTop: amount }, 
@@ -122,7 +120,6 @@ $(function() {
 		}
 		if (command == "top") {
 			clearMapTags();
-			//window.scrollTo(0, 0);
 			$('html,body').animate(
 				{ scrollTop: $('html,body').offset().top },
 				{ duration: 'fast', easing: 'swing'}
@@ -131,7 +128,6 @@ $(function() {
 		}
 		if (command == "bottom") {
 			clearMapTags();
-			// window.scrollTo(0, document.body.scrollHeight);
 			$('html,body').animate(
 				{ scrollTop: $(document).height() },
 				{ duration: 'fast', easing: 'swing'}
@@ -176,13 +172,68 @@ $(function() {
 			zoomLevel = zoomLevel - 0.2;
 			return;
 		}
-		if (bladeRunnerMode && command == "enhance") {
-			$('body').css({ '-webkit-filter': 'blur(0px)' });
-			//there should also be pan left pan right pan down pan up
-			//in bladerunner mode
+		if (command == "zoom normal") {
+			if (bladeRunnerMode) {
+				$('body').css({ '-webkit-filter': 'blur(0px)' });
+			}
+			$('html, body').animate(
+				{ zoom: 1.0 },
+				{ duration: 'slow', easing: 'swing' }
+			);
+			zoomLevel = 1.0;
 			return;
 		}
+		if (bladeRunnerMode && command == "enhance") {
+			$('body').css({ '-webkit-filter': 'blur(0px)' });
+			return;
+		}
+		if (command == "Blade Runner mode") {
+			bladeRunnerMode = !bladeRunnerMode;
+		}
+		if (command == "keep scrolling down") {
+			scrollContainer.animate(
+				{scrollTop: '+=' + document.body.scrollHeight},
+				{
+					duration: 800 * document.body.scrollHeight / 50,
+					easing: 'linear'
+				}
+			);
+		}
+		if (command == "keep scrolling up") {
+			scrollContainer.animate(
+				{scrollTop: '-=' + document.body.scrollHeight},
+				{
+					duration: 800 * document.body.scrollHeight / 50,
+					easing: 'linear'
+				}
+			);
+		}
+		if (command == "keep scrolling right") {
 		
+		}
+		if (command == "keep scrolling left") {
+		
+		}
+		if (command == "faster" && scrolling) {
+			scrollContainer.stop();
+		}
+		if (command == "slower" && scrolling) {
+			scrollSpeed += 250;
+			if (scrollSpeed >= 9000) {
+				alert("IT'S OVER 9000!!!! YOU CAN'T SCROLL THAT SLOW!!");
+				scrolling = false;
+			}
+		}
+		if (command == "stop") {
+			scrollContainer.stop();
+			//use to cancel page load/reload OR to stop scrolling
+		}
+		if (command == "help") {
+		
+		}
+		if (command == "minimize") {
+		
+		}
 		$('#'+command).trigger("click");
 		clearMapTags();
 		return;

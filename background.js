@@ -1,5 +1,4 @@
 var inputWindowId;
-var lastRequest = "";
 var time_of_last_request = 0;
 var zoomInOrOut = false;
 
@@ -21,6 +20,13 @@ chrome.browserAction.onClicked.addListener(function() {
 });
 
 function executeMessage( message ) {
+	//don't double execute commands that are sent twice by mistake
+	if ( (new Date()).getTime() - time_of_last_request < 1000 ) {
+		console.log("noticed time");
+		return;
+	}
+	time_of_last_request = (new Date()).getTime();
+
 	console.log("executing: " + message);
 
 	//send it to the control script
@@ -100,21 +106,13 @@ chrome.runtime.onMessageExternal.addListener(
 			return;
 		}
 		//check that message is not empty
-		if (request.message) {
-			console.log("called " + request.message);
-		}
-		else {
+		if (!request.message) {
 			return;
 		}
+		console.log("called " + request.message);
 		//stop "zoom in" and "zoom out" from being processed too quickly as "zoom"
 		//this can be made into a function to generalize it, when we need to, later
 		if ( request.message == "zoom" ) {
-			if ( (new Date()).getTime() - time_of_last_request < 1000 ) {
-				console.log("noticed time");
-				return;
-			}
-			time_of_last_request = (new Date()).getTime();
-			waiting = true;
 			console.log("setting timeout");
 			setTimeout(function(){
 				console.log("checking...");
@@ -125,24 +123,15 @@ chrome.runtime.onMessageExternal.addListener(
 				}
 				else {
 					console.log("go ahead with zoom!");
-					lastRequest = "zoom";
 					executeMessage( request.message );
 					return;
 				}
 			}, 400);
 		}
 		else {
-			if (request.message == "zoom in" || request.message == "zoom out") {
+			if (request.message == "zoom in" || request.message == "zoom out" || request.message == "zoom normal") {
 				zoomInOrOut = true;
-			}
-			//don't double execute commands that are sent twice by mistake
-			if ( request.message == lastRequest && (new Date()).getTime() - time_of_last_request < 1000 ) {
-				console.log("noticed time");
-				return;
-			}
-			time_of_last_request = (new Date()).getTime();
-			lastRequest = request.message;		
-			
+			}			
 			//at last, execute.
 			executeMessage( request.message );
 		}
