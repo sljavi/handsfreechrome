@@ -36,9 +36,10 @@
 				"done",		//close help, or turn off extension
 				"faster",	//increases speed of continuous scrolling
 				"slower",	//decreases speed of continuous scrolling
+				"flower",	/*misheard word for "slower"*/
 				"stop",		//stops continuous scrolling
 				"help",		//brings up help page, or hides it
-				"minimize"	//minimize all chrome windows; deactivates extension
+				"minimize",	//minimize main chrome windows (should deactivate extension)
 			];
 			
 			var valid_double_commands = [
@@ -88,7 +89,7 @@
 			//sends spoken command to extension's background script, which sends it to
 			//the active tab, where it is executed by an injected control script.
 			var sendCommand = function(command) {
-				chrome.runtime.sendMessage('nhaknocpionlnlfomgggoahebnjllmlm', {message: command},
+				chrome.runtime.sendMessage('jipmejkkjeefmlpjhepkpflpdehmncea', {message: command},
 				function(response) {
 					if (!response.success) {
 						alert("failure to send message to background.js");

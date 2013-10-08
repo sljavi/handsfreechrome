@@ -53,6 +53,10 @@ function executeMessage( message ) {
 				}
 				return;
 			}
+			if (message == "minimize") {
+				chrome.windows.update( window.id, {state: "minimized" } );
+				return;
+			}
 			if (message == "new tab") {
 				chrome.tabs.create({ windowId: window.id });
 				return;
@@ -172,8 +176,8 @@ chrome.runtime.onMessage.addListener(
 		//	chrome.tabs.sendRequest(tabs[i].id, { action: "xxx" });
 			// console.log(tabs[i]);
 		// }
-	// });
+	// // });
 
-    if (request.greeting == "hello")
-      sendResponse({farewell: "goodbye2"});
-  });
+    // if (request.greeting == "hello")
+      // sendResponse({farewell: "goodbye2"});
+   });

@@ -24,6 +24,10 @@ Let other people tackle making this multi-lingual.
 This should all be adjustable in a settings box, really.
 
 -----------
+
+"scroll reading" command for auto-slow speed
+home
+
 instead of if statements, can we have a command object that we 'lookup' the command on? is that faster?
 where string command names correspond to methods of the object. YES. YES, YES, YES. way better design.
 then just call command_object[method]() or whatever the syntax is. this will be done later.
