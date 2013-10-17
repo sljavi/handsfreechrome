@@ -11,7 +11,10 @@
 			var quick_mode = false;
 			
 			var valid_single_commands = [
-				"map",		//paints numbers next to anchor tags
+				"map",		//paints numbers next to anchor tags, forms, and buttons
+				"other",	//paints numbers next to spans and images
+				"att",		/*misheard word for "8"*/
+				"sex",		/*misheard word for "6"*/
 				"up",		//scrolls up 200 pixels
 				"op",		/*misheard word "up"*/
 				"down",		//scrolls down 200 pixels
@@ -34,6 +37,7 @@
 				"exit",		//closes all Chrome windows
 				"quit",		//closes all Chrome windows
 				"done",		//close help, or turn off extension
+				"Don",		/*misheard word for "done"*/
 				"faster",	//increases speed of continuous scrolling
 				"slower",	//decreases speed of continuous scrolling
 				"flower",	/*misheard word for "slower"*/
@@ -64,7 +68,7 @@
 			}
 
 			/*Checks to see if command is valid.*/
-			/*Checks against two words commands first, then against single word commands*/
+			/*Checks against three word commands, first, then against two word commands, then against single word commands*/
 			var matchesValidCommands = function(three_commands) {
 				for (var i = 0; i < valid_triple_commands.length; i++) {
 					if (three_commands[0] + " " + three_commands[1] + " " + three_commands[2] == valid_triple_commands[i]) {
@@ -89,7 +93,7 @@
 			//sends spoken command to extension's background script, which sends it to
 			//the active tab, where it is executed by an injected control script.
 			var sendCommand = function(command) {
-				chrome.runtime.sendMessage('jipmejkkjeefmlpjhepkpflpdehmncea', {message: command},
+				chrome.runtime.sendMessage('pmefchbococjnddekdbnepkkefnaocbk', {message: command},
 				function(response) {
 					if (!response.success) {
 						alert("failure to send message to background.js");
@@ -190,7 +194,7 @@
 					
 					recognition.onresult = function(event) {
 						var interim_transcript = '';
-						if (typeof(event.results) == 'undefined') {
+						if (typeof event.results == 'undefined') {
 							recognition.onend = null;
 							recognition.stop();
 							alert("results were undefined");

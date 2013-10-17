@@ -1,6 +1,16 @@
 var inputWindowId;
 var time_of_last_request = 0;
 var zoomInOrOut = false;
+var skip = false;
+
+function contains(a, obj) {
+    for (var i = 0; i < a.length; i++) {
+        if (a[i] === obj) {
+            return true;
+        }
+    }
+    return false;
+}
 
 chrome.browserAction.onClicked.addListener(function() {
    chrome.windows.create(
@@ -36,7 +46,7 @@ function executeMessage( message ) {
 				chrome.windows.remove( window.id );
 				return;
 			}
-			if (message == "done") {
+			if (message == "done" || message == "Don") {
 				chrome.windows.remove( inputWindowId );
 				return;
 			}
@@ -114,8 +124,7 @@ chrome.runtime.onMessageExternal.addListener(
 			return;
 		}
 		console.log("called " + request.message);
-		//stop "zoom in" and "zoom out" from being processed too quickly as "zoom"
-		//this can be made into a function to generalize it, when we need to, later
+		//stop "zoom in", "zoom out", and "zoom normal" from being processed too quickly as "zoom"
 		if ( request.message == "zoom" ) {
 			console.log("setting timeout");
 			setTimeout(function(){
@@ -135,9 +144,33 @@ chrome.runtime.onMessageExternal.addListener(
 		else {
 			if (request.message == "zoom in" || request.message == "zoom out" || request.message == "zoom normal") {
 				zoomInOrOut = true;
-			}			
-			//at last, execute.
-			executeMessage( request.message );
+			}
+			var nums = ["16","17","18","19","20","30","40","50","60",
+						"70","80","90","100","120","130","140","150",
+						"160","170","180","190","200"];
+			if (contains(nums, request.message)){
+				skip = false;
+				setTimeout(function(){
+					console.log("checking..");
+					if(skip) {
+						console.log("yeah, nevermind");
+						skip = false;
+						return;
+					}
+					else {
+						console.log("Go ahead with this one!");
+						executeMessage( request.message );
+						return;
+					}
+				}, 400);
+			}
+			else {
+				if (!skip) {
+					skip = true;
+				}
+				//at last, execute.
+				executeMessage( request.message );
+			}
 		}
 	});
 
