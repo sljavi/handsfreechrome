@@ -63,28 +63,28 @@ $(function() {
 				var n = 1;
 				$('a,button,input').each(function(){
 					if ( isScrolledIntoView(this) && VISIBILITY.isVisible(this) ) {
+					
 						var id = n;
-						var a = $(this).offset();
-						var destination = $(this).attr('href');
-						//console.log(destination, n);
+						var a = $(this).offset();									
 						$('body').append('<span class="numTag" id="' + id + '" style="background:white; border: 1px solid black; font-size: 10pt; position:absolute; z-index:999;">' + id + '</span>');
 						$('#'+id).css({left: a.left - 25, top: a.top});
-						console.log(this.tagname);
+						
+						var self = this;
 						switch( this.tagName)
 						{
 						case 'A':
 							$('#'+id).click(function(){
-								window.location.href = destination;
+								setTimeout(function() { self.click(); }, 10);
 							});
 							break;
 						case 'BUTTON':
 							$('#'+id).click(function(){
-								this.click();
+								self.click();
 							});
 							break;
 						case 'INPUT':
 							$('#'+id).click(function(){
-								$(this).focus();
+								self.focus();
 							});
 							break;
 						}
