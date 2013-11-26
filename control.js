@@ -1,6 +1,7 @@
 $(function() {
 	var map_is_on = false;
 	var zoomLevel = 1.0;
+	var dictation_mode = false;
 	var bladeRunnerMode = false;
 	var scrollSpeed = 800;
 	var scrollContainer = $('html, body');
@@ -27,8 +28,8 @@ $(function() {
 	}
 	
 	function startScrolling( direction, speed ) {
-		if ( direction == "up" ) {operator = "-=";}
-		if ( direction == "down" ) {operator = "+=";}
+		if ( direction === "up" ) {operator = "-=";}
+		if ( direction === "down" ) {operator = "+=";}
 		currentDirection = direction;
 		currentSpeed = speed;
 		scrollContainer.stop();
@@ -42,14 +43,22 @@ $(function() {
 		);
 	}
 	
+	function switch_mode(turn_on) {
+		if (turn_on) {
+			dictation_mode = true;
+		} else {
+			dictation_mode = false;
+		}
+		chrome.runtime.sendMessage({greeting: dictation_mode.toString() }, function(response) {
+			console.log(response);
+		});
+	}
+	
 	var commandCenter = (function () {
 		//verifies that method exists before calling it
 		this.call = function( command ){ 
 			console.log("Page has received command: " + command);
-			// chrome.runtime.sendMessage({greeting: "hello"}, function(response) {
-			// console.log(response.farewell);
-			// });
-			if (window.location.origin == 'https://handsfreechrome.com/input.html') {
+			if (window.location.origin === 'https://handsfreechrome.com/input.html') {
 				return -1;
 			}
 			if ( typeof( this[command] ) === 'function' ) {
@@ -82,9 +91,11 @@ $(function() {
 								self.click();
 							});
 							break;
+						//needs to only switch_mode on certain types of input, not all
 						case 'INPUT':
 							$('#'+id).click(function(){
 								self.focus();
+								switch_mode(true);
 							});
 							break;
 						}
@@ -110,7 +121,7 @@ $(function() {
 						$('#'+id).css({left: offset.left - 25, top: offset.top});
 						var span = this;
 						$('#'+id).click(function(){
-							span.click();
+							setTimeout(function() { span.click(); }, 10);
 						});
 						n++;
 					}
@@ -224,9 +235,7 @@ $(function() {
 			return;
 		};
 		this.zoom_out = function() {
-			if (bladeRunnerMode) {
-				$('body').css({ '-webkit-filter': 'blur(0px)' });
-			}
+			$('body').css({ '-webkit-filter': 'blur(0px)' });
 			$('html, body').animate(
 				{ zoom: zoomLevel - 0.2 },
 				{ duration: 'slow', easing: 'swing' }
@@ -236,9 +245,7 @@ $(function() {
 			return;
 		};
 		this.zoom_normal = function() {
-			if (bladeRunnerMode) {
-				$('body').css({ '-webkit-filter': 'blur(0px)' });
-			}
+			$('body').css({ '-webkit-filter': 'blur(0px)' });
 			$('html, body').animate(
 				{ zoom: 1.0 },
 				{ duration: 'slow', easing: 'swing' }
@@ -329,11 +336,16 @@ $(function() {
 	
 	chrome.runtime.onMessage.addListener(
 		function(request, sender, sendResponse) {
-			if (commandCenter.call(request) == 0) {
-				if (request == "att") request = "8";
-				if (request == "sex") request = "6";
-				$('#'+request).trigger("click");
-				clearMapTags();
+			if (!dictation_mode) {
+				if (commandCenter.call(request) == 0) {
+					if (request === "att") request = "8";
+					if (request === "sex") request = "6";
+					$('#'+request).trigger("click");
+					clearMapTags();
+				}
+			}
+			else {
+				console.log("dictation mode is on.");
 			}
 			return;
 		});
