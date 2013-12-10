@@ -11,6 +11,17 @@ $(function() {
 	$('body').css({ '-webkit-transition': '0.3s ease-in-out' });
 	var blurred = false;
 
+	if (typeof String.prototype.startsWith !== 'function') {
+		String.prototype.startsWith = function (str){
+			return this.slice(0, str.length) === str;
+		};
+	}
+	if (typeof String.prototype.endsWith !== 'function') {
+		String.prototype.endsWith = function (str){
+			return this.slice(-str.length) === str;
+		};
+	}
+
 	function isScrolledIntoView(elem) {
 		var docViewTop = $(window).scrollTop();
 		var docViewBottom = docViewTop + $(window).height();
@@ -49,20 +60,30 @@ $(function() {
 		} else {
 			dictation_mode = false;
 		}
-		chrome.runtime.sendMessage({greeting: dictation_mode.toString() }, function(response) {
+		chrome.runtime.sendMessage({greeting: {dictModeOn : dictation_mode} }, function(response) {
 			console.log(response);
 		});
+	}
+			
+	function inform_input_page(turn_on) {
+		document.getElementById('modeSwitch').click();
 	}
 	
 	var commandCenter = (function () {
 		//verifies that method exists before calling it
-		this.call = function( command ){ 
+		this.call = function( command ){
 			console.log("Page has received command: " + command);
 			if (window.location.origin === 'https://handsfreechrome.com/input.html') {
 				return -1;
 			}
+			console.log(command);
+			if ( command.split(" ")[0] + command.split(" ")[1] === "goto" ) {
+				console.log("calling goto");
+				console.log(command.split(" ")[2]);
+				this.go_to(command.split(" ")[2]);
+			}
 			if ( typeof( this[command] ) === 'function' ) {
-				this[command]();
+					this[command]();
 				return 1;
 			}
 			return 0;
@@ -134,6 +155,25 @@ $(function() {
 				return;
 			}
 		};
+		//we're going to have to make it an added function of this extension that whenever chrome says "oops did you mean..." it auto-redirects to google or something
+		//otherwise the extension stops working completely because there's no control script because we're not on an http page
+		this.go_to = function(destination) {
+			if (destination === "undefined") {
+				console.log("skipping a fake");
+				return;
+			}
+			if ( !destination.endsWith(".com") && !destination.endsWith(".edu") && !destination.endsWith(".gov") && !destination.endsWith(".org") ) {
+				if (destination.endsWith(".") ) {
+					destination = destination.slice(0,-1);
+				}
+				destination += ".com";
+			}
+			console.log("about to go to " + destination);
+			window.location.href = "http://www." + destination;
+		};
+		this.home = function() {
+			window.location.href = "https://www.google.com";
+		}
 		this.down = function() {
 			scrollContainer.stop();
 			clearMapTags();
@@ -302,6 +342,8 @@ $(function() {
 			'call'			: call,
 			'map'			: map,
 			'other'			: other,
+			'go_to'			: go_to,
+			'home'			: home,
 			'down'			: down,
 			'up'			: up,
 			'op'			: up, //misheard word
@@ -336,17 +378,21 @@ $(function() {
 	
 	chrome.runtime.onMessage.addListener(
 		function(request, sender, sendResponse) {
-			if (!dictation_mode) {
-				if (commandCenter.call(request) == 0) {
-					if (request === "att") request = "8";
-					if (request === "sex") request = "6";
-					$('#'+request).trigger("click");
-					clearMapTags();
+			if (window.location.href === 'https://handsfreechrome.com/input.html') {
+				inform_input_page(request.dictModeOn);
+				return;
+			} else {
+				if (!dictation_mode) {
+					if (commandCenter.call(request) === 0) {
+						if (request === "att") request = "8";
+						if (request === "sex") request = "6";
+						$('#'+request).trigger("click");
+						clearMapTags();
+					}
+				} else {
+					console.log("dictation mode is on.");
 				}
+				return;
 			}
-			else {
-				console.log("dictation mode is on.");
-			}
-			return;
 		});
 });

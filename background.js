@@ -13,6 +13,17 @@ function contains(a, obj) {
     return false;
 }
 
+if (typeof String.prototype.startsWith !== 'function') {
+	String.prototype.startsWith = function (str){
+		return this.slice(0, str.length) === str;
+	};
+}
+if (typeof String.prototype.endsWith !== 'function') {
+	String.prototype.endsWith = function (str){
+		return this.slice(-str.length) === str;
+	};
+}
+
 chrome.browserAction.onClicked.addListener(function() {
    chrome.windows.create(
    {
@@ -36,8 +47,12 @@ function executeMessage( message, dictation_message ) {
 		console.log("noticed time");
 		return;
 	}
-	time_of_last_request = (new Date()).getTime();
-	
+	if ( !dictation_message && message.endsWith(".com") ) {
+		message = message.slice(0, -4);
+	}
+	if ( !dictation_message && !message.startsWith("go to") ) {
+		time_of_last_request = (new Date()).getTime();
+	}
 	if (!dictation_message) {
 		console.log("executing: " + message);
 		//send it to the control script
@@ -192,29 +207,27 @@ chrome.runtime.onMessageExternal.addListener(
 			executeMessage( request.message, true );
 		}
 	});
-
-	/*
-	this is for when a message is received from the control script.
-	we need to send a message to the input window toggling input mode.
-	*/
+	
+//toggle dictation mode on background and input scripts
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
 	if(sender.tab){
 		if(sender.tab.url !== "https://www.handsfreechrome.com"){
-			if (request.greeting === "true") {
+			if (request.greeting.dictModeOn) {
 				console.log("turning on dictation mode in the background window");
+				dictation_mode = true;
 				//send message to input window
-				chrome.windows.get({windowId: inputWindowId, populate:true},function(window){
-						chrome.tabs.query({
-								active: true,
-								windowId: window.id
-							}, function( array_of_one_tab ){
-								var tab = array_of_one_tab[0];
-								var url = tab.url;
-								var id = tab.id;
-								console.log("Active: " + url + " Id: " + id);
-								chrome.tabs.sendMessage(id, "did you get my message, dear?");
-							});
+				chrome.windows.get(inputWindowId, {populate:true},function(window){
+					chrome.tabs.query({
+							active: true,
+							windowId: window.id
+						}, function( array_of_one_tab ){
+							var tab = array_of_one_tab[0];
+							var url = tab.url;
+							var id = tab.id;
+							console.log("Active: " + url + " Id: " + id);
+							chrome.tabs.sendMessage(id, {dictModeOn : true});
+						});
 				});
 			}
 		}
