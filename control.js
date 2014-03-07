@@ -3,13 +3,27 @@ $(function() {
 	var zoomLevel = 1.0;
 	var dictation_mode = false;
 	var bladeRunnerMode = false;
+	
 	var scrollSpeed = 800;
 	var scrollContainer = $('html, body');
 	var currentDirection = null;
 	var currentSpeed = null;
 	
+	var lastMessage = null;
+	var lastTime = (new Date()).getTime();
+	var commandDelay = null;
+	
 	$('body').css({ '-webkit-transition': '0.3s ease-in-out' });
 	var blurred = false;
+
+	function contains(a, obj) {
+	    for (var i = 0; i < a.length; i++) {
+	        if (a[i] === obj) {
+	            return true;
+	        }
+	    }
+	    return false;
+	}	
 
 	if (typeof String.prototype.startsWith !== 'function') {
 		String.prototype.startsWith = function (str){
@@ -55,6 +69,7 @@ $(function() {
 	}
 	
 	function switch_mode(turn_on) {
+		console.log("mode switched");
 		if (turn_on) {
 			dictation_mode = true;
 		} else {
@@ -68,32 +83,14 @@ $(function() {
 	function inform_input_page(turn_on) {
 		document.getElementById('modeSwitch').click();
 	}
-	
-	var commandCenter = (function () {
-		//verifies that method exists before calling it
-		this.call = function( command ){
-			console.log("Page has received command: " + command);
-			if (window.location.origin === 'https://handsfreechrome.com/input.html') {
-				return -1;
-			}
-			console.log(command);
-			if ( command.split(" ")[0] + command.split(" ")[1] === "goto" ) {
-				console.log("calling goto");
-				console.log(command.split(" ")[2]);
-				this.go_to(command.split(" ")[2]);
-			}
-			if ( typeof( this[command] ) === 'function' ) {
-					this[command]();
-				return 1;
-			}
-			return 0;
-		};
-		this.map = function() {
+
+	//encapsulates all user command functionality involving DOM manipulation
+	var commandCenter = new (function () {
+		var map = function() {
 			if (!map_is_on){
 				var n = 1;
-				$('a,button,input').each(function(){
+				$('a,button,input,img').each(function(){
 					if ( isScrolledIntoView(this) && VISIBILITY.isVisible(this) ) {
-					
 						var id = n;
 						var a = $(this).offset();									
 						$('body').append('<span class="numTag" id="' + id + '" style="background:white; border: 1px solid black; font-size: 10pt; position:absolute; z-index:999;">' + id + '</span>');
@@ -103,6 +100,11 @@ $(function() {
 						switch( this.tagName)
 						{
 						case 'A':
+							$('#'+id).click(function(){
+								setTimeout(function() { self.click(); }, 10);
+							});
+							break;
+						case 'IMG':
 							$('#'+id).click(function(){
 								setTimeout(function() { self.click(); }, 10);
 							});
@@ -131,10 +133,11 @@ $(function() {
 				return;
 			}
 		};
-		this.other = function() {
+		//change to 'guide' or something
+		var other = function() {
 			if (!map_is_on){
 				var n = 1;
-				$('span,img').each(function(){
+				$('span, li').each(function(){
 					if ( isScrolledIntoView(this) && VISIBILITY.isVisible(this) ) {
 						var id = n;
 						var offset = $(this).offset();
@@ -157,7 +160,7 @@ $(function() {
 		};
 		//we're going to have to make it an added function of this extension that whenever chrome says "oops did you mean..." it auto-redirects to google or something
 		//otherwise the extension stops working completely because there's no control script because we're not on an http page
-		this.go_to = function(destination) {
+		var go_to = function(destination) {
 			if (destination === "undefined") {
 				console.log("skipping a fake");
 				return;
@@ -171,10 +174,10 @@ $(function() {
 			console.log("about to go to " + destination);
 			window.location.href = "http://www." + destination;
 		};
-		this.home = function() {
+		var home = function() {
 			window.location.href = "https://www.google.com";
 		}
-		this.down = function() {
+		var down = function() {
 			scrollContainer.stop();
 			clearMapTags();
 			var amount = '+=' + 200;
@@ -184,7 +187,7 @@ $(function() {
 			);
 			return;
 		};
-		this.up = function() {
+		var up = function() {
 			scrollContainer.stop();
 			clearMapTags();
 			var amount = '-=' + 200;
@@ -194,7 +197,7 @@ $(function() {
 			);
 			return;
 		};
-		this.right = function() {
+		var right = function() {
 			clearMapTags();
 			var amount = '+=' + 200;
 				$('html, body').animate(
@@ -203,7 +206,7 @@ $(function() {
 			);
 			return;
 		};
-		this.left = function() {
+		var left = function() {
 			clearMapTags();
 			var amount = '-=' + 200;
 				$('html, body').animate(
@@ -212,7 +215,7 @@ $(function() {
 			);
 			return;
 		};
-		this.fall = function() {
+		var fall = function() {
 			scrollContainer.stop();
 			clearMapTags();
 			var amount = '+=' + window.innerHeight;
@@ -222,7 +225,7 @@ $(function() {
 			);
 			return;
 		};
-		this.rise = function() {
+		var rise = function() {
 			scrollContainer.stop();
 			clearMapTags();
 			var amount = '-=' + window.innerHeight;
@@ -232,15 +235,17 @@ $(function() {
 			);
 			return;
 		};
-		this.back = function() {
+		var back = function() {
 			window.history.back();
 			return;
 		};
-		this.forward = function() {
+		var forward = function() {
 			window.history.forward();
 			return;
 		};
-		this.top1 = function() {
+		//top1 instead of 'top' because 'top' is kind of
+		//like a semi-reserved word...using it causes issues.
+		var top1 = function() {
 			console.log("called top!");
 			scrollContainer.stop();
 			clearMapTags();
@@ -250,7 +255,7 @@ $(function() {
 			);
 			return;
 		};
-		this.bottom = function() {
+		var bottom = function() {
 			scrollContainer.stop();
 			clearMapTags();
 			$('html,body').animate(
@@ -259,11 +264,11 @@ $(function() {
 			);
 			return;
 		};
-		this.reload = function() {
+		var reload = function() {
 			location.reload();
 			return;
 		};
-		this.zoom = function() {
+		var zoom = function() {
 			if (bladeRunnerMode) {
 				$('body').css({ '-webkit-filter': 'blur(5px)' });
 			}
@@ -274,7 +279,7 @@ $(function() {
 			zoomLevel = zoomLevel + 0.2;
 			return;
 		};
-		this.zoom_out = function() {
+		var zoom_out = function() {
 			$('body').css({ '-webkit-filter': 'blur(0px)' });
 			$('html, body').animate(
 				{ zoom: zoomLevel - 0.2 },
@@ -284,7 +289,7 @@ $(function() {
 			zoomLevel = zoomLevel - 0.2;
 			return;
 		};
-		this.zoom_normal = function() {
+		var zoom_normal = function() {
 			$('body').css({ '-webkit-filter': 'blur(0px)' });
 			$('html, body').animate(
 				{ zoom: 1.0 },
@@ -293,16 +298,16 @@ $(function() {
 			zoomLevel = 1.0;
 			return;
 		};
-		this.enhance = function() {
+		var enhance = function() {
 			if (bladeRunnerMode) {
 				$('body').css({ '-webkit-filter': 'blur(0px)' });
 			}
 			return;
 		};
-		this.help = function() {
+		var help = function() {
 			console.log("not implemented");
 		};
-		this.slower = function() {
+		var slower = function() {
 			if (currentSpeed) {
 				currentSpeed += 250;
 			}
@@ -310,7 +315,7 @@ $(function() {
 				startScrolling( currentDirection, currentSpeed );
 			}
 		};
-		this.faster = function() {
+		var faster = function() {
 			if (currentSpeed) {
 				currentSpeed -= 250;
 			}
@@ -320,79 +325,123 @@ $(function() {
 				startScrolling( currentDirection, currentSpeed );
 			}
 		};
-		this.stop = function() {
+		var stop = function() {
 			scrollContainer.stop();
 		};
-		this.toggle_BR_mode = function() {
+		var toggle_BR_mode = function() {
 			bladeRunnerMode = !bladeRunnerMode;
 		};
-		this.keep_scrolling_down = function() {
+		var keep_scrolling_down = function() {
 			startScrolling( "down", scrollSpeed );
 		};
-		this.keep_scrolling_up = function() {
+		var keep_scrolling_up = function() {
 			startScrolling( "up", scrollSpeed );
 		};
-		this.keep_scrolling_right = function() {
+		var keep_scrolling_right = function() {
 			console.log("not implemented");
 		};
-		this.keep_scrolling_left = function() {
+		var keep_scrolling_left = function() {
 			console.log("not implemented");
 		};
-		return {
-			'call'			: call,
-			'map'			: map,
-			'other'			: other,
-			'go_to'			: go_to,
-			'home'			: home,
-			'down'			: down,
-			'up'			: up,
-			'op'			: up, //misheard word
-			'right'			: right,
-			'left'			: left,
-			'fall'			: fall,
-			'song'			: fall, //misheard word
-			'rise'			: rise,
-			'frys'			: rise, //misheard word
-			'back'			: back,
-			'forward'		: forward,
-			'top'			: top1,
-			'bottom'		: bottom,
-			'reload'		: reload,
-			'refresh'		: reload,
-			'zoom'			: zoom,
-			'zoom in'		: zoom,
-			'zoom out'		: zoom_out,
-			'zoom normal'	: zoom_normal,
-			'enhance'		: enhance,
-			'help'			: help,
-			'slower'		: slower,
-			'faster'		: faster,
-			'stop'			: stop,
-			'Blade Runner mode'		: toggle_BR_mode,
-			'keep scrolling down'	: keep_scrolling_down,
-			'keep scrolling up'		: keep_scrolling_up,
-			'keep scrolling right'	: keep_scrolling_right,
-			'keep scrolling left'	: keep_scrolling_left
+
+		this.call = function( command ){
+			var key = {
+				'map'			: map,
+				'other'			: other,
+				'go_to'			: go_to,
+				'home'			: home,
+				'down'			: down,
+				'up'			: up,
+				'op'			: up,   //misheard word
+				'right'			: right,
+				'left'			: left,
+				'fall'			: fall,
+				'full'			: fall, //misheard word
+				'song'			: fall, //misheard word
+				'rise'			: rise,
+				'frys'			: rise, //misheard word
+				'back'			: back,
+				'forward'		: forward,
+				'top'			: top1,
+				'bottom'		: bottom,
+				'reload'		: reload,
+				'refresh'		: reload,
+				'zoom'			: zoom,
+				'zoom in'		: zoom,
+				'zoom out'		: zoom_out,
+				'zoom normal'	: zoom_normal,
+				'enhance'		: enhance,
+				'help'			: help,
+				'slower'		: slower,
+				'faster'		: faster,
+				'stop'			: stop,
+				'Blade Runner mode'		: toggle_BR_mode,
+				'keep scrolling down'	: keep_scrolling_down,
+				'keep scrolling up'		: keep_scrolling_up,
+				'keep scrolling right'	: keep_scrolling_right,
+				'keep scrolling left'	: keep_scrolling_left
+			};
+			console.log("Page has received command: " + command);
+			if (window.location.origin === 'https://handsfreechrome.com/input.html') {
+				return -1;
+			}
+			if ( command.split(" ")[0] + command.split(" ")[1] === "goto" ) {
+				console.log("calling goto");
+				console.log(command.split(" ")[2]);
+				key.go_to(command.split(" ")[2]);
+			}
+			if ( typeof key[command]  === 'function' ) {
+					console.log("calling it");
+					key[command]();
+				return 1;
+			}
+			return 0;
 		};
-	}());
-	
+	})();
+
 	chrome.runtime.onMessage.addListener(
 		function(request, sender, sendResponse) {
+			console.log("got a message: " + request);
+			if (request === lastMessage && (new Date()).getTime() - lastTime < 1000 ) {
+				return;
+			}
+			lastMessage = request;
+			lastTime = (new Date()).getTime();
 			if (window.location.href === 'https://handsfreechrome.com/input.html') {
 				inform_input_page(request.dictModeOn);
 				return;
-			} else {
-				if (!dictation_mode) {
-					if (commandCenter.call(request) === 0) {
-						if (request === "att") request = "8";
-						if (request === "sex") request = "6";
+			}
+			if (request === "CHROME_DICTATION_END") {
+				dictation_mode = false;
+				console.log("trying to submit");
+				$(document.activeElement).parents('form:first').submit();
+			}
+			if (!dictation_mode) {
+				if (request.startsWith("zoom")) {
+					clearTimeout(commandDelay);
+					commandDelay = setTimeout(function(){
+						commandCenter.call(request);
+					}, 1000);
+				}
+				if (commandCenter.call(request) === 0) {
+					if (request === "att") request = "8";
+					if (request === "sex") request = "6";
+					clearTimeout(commandDelay);
+					commandDelay = setTimeout(function(){
 						$('#'+request).trigger("click");
 						clearMapTags();
-					}
-				} else {
-					console.log("dictation mode is on.");
+					}, 1000);
 				}
-				return;
+			} else {
+				console.log(document.activeElement);
+				console.log("the request is: " + request);
+				console.log("the value is: " + document.activeElement.value);
+				if (document.activeElement.value === undefined) {
+					document.activeElement.value = "" + request;
+				} else {
+					document.activeElement.value +=  " " + request;
+				}
 			}
-		});
+		}
+	);
 });

@@ -4,9 +4,21 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 	<script type="text/javascript">
 		$(function() {
+			if (typeof String.prototype.startsWith !== 'function') {
+				String.prototype.startsWith = function (str){
+					return this.slice(0, str.length) === str;
+				};
+			}
+			if (typeof String.prototype.endsWith !== 'function') {
+				String.prototype.endsWith = function (str){
+					return this.slice(-str.length) === str;
+				};
+			}
+		
 			//for inputting text to forms
 			var dictation_mode = false;
 			$('#modeSwitch').click(function() {
+				console.log("Switched");
 				dictation_mode = !dictation_mode;
 			});
 			
@@ -25,6 +37,7 @@
 				"frys", 	//misheard word for "rise"
 				"rice", 	//misheard word for "rise"
 				"fall",		//page down
+				"full",		//misheard word for "fall"
 				"song", 	//misheard word for "fall"
 				"back", 	//last page in history
 				"forward",	//next page in history
@@ -69,14 +82,11 @@
 			}
 
 			/*Checks to see if command is valid.*/
-			/*Checks against three word commands, first, then against two word commands, then against single word commands*/
-			var matchesValidCommands = function(three_commands) {
-				console.log("the 3 commands are:");
-				console.log(three_commands);
+			/*Checks against three word commands first, then against two word commands, then against single word commands*/
+			var matchesValidCommands = function(three_commands) {			
 				for (var i = 0; i < valid_triple_commands.length; i++) {
 					if (three_commands[0] + " " + three_commands[1] + " " + three_commands[2] === valid_triple_commands[i] ||
-						three_commands[0] + " " + three_commands[1] == "go to") {
-						//this needs to be improved....it is glitching by doing "go to bestbuy" --> "go to best", "buy"
+						three_commands[0] + " " + three_commands[1] === "go to") {
 						console.log(three_commands[0] + " " + three_commands[1] + " " + three_commands[2]);
 						return 3;
 					}
@@ -96,7 +106,7 @@
 			};
 			
 			//sends spoken command to extension's background script, which sends it to
-			//the active tab, where it is executed by an injected control script.
+			//the active tab, where it is executed by an injected content script.
 			var sendCommand = function(command) {
 				chrome.runtime.sendMessage('pmefchbococjnddekdbnepkkefnaocbk', {message: command},
 				function(response) {
@@ -107,7 +117,7 @@
 				});
 			};
 
-			//handles spoken input, checking for validity and then sending it to the extension
+			//handles spoken input, verifying validity before sending it to the extension
 			var receiveInput = function(input) {
 				if (!dictation_mode) {
 					organizedInput = input.trim().split(" ");
@@ -116,12 +126,18 @@
 						if ( !(organizedInput[i].trim() === "") ) {
 							non_empty_oi.push(organizedInput[i].trim());
 						}
-					}					
-					var match = matchesValidCommands( [ non_empty_oi[0], non_empty_oi[1], non_empty_oi[2] ] );
+					}
+					for (var i = 0; i < 3; i++) {
+						m = non_empty_oi[i];
+						if ( typeof m === "string" && (m.endsWith(".com") || m.endsWith(".gov") || m.endsWith(".org") || m.endsWith(".edu")) ) {
+							sendCommand("go to " + m);
+							return;
+						}
+					}
+					var match = matchesValidCommands( non_empty_oi.slice(0,3) );
 					if ( !match ) {
 						return;
-					}
-					else {
+					} else {
 						if (match === 1) {
 							console.log("Valid command recognized: " + non_empty_oi[0]);
 							sendCommand(non_empty_oi[0]);
@@ -139,16 +155,18 @@
 						}
 						return;
 					}
-				}
-				else {
+				} else {
 					/*
-					Take input until the word "done || Don || next" is found
-					send all input to background js
+					Take input until the word "enter" or "next" is found.
+					Send all input to the background window.
 					
-					When "finish" is found, end dictation mode,
-					send "finish" to background js as independent message
+					When "enter" is found, end dictation mode,
+					send a flag message to background js to signal
+					a return to dictation mode.
+
+					When "next" is found, send a flag message to backgrond js
+					to signal that we should move to the next input in the form.
 					*/
-					
 					organizedInput = input.trim().split(" ");
 					non_empty_oi = [];
 					for (var i = 0; i < organizedInput.length; i++) {
@@ -156,13 +174,16 @@
 							non_empty_oi.push(organizedInput[i].trim());
 						}
 					}	
-					if (non_empty_oi[non_empty_oi.length - 1] === 'next'
-						|| non_empty_oi[non_empty_oi.length - 1] === 'done'
-						|| non_empty_oi[non_empty_oi.length - 1] === 'Don'){
-						console.log("found it");
+					if (non_empty_oi[non_empty_oi.length - 1] === 'next' || non_empty_oi[non_empty_oi.length - 1] === 'go'){
+						if(non_empty_oi.length > 1) {
+							sendCommand(non_empty_oi.slice(0, non_empty_oi.length - 1).join(" "));
+						}
+						sendCommand("CHROME_DICTATION_END");
+						console.log("dictation mode ended in input window");
 						dictation_mode = false;
 					} else {
-						console.log(input);
+						sendCommand(non_empty_oi.join(" "));
+						console.log("sent as dictation: " + input);
 					}
 					return;
 				}

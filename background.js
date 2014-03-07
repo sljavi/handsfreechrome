@@ -58,36 +58,36 @@ function executeMessage( message, dictation_message ) {
 		//send it to the control script
 		chrome.windows.getAll( {populate:true}, function(windows){
 			windows.forEach(function(window){
-				if (message == "quit" || message == "exit") {
+				if (message === "quit" || message === "exit") {
 					chrome.windows.remove( window.id );
 					return;
 				}
-				if (message == "done" || message == "Don") {
+				if (message === "done" || message === "Don") {
 					chrome.windows.remove( inputWindowId );
 					return;
 				}
 				//don't let any other commands reach the input window
-				if (window.tabs[0].url == 'https://handsfreechrome.com/input.html') {
+				if (window.tabs[0].url === 'https://handsfreechrome.com/input.html') {
 					return;
 				}
-				if (message == "full screen") {
-					if (window.state != "fullscreen") {
+				if (message === "full screen") {
+					if (window.state !== "fullscreen") {
 						chrome.windows.update( window.id, { state: "fullscreen" } );
 					}
-					else if (window.state == "fullscreen") {
+					else if (window.state === "fullscreen") {
 						chrome.windows.update( window.id, { state: "maximized" } );
 					}
 					return;
 				}
-				if (message == "minimize") {
+				if (message === "minimize") {
 					chrome.windows.update( window.id, {state: "minimized" } );
 					return;
 				}
-				if (message == "new tab") {
+				if (message === "new tab") {
 					chrome.tabs.create({ windowId: window.id });
 					return;
 				}
-				if (message == "switch") {
+				if (message === "switch") {
 					now = false;
 					chrome.tabs.query(
 						{windowId: window.id},
@@ -115,7 +115,7 @@ function executeMessage( message, dictation_message ) {
 						var tab = array_of_one_tab[0];
 						var url = tab.url;
 						var id = tab.id;
-						if (message == "close tab") {
+						if (message === "close tab") {
 							chrome.tabs.remove(id);
 							return;
 						}
@@ -126,7 +126,7 @@ function executeMessage( message, dictation_message ) {
 	} else {
 		chrome.windows.getAll( {populate:true}, function(windows){
 			windows.forEach(function(window){
-				if (window.tabs[0].url == 'https://handsfreechrome.com/input.html') {
+				if (window.tabs[0].url === 'https://handsfreechrome.com/input.html') {
 					return;
 				}
 				chrome.tabs.query({
@@ -146,8 +146,8 @@ function executeMessage( message, dictation_message ) {
 chrome.runtime.onMessageExternal.addListener(
 	function(request, sender, sendResponse) {
 		// don't allow access from other pages
-		if (sender.url != "https://www.handsfreechrome.com/input.html"
-			&& sender.url != "https://handsfreechrome.com/input.html") {
+		if (sender.url !== "https://www.handsfreechrome.com/input.html"
+			&& sender.url !== "https://handsfreechrome.com/input.html") {
 			alert("Nevermind, bad URL from message sender.");
 			console.log("Nevermind, bad URL from message sender.");
 			console.log("URL: " + sender.url);
@@ -157,53 +157,14 @@ chrome.runtime.onMessageExternal.addListener(
 		if (!request.message) {
 			return;
 		}
+		if (request.message === "CHROME_DICTATION_END") {
+			dictation_mode = false;
+		}
 		if (!dictation_mode) {
-			console.log("called " + request.message);
-			//stop "zoom in", "zoom out", and "zoom normal" from being processed too quickly as "zoom"
-			if ( request.message == "zoom" ) {
-				console.log("setting timeout");
-				setTimeout(function(){
-					console.log("checking...");
-					if (zoomInOrOut) {
-						console.log("yeah, nevermind");
-						zoomInOrOut = false;
-						return;
-					} else {
-						console.log("go ahead with zoom!");
-						executeMessage( request.message, false );
-						return;
-					}
-				}, 400);
-			} else {
-				if (request.message == "zoom in" || request.message == "zoom out" || request.message == "zoom normal") {
-					zoomInOrOut = true;
-				}
-				var nums = ["16","17","18","19","20","30","40","50","60",
-							"70","80","90","100","120","130","140","150",
-							"160","170","180","190","200"];
-				if (contains(nums, request.message)){
-					skip = false;
-					setTimeout(function(){
-						console.log("checking..");
-						if(skip) {
-							console.log("yeah, nevermind");
-							skip = false;
-							return;
-						} else {
-							console.log("Go ahead with this one!");
-							executeMessage( request.message, false );
-							return;
-						}
-					}, 400);
-				} else {
-					if (!skip) {
-						skip = true;
-					}
-					//at last, execute.
-					executeMessage( request.message, false );
-				}
-			}
+			console.log("called as command: " + request.message);
+			executeMessage( request.message, false );
 		} else {
+			console.log("called as dictation: " + request.message);
 			executeMessage( request.message, true );
 		}
 	});
