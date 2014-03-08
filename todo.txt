@@ -1,3 +1,16 @@
+-next
+-toggle out of dictation without submitting form
+-clear form
+-special characters in form
+-use military language to spell...alpha charlie bravo...a pop-up guide
+-number bug
+-clearDelay
+-page start text
+-settings
+-help
+
+------------
+
 -auto-turn-on voice control (when extension is active) for yes/no message boxes
 -bookmarks map
 -reposition tags to allow readability

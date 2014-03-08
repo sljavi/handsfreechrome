@@ -164,7 +164,7 @@
 					send a flag message to background js to signal
 					a return to dictation mode.
 
-					When "next" is found, send a flag message to backgrond js
+					When "next" is found, send a flag message to background js
 					to signal that we should move to the next input in the form.
 					*/
 					organizedInput = input.trim().split(" ");
@@ -174,11 +174,26 @@
 							non_empty_oi.push(organizedInput[i].trim());
 						}
 					}	
-					if (non_empty_oi[non_empty_oi.length - 1] === 'next' || non_empty_oi[non_empty_oi.length - 1] === 'go'){
+					//submit current form, end dictation mode
+					if (non_empty_oi[non_empty_oi.length - 1] === 'go'){
 						if(non_empty_oi.length > 1) {
 							sendCommand(non_empty_oi.slice(0, non_empty_oi.length - 1).join(" "));
 						}
-						sendCommand("CHROME_DICTATION_END");
+						sendCommand("CHROME_DICTATION_SUBMIT");
+						console.log("dictation mode ended in input window");
+						dictation_mode = false;
+					//move on to next input in form, or cycle back to first input if there are no more
+					} else if (non_empty_oi[non_empty_oi.length - 1] === 'next' ) {
+						if(non_empty_oi.length > 1) {
+							sendCommand(non_empty_oi.slice(0, non_empty_oi.length - 1).join(" "));
+						}
+						sendCommand("CHROME_DICTATION_NEXT");
+					//stop dictation mode without submitting form, switch back to control mode
+					} else if (non_empty_oi[non_empty_oi.length - 1] === 'stop' ) {
+						if(non_empty_oi.length > 1) {
+							sendCommand(non_empty_oi.slice(0, non_empty_oi.length - 1).join(" "));
+						}
+						sendCommand("CHROME_DICTATION_STOP");
 						console.log("dictation mode ended in input window");
 						dictation_mode = false;
 					} else {

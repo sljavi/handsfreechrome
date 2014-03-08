@@ -12,6 +12,8 @@ $(function() {
 	var lastMessage = null;
 	var lastTime = (new Date()).getTime();
 	var commandDelay = null;
+
+	var inputNumberBugFix = false;
 	
 	$('body').css({ '-webkit-transition': '0.3s ease-in-out' });
 	var blurred = false;
@@ -243,9 +245,7 @@ $(function() {
 			window.history.forward();
 			return;
 		};
-		//top1 instead of 'top' because 'top' is kind of
-		//like a semi-reserved word...using it causes issues.
-		var top1 = function() {
+		var top = function() {
 			console.log("called top!");
 			scrollContainer.stop();
 			clearMapTags();
@@ -285,7 +285,6 @@ $(function() {
 				{ zoom: zoomLevel - 0.2 },
 				{ duration: 'slow', easing: 'swing' }
 			);
-			//document.body.style.zoom = zoomLevel - 0.2;
 			zoomLevel = zoomLevel - 0.2;
 			return;
 		};
@@ -362,7 +361,7 @@ $(function() {
 				'frys'			: rise, //misheard word
 				'back'			: back,
 				'forward'		: forward,
-				'top'			: top1,
+				'top'			: top,
 				'bottom'		: bottom,
 				'reload'		: reload,
 				'refresh'		: reload,
@@ -411,10 +410,23 @@ $(function() {
 				inform_input_page(request.dictModeOn);
 				return;
 			}
-			if (request === "CHROME_DICTATION_END") {
+			if (request === "CHROME_DICTATION_STOP") {
 				dictation_mode = false;
-				console.log("trying to submit");
+				$(document.activeElement).blur();
+			}
+			if (request === "CHROME_DICTATION_SUBMIT") {
+				dictation_mode = false;
 				$(document.activeElement).parents('form:first').submit();
+			}
+			if (request === "CHROME_DICTATION_NEXT") {
+				console.log("attempting to next");
+				var inputs = $(document.activeElement).closest('form').find(':input');
+				if ( inputs.index(document.activeElement) === inputs.length - 1) {
+					inputs.eq(0).focus();
+				}
+				else if (inputs.length > 1) {
+					inputs.eq(inputs.index(document.activeElement) + 1).focus();
+				}
 			}
 			if (!dictation_mode) {
 				if (request.startsWith("zoom")) {
@@ -422,8 +434,7 @@ $(function() {
 					commandDelay = setTimeout(function(){
 						commandCenter.call(request);
 					}, 1000);
-				}
-				if (commandCenter.call(request) === 0) {
+				} else if (commandCenter.call(request) === 0) {
 					if (request === "att") request = "8";
 					if (request === "sex") request = "6";
 					clearTimeout(commandDelay);
@@ -433,10 +444,14 @@ $(function() {
 					}, 1000);
 				}
 			} else {
-				console.log(document.activeElement);
-				console.log("the request is: " + request);
-				console.log("the value is: " + document.activeElement.value);
-				if (document.activeElement.value === undefined) {
+				if (!inputNumberBugFix && !!parseInt(request) && contains(["", undefined], document.activeElement.value)) {
+					inputNumberBugFix = true;
+					return;
+				}
+				// console.log(document.activeElement);
+				// console.log("the request is: " + request);
+				// console.log("the value is: " + document.activeElement.value);
+				if (contains(["", undefined], document.activeElement.value)) {
 					document.activeElement.value = "" + request;
 				} else {
 					document.activeElement.value +=  " " + request;

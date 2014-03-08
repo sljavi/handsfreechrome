@@ -157,7 +157,7 @@ chrome.runtime.onMessageExternal.addListener(
 		if (!request.message) {
 			return;
 		}
-		if (request.message === "CHROME_DICTATION_END") {
+		if (request.message === "CHROME_DICTATION_STOP" || request.message === "CHROME_DICTATION_SUBMIT") {
 			dictation_mode = false;
 		}
 		if (!dictation_mode) {
