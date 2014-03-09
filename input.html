@@ -29,8 +29,9 @@
 				"att",		//misheard word for "8"
 				"sex",		//misheard word for "6"
 				"up",		//scrolls up 200 pixels
-				"op",		//misheard word "up"
+				"op",		//misheard word for "up"
 				"down",		//scrolls down 200 pixels
+				"town",		//mishear word for "down"
 				"right",	//scrolls right 200 pixels
 				"left",		//scrolls left 200 pixels
 				"rise", 	//page up
@@ -39,6 +40,7 @@
 				"fall",		//page down
 				"full",		//misheard word for "fall"
 				"song", 	//misheard word for "fall"
+				"all",		//misheard word for "fall"
 				"back", 	//last page in history
 				"forward",	//next page in history
 				"top",		//scroll to top of page
@@ -196,6 +198,11 @@
 						sendCommand("CHROME_DICTATION_STOP");
 						console.log("dictation mode ended in input window");
 						dictation_mode = false;
+					} else if (non_empty_oi[non_empty_oi.length - 1] === 'undo' ) {
+						if(non_empty_oi.length > 1) {
+							sendCommand(non_empty_oi.slice(0, non_empty_oi.length - 1).join(" "));
+						}
+						sendCommand("CHROME_DICTATION_UNDO");
 					} else {
 						sendCommand(non_empty_oi.join(" "));
 						console.log("sent as dictation: " + input);

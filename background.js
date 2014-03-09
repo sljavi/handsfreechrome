@@ -66,6 +66,7 @@ function executeMessage( message, dictation_message ) {
 					chrome.windows.remove( inputWindowId );
 					return;
 				}
+				console.log(window.tabs[0].url);
 				//don't let any other commands reach the input window
 				if (window.tabs[0].url === 'https://handsfreechrome.com/input.html') {
 					return;

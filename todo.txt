@@ -1,13 +1,9 @@
--next
--toggle out of dictation without submitting form
--clear form
+-next bug
+-check if undo works at all
 -special characters in form
 -use military language to spell...alpha charlie bravo...a pop-up guide
--number bug
--clearDelay
 -page start text
 -settings
--help
 
 ------------
 
@@ -46,38 +42,8 @@ bookmarks
 find/search
 screenshot
 
-up -> scroll up
-down -> scroll down
-
-start scrolling down
-start scrolling up
-stop
-faster
-slower
-
-page down
-page up
-
-back -> last page
-forward -> next page
-
-map -> links, forms, buttons
-map2 -> spans, imgs
-
-submit -> submits form
-next -> next form box (equivalent of pressing tab)
 "next" could have unexpected results if it goes to an offscreen form.
 only allow it to work for currently visible forms, require a scroll down to continue
 
 help -> display box with all commands (this should fit on one screen, but scrollable if not)
-done -> hide help
-
-off -> deactivate voice control
-
-zoom in
-zoom out
-close tab
-exit -> close chrome
-new tab
-switch -> switches tab
-jiggle -> repositions tags to allow readability
+done -> hide help or turn off voice control if help is already hidden
