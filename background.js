@@ -1,4 +1,4 @@
-var inputWindowId;
+var inputWindowId = null;
 var time_of_last_request = 0;
 var zoomInOrOut = false;
 var skip = false;
@@ -24,9 +24,9 @@ if (typeof String.prototype.endsWith !== 'function') {
 	};
 }
 
-chrome.browserAction.onClicked.addListener(function() {
-   chrome.windows.create(
-   {
+function openInputWindow() {
+	chrome.windows.create(
+    {
 	   'url': 'https://handsfreechrome.com/input.html',
 	   'height': 300,//50, 
 	   'width': 400,//50,
@@ -36,6 +36,10 @@ chrome.browserAction.onClicked.addListener(function() {
    function(window) {
 		inputWindowId = window.id;
    });
+}
+
+chrome.browserAction.onClicked.addListener(function() {
+   openInputWindow();
    //after creating the window, use chrome.windows.update ({focus:true")
    //(or something like that) to go back to main window
    //apparently we can still take mic input with the window in the background
@@ -191,6 +195,15 @@ chrome.runtime.onMessage.addListener(
 							chrome.tabs.sendMessage(id, {dictModeOn : true});
 						});
 				});
+			} else if (request.greeting === "TOGGLE_EXTENSION_ON_OFF") {
+				if(!inputWindowId){
+					openInputWindow();
+				} else {
+					if(inputWindowId){
+						chrome.windows.remove( inputWindowId );
+						inputWindowId = null;
+					}
+				}
 			}
 		}
 	}

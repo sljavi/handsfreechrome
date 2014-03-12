@@ -211,6 +211,7 @@
 				}
 			};
 			var final_transcript = '';
+			var lastStartedAt = 0;
 			var recognizing = false;
 			var start = function() {
 				if ('webkitSpeechRecognition' in window) {
@@ -221,28 +222,33 @@
 					
 					recognition.onstart = function() {
 						recognizing = true;
+						lastStartedAt = new Date().getTime();
 						document.getElementById('inputDisplay').innerHTML = "Started";
 					};
 					
 					recognition.onerror = function(event) {
 						if (event.error === 'no-speech') {
-						  console.log("no speech");
-						  document.getElementById('inputDisplay').innerHTML = "no-speech";
-						  alert("no speech, refresh");
-						  //start();
+						  	console.log("no speech");
 						}
 						if (event.error === 'audio-capture') {
-						  document.getElementById('inputDisplay').innerHTML = "audio-capture";
+						  	console.log("audio capture");
 						}
 						if (event.error === 'not-allowed') {
-						  alert("not-allowed-error-thing");
+							console.log("not allowed");
 						}
 					};
 					
 					recognition.onend = function() {
 						console.log("recognition ended");
 						recognizing = false;
-						//start();
+						var timeSinceLastStart = new Date().getTime() - lastStartedAt;
+				        if (timeSinceLastStart < 1000) {
+				        	console.log("setting timeout");
+				        	setTimeout(recognition.start, 1000 - timeSinceLastStart);
+				        } else {
+							console.log("starting immediately");
+							recognition.start();
+				        }
 					};
 					
 					recognition.onresult = function(event) {
@@ -273,7 +279,6 @@
 						document.getElementById('inputDisplay').innerHTML = final_transcript;
 						document.getElementById('interimDisplay').innerHTML = interim_transcript;
 					}
-					
 					recognition.start();
 				}
 			};
