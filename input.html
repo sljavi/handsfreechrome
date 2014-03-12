@@ -110,6 +110,7 @@
 			//sends spoken command to extension's background script, which sends it to
 			//the active tab, where it is executed by an injected content script.
 			var sendCommand = function(command) {
+				console.log("sending: " + command);
 				chrome.runtime.sendMessage('pmefchbococjnddekdbnepkkefnaocbk', {message: command},
 				function(response) {
 					if (!response.success) {
@@ -159,15 +160,8 @@
 					}
 				} else {
 					/*
-					Take input until the word "enter" or "next" is found.
+					Take input until the word "go" or "stop" or "next" is found.
 					Send all input to the background window.
-					
-					When "enter" is found, end dictation mode,
-					send a flag message to background js to signal
-					a return to dictation mode.
-
-					When "next" is found, send a flag message to background js
-					to signal that we should move to the next input in the form.
 					*/
 					organizedInput = input.trim().split(" ");
 					non_empty_oi = [];
@@ -212,6 +206,7 @@
 			};
 			var final_transcript = '';
 			var lastStartedAt = 0;
+			var lastInputAt = new Date().getTime();
 			var recognizing = false;
 			var start = function() {
 				if ('webkitSpeechRecognition' in window) {
@@ -245,13 +240,16 @@
 				        if (timeSinceLastStart < 1000) {
 				        	console.log("setting timeout");
 				        	setTimeout(recognition.start, 1000 - timeSinceLastStart);
-				        } else {
+				        } else if (new Date().getTime() - lastInputAt < 180000) {
 							console.log("starting immediately");
 							recognition.start();
+				        } else {
+				        	alert("No speech detected for more than 3 minutes, turning off. Refresh input window to reactivate.")
 				        }
 					};
 					
 					recognition.onresult = function(event) {
+						lastInputAt = new Date().getTime();
 						var interim_transcript = '';
 						if (typeof event.results === 'undefined') {
 							recognition.onend = null;

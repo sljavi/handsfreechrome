@@ -4,12 +4,10 @@
 v1.0 major goals:
 
 -next bug
--page start text
--numbers bug
+-different types of input
 -settings
--bottom doesn't work with help
--number delay barely working if at all
--reload page on start so that it works without user reloading
+-command to move window from foreground to background and vice versa. is this possible? yes.
+-indication of whether we're in dictation or control mode
 
 ------------
 

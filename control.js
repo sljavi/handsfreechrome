@@ -187,7 +187,9 @@ $(function() {
 				}
 				destination += ".com";
 			}
-			console.log("about to go to " + destination);
+			//sigh
+			if (destination === "readit.com" || destination === "read.com") destination = "reddit.com";
+			// console.log("about to go to " + destination);
 			window.location.href = "http://www." + destination;
 		};
 		var home = function() {
@@ -272,7 +274,7 @@ $(function() {
 			scrollContainer.stop();
 			clearMapTags();
 			scrollContainer.animate(
-				{ scrollTop: $(document).height() },
+				{ scrollTop: scrollContainer[0].scrollHeight },
 				{ duration: 'fast', easing: 'swing'}
 			);
 			return;
@@ -341,7 +343,7 @@ $(function() {
 			if (currentSpeed <= 0) {
 				currentSpeed = 5;
 			}
-			console.log(currentSpeed);
+			// console.log(currentSpeed);
 			if (currentDirection) {
 				startScrolling( currentDirection, currentSpeed );
 			}
@@ -404,7 +406,7 @@ $(function() {
 				'keep scrolling right'	: keep_scrolling_right,
 				'keep scrolling left'	: keep_scrolling_left
 			};
-			console.log("Page has received command: " + command);
+			console.log("Page has received a command from Hands Free: " + command);
 			if (window.location.origin === 'https://handsfreechrome.com/input.html') {
 				return -1;
 			}
@@ -422,7 +424,8 @@ $(function() {
 
 	chrome.runtime.onMessage.addListener(
 		function(request, sender, sendResponse) {
-			console.log("got a message: " + request);
+			//this time-checking thing to skip redundant request...I think we're already doing
+			//this in background.js....can we remove this here?
 			if (request === lastMessage && (new Date()).getTime() - lastTime < 1000 ) {
 				return;
 			}
@@ -453,7 +456,6 @@ $(function() {
 				return;
 			}
 			if (request === "CHROME_DICTATION_NEXT") {
-				console.log("attempting to next");
 				var inputs = $(document.activeElement).closest('form').find(':input');
 				if ( inputs.index(document.activeElement) === inputs.length - 1) {
 					inputs.eq(0).focus();
