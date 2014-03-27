@@ -60,6 +60,7 @@
 				"stop",		//stops continuous scrolling
 				"help",		//brings up help page, or hides it
 				"minimize",	//minimize main chrome windows (should deactivate extension)
+				"Newtown"	//misheard word for "new tab"
 			];
 			
 			var valid_double_commands = [
@@ -111,10 +112,18 @@
 			//the active tab, where it is executed by an injected content script.
 			var sendCommand = function(command) {
 				console.log("sending: " + command);
-				chrome.runtime.sendMessage('pmefchbococjnddekdbnepkkefnaocbk', {message: command},
+				//sends to both dev extension and prod extension
+				chrome.runtime.sendMessage('ebbnefnjapcaoonkjcholcencjifgiej', {message: command},
 				function(response) {
 					if (!response.success) {
-						alert("failure to send message to background.js");
+						alert("failure to send message to prod background.js");
+						console.log("failure to send message to background.js");
+					}
+				});
+				chrome.runtime.sendMessage('ofkkpamamfkbbnjoojjjplmamdlhkchl', {message: command},
+				function(response) {
+					if (!response.success) {
+						alert("failure to send message to dev background.js");
 						console.log("failure to send message to background.js");
 					}
 				});
