@@ -1,0 +1,26 @@
+{
+  "manifest_version": 2,
+
+  "name": "Hands Free for Chrome",
+  "description": "Navigate the web hands free!",
+  "version": "1.0",
+  "background": { "scripts": ["background.js"] },
+  "content_scripts": [ 
+	{
+		"matches": ["http://*/*", "https://*/*"],
+		"js": ["visibility.js", "jquery.js", "control.js"]
+	}
+  ],
+  "browser_action": {
+    "default_icon": "icon.png"
+  },
+  "externally_connectable": {
+    "matches": ["*://*.handsfreechrome.com/*"]
+  },
+  "permissions": [
+	"bookmarks",
+	"history",
+    "tabs"
+  ],
+  "web_accessible_resources": ["jquery-1.10.2.min.map"]
+}
