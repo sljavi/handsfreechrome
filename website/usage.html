@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
 	<head>
+		<title>Hands Free for Chrome</title>
+		<meta name="description" content="Hands Free for Chrome, a Chrome extension to browse the web using only your voice, free to download and use. A mic is required.">
 		<meta charset="utf-8"/>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 		<link rel="stylesheet" type="text/css" href="index.css">
@@ -20,15 +22,14 @@
 		</ul>
 		</ul>
 		<div id="command_guide" class="category">
-			<h1>Installation and Usage Guide</h1>
-			<p>When you add Hands Free to your Chrome browser, it will ask you to give the extension various permissions, which will allow the extension to do things like create and close tabs when commanded.</p>
+			<h3>Installation and Usage Guide</h3>
+			<p>When you first add Hands Free to your Chrome browser, you'll be asked for various permissions which will allow the extension to do things like create and close tabs when commanded.</p>
 
-			<p>Having given Hands Free the necessary permissions, you can then hit Ctrl + Space on any webpage to pop up the Hands Free
-			input window. This is the window that listens to you and hears your commands. The first time it opens, it will ask you for
-			permission to access your mic. It goes without saying that without access to the mic, Hands Free cannot function. 
-			You won't need to grant this permission again the next time you use the extension. The input window can also be opened by clicking on the newly added Hands Free icon in the upper right corner of your browser.</p>
+			<p>You can then hit Ctrl + Space on any webpage to open the Hands Free input window. This is the window that listens to you and hears your commands. The first time it opens, it will ask you for permission to access your mic. It goes without saying that without access to the mic, Hands Free cannot function. You won't need to grant this permission again the next time you use the extension.</p>
 
-			<p>After that, you can minimize the input window or leave it in front-- it makes no difference. You may find it useful to leave it visible so that you can see whether it heard you correctly.</p>
+			<p>The input window can also be opened by clicking on the newly added Hands Free icon in the upper right hand corner of your browser.</p>
+
+			<p>After that, you can minimize the input window or leave it in front-- it makes no difference. You may find it useful to leave it visible so that you can see whether your command was correctly heard.</p>
 
 			<p>The words that appear above the line in the input window when you speak are words that Hands Free is still processing-- once they move to beneath the line, Hands Free is finished taking that input and is ready for a new command.</p>
 
@@ -44,11 +45,19 @@
 
 			<p>Hands Free turns itself off automatically after 3 minutes pass without receiving a new command. You can refresh the input window to turn it back on, or close the input window and open it again.</p>
 
-			<h1>Command Guide</h1>
+			<p>If you experience any trouble with Hands Free ignoring commands or not hearing you, try some combination of manually refreshing the page you're on and/or manually refreshing the input window.</p>
+
+			<p>If dictation mode freezes up somehow, or Hands Free just won't listen to you, and refreshing isn't an option, try using the <kbd>close tab</kbd>, <kbd>new tab</kbd>, and <kbd>go to</kbd> commands to escape the lock. If you're in dictation mode, make sure to say <kbd>stop</kbd> first.</p>
+
+			<p>It'll take a little playing around, maybe for a few days, before you get used to the occasional pitfalls and learn your way out of them. Rest assured many of them will be fixed in time.</p>
+
+			<p>Incidentally, for the time being you won't be able to use Hands Free to log into any sites, since usernames and passwords are generally not dictionary words and therefore will not be recognized by the voice recognition. For this you'll need phonetic mode, which has not yet been implemented.</p>
+
+			<h3>Command Guide</h3>
 
 		    <p>Say <kbd>help</kbd> to bring up a copy of this command guide.</p>
 
-		    <p>The most common problem is a command being misheard by the
+		    <p style="font-style: italic">Note: the most common problem is a command being misheard by the
 		    speech engine. By observing the Hands Free input window, you can see
 		    what it thinks you said. This may help you learn the proper
 		    enunciations necessary in order to be understood more readily. </p>
@@ -80,22 +89,27 @@
 		    <p>To paint number tags alongside what are most likely visible,
 		    clickable elements on the page, say <kbd>map</kbd>. The tags will
 		    appear near the upper left corner of the corresponding link, image, or
-		    input form. Use your best judgement to tell which is which.<br>
-		    Saying <kbd>map</kbd> a second time will hide the number tags, as will
-		    using any of the scrolling commands.</p>
-
-		    <p>If the element you wish to click is not numbered by <kbd>map</kbd>,
-		    try hiding the numbers and using <kbd>guide</kbd> instead. (The "guide"
-		    command is usually misheard, and will be changed.)</p>
-
-		    <p style="font-style: italic">Note: The system by which clickable
-		    elements are numbered will be heavily improved in the future, but for
-		    the time being there will be many frustrations in the placement of the
-		    numbers.</p>
+		    input form. Use your best judgement to tell which is which.</p>
 
 		    <p>To click a numbered element, simply speak the number. Enunciate very
-		    clearly— the speech engine will readily confuse numbers like 15 and 50,
-		    or 16 and 60.</p>
+		    clearly.</p>
+
+		    <p>If you decide not to click on anything, saying <kbd>map</kbd> a second 
+		    time will hide the number tags, as will using any of the scrolling commands.</p>
+
+		    <p>If the element you wish to click is not numbered by <kbd>map</kbd>,
+		    try using <kbd>guide</kbd> instead. Saying <kbd>guide</kbd> while the <kbd>map</kbd> tags are active 
+		    will hide the existing tags and draw new ones. The same is true in reverse.</p>
+
+		    <p>The system by which clickable elements are numbered will be heavily improved in the future, but for
+		    the time being there may be many frustrations in the placement of the numbers.</p>
+
+		    <p>To alleviate this, there is a <kbd>show</kbd> command, which will sloppily paint numbers over nearly everything,
+		    including elements you cannot see and therefore cannot click on. It's a last resort. But if <kbd>map</kbd> and <kbd>guide</kbd> don't paint a number next to the element you wish to click, the odds are very high that <kbd>show</kbd> will get the job done.</p>
+
+		    <p>Again, saying <kbd>show</kbd> while <kbd>map</kbd> or <kbd>guide</kbd> are active will just hide the existing tags and draw new ones.</p>
+
+		    <p><i>Note: There is currently no support for dropdown menus.</i></p>
 
 		    <h3>Dictation Mode</h3>
 
@@ -111,12 +125,7 @@
 		    To move the cursor to the next input in the form (for example, from
 		    username to password), say <kbd>next</kbd>.<br>
 		    <br>
-		    <i>Note: Buttons in forms count as inputs, so you may inadvertently
-		    move to a button first. Simply continue to say next until the input you
-		    desire is selected.</i><br>
-		    <br>
-		    To remove the last word you entered from the textbox, say
-		    <kbd>undo</kbd>.</p>
+		    To remove the last word you entered from the textbox, say <kbd>undo</kbd>.</p>
 
 		    <h3>Navigation</h3>
 
@@ -141,9 +150,10 @@
 		    <p>To go back one page in your history, say <kbd>back</kbd>.<br>
 		    To go forward one page in your history, say <kbd>forward</kbd>.</p>
 
-		    <p>To go to google.com, say <kbd>home</kbd>.</p>
+		    <p>To go to google.com, say <kbd>home</kbd>. This will also automatically put the extension into 
+		    dictation mode, and is the fastest way to search for things.</p>
 
-		    <p>Note that Google can be used to indirectly reach almost any website that you can't
+		    <p style="font-style: italic">Note: Google can be used to indirectly reach almost any website that you can't
 		    navigate to directly via Hands Free. For instance, going to Google and searching for
 		    "free credit report.com" will correctly bring up as a result the actual "freecreditreport.com",
 		    which you can then click on.</p>
@@ -152,11 +162,9 @@
 
 		    <p>To open a new tab, say <kbd>new tab</kbd>.</p>
 
-		    <p style="font-style: italic">Note: When opening a new tab, this
-		    extension will stop working unless you have installed the new tab
-		    redirect extension, which will direct new tabs to default to a page of
-		    your choosing. That extension can be found at
-		    https://chrome.google.com/webstore/detail/new-tab-redirect/icpgjfneehieebagbmdbhnlpiopdcmna?hl=en</p>
+		    <p style="font-style: italic">Note: When opening a new tab, only the "go to" command and tab control commands will work
+		    unless you have installed the new tab redirect extension, which will cause new tabs to default to a page of
+		    your choosing. That extension can be found on <a href="https://chrome.google.com/webstore/detail/new-tab-redirect/icpgjfneehieebagbmdbhnlpiopdcmna?hl=en">the Chrome Web Store.</a></p>
 
 		    <p>To close the current tab, say <kbd>close tab</kbd>.<br>
 		    To switch the active tab to the next tab in the window, say
@@ -179,12 +187,9 @@
 
 		    <h3>Zooming</h3>
 
-		    <p>To zoom in, say <kbd>zoom in</kbd>, or just <kbd>zoom</kbd>.<br>
+		    <p>To zoom in, say <kbd>zoom in</kbd><br>
 		    To zoom out, say <kbd>zoom out</kbd>.<br>
-		    To restore the zoom level to normal, say <kbd>zoom normal</kbd>.<br>
-		    <br>
-		    <i>Note: The zoom normal command oftentimes fails once or twice. Try
-		    repeating it after a moment.</i></p>
+		    To restore the zoom level to normal, say <kbd>zoom normal</kbd>.</p>
 
 		    <h3>Refreshing</h3>
 

@@ -1,0 +1,10 @@
+minify
+
+tab icon
+button icon
+
+"add-to-chrome" / "added-to-chrome"
+set up webstore page
+get graphic information to cailin
+chartbeat? or something for tracking
+figure out how to update the extension

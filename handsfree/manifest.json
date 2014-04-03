@@ -3,7 +3,7 @@
 
   "name": "Hands Free for Chrome",
   "description": "Navigate the web hands free!",
-  "version": "1.0",
+  "version": "1.2",
   "background": { "scripts": ["background.js"] },
   "content_scripts": [ 
 	{

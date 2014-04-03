@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<title>Hands Free Input</title>
+	<meta name="description" content="Hands Free for Chrome, a Chrome extension to browse the web using only your voice, free to download and use. A mic is required.">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 	<script type="text/javascript">
 		$(function() {
@@ -23,12 +25,14 @@
 			});
 			
 			var valid_single_commands = [
-				"map",		//paints numbers next to anchor tags, forms, and buttons
-				"other",	//paints numbers next to spans and images
+				"map",		//paints numbers next to anchor tags, images, forms, and buttons
+				"guide",	//paints numbers next to spans and images
+				"show",		//paints numbers next to anchor tags, forms, buttons, images, and spans, regardless of whether they're visible
 				"home",		//navigates directly to your homepage
 				"att",		//misheard word for "8"
 				"sex",		//misheard word for "6"
 				"up",		//scrolls up 200 pixels
+				"app",		//misheard word for "up"
 				"op",		//misheard word for "up"
 				"down",		//scrolls down 200 pixels
 				"town",		//mishear word for "down"
@@ -115,17 +119,17 @@
 				//sends to both dev extension and prod extension
 				chrome.runtime.sendMessage('ebbnefnjapcaoonkjcholcencjifgiej', {message: command},
 				function(response) {
-					if (!response.success) {
-						alert("failure to send message to prod background.js");
-						console.log("failure to send message to background.js");
-					}
+					//if (!response.success) {
+					//	alert("failure to send message to prod background.js");
+					//	console.log("failure to send message to background.js");
+					//}
 				});
 				chrome.runtime.sendMessage('ofkkpamamfkbbnjoojjjplmamdlhkchl', {message: command},
 				function(response) {
-					if (!response.success) {
-						alert("failure to send message to dev background.js");
-						console.log("failure to send message to background.js");
-					}
+					// if (!response.success) {
+					// 	alert("failure to send message to dev background.js");
+					// 	console.log("failure to send message to background.js");
+					// }
 				});
 			};
 

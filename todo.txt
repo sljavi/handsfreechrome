@@ -4,7 +4,6 @@
 v1.0 major goals:
 
 -next bug
--different types of input
 -settings
 -command to move window from foreground to background and vice versa. is this possible? yes.
 -indication of whether we're in dictation or control mode
@@ -17,14 +16,13 @@ v2.0 major goals:
 -add phonetic mode
 -video controls
 -find
+-textarea bug
 
 -----------
 
 v3.0 major goals:
 
 -tab map
--home command
--move "go to" to background.js so "oops did you mean" isn't a problem ... this'll be a big task
 -bookmarks
 
 ------------
@@ -53,7 +51,6 @@ and closes the new tab.
 
 "scroll reading" command for auto-slow speed
 
-Can we clear the interim buffer the MOMENT we get it, to get rid of that delay from bad input like talking?
 split screen, create new tab if only one is open
 minimize, maximize
 for picking a tab-- prepend a number in every tab title, then pick by number, just like with map

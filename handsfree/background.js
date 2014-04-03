@@ -1,8 +1,7 @@
 var inputWindowId = null;
 var time_of_last_request = 0;
-var zoomInOrOut = false;
-var skip = false;
 var dictation_mode = false;
+var last_message = null;
 
 function contains(a, obj) {
     for (var i = 0; i < a.length; i++) {
@@ -46,12 +45,18 @@ chrome.browserAction.onClicked.addListener(function() {
 });
 
 function executeMessage( message, dictation_message ) {
+	if (last_message && last_message.startsWith("keep") && last_message.endsWith(message)){
+		return;
+	}
+	if (last_message === "Newtown" && message === "new tab"){
+		return;
+	}
 	//don't double execute commands that are sent twice by mistake
-	if ( !parseInt(message) && (new Date()).getTime() - time_of_last_request < 1000 ) {
-		console.log(message);
+	if ( !parseInt(message) && message === last_message && (new Date()).getTime() - time_of_last_request < 1000 ) {
 		console.log("noticed time");
 		return;
 	}
+	last_message = message;
 	if ( !dictation_message && message.endsWith(".com") ) {
 		message = message.slice(0, -4);
 	}
@@ -88,7 +93,7 @@ function executeMessage( message, dictation_message ) {
 					chrome.windows.update( window.id, {state: "minimized" } );
 					return;
 				}
-				if (message === "new tab") {
+				if (message === "new tab" || message === "Newtown") {
 					chrome.tabs.create({ windowId: window.id });
 					return;
 				}
@@ -196,14 +201,19 @@ chrome.runtime.onMessage.addListener(
 						});
 				});
 			} else if (request.greeting === "TOGGLE_EXTENSION_ON_OFF") {
-				if(!inputWindowId){
-					openInputWindow();
-				} else {
-					if(inputWindowId){
-						chrome.windows.remove( inputWindowId );
-						inputWindowId = null;
+				var open = true;
+				chrome.windows.getAll( {populate:true}, function(windows){
+					windows.forEach(function(window){
+						if (window.tabs[0].url === 'https://handsfreechrome.com/input.html') {
+							console.log("bang");
+							chrome.windows.remove( window.id );
+							open = false;
+						}
+					});
+					if (open) {
+						openInputWindow();
 					}
-				}
+				});
 			}
 		}
 	}
