@@ -93,7 +93,7 @@
 .category ul li {
 	font-size: 17px;
 	text-align: left;
-	color: #E6DAB6	;
+	color: #E9D699;
 }
 
 .category a {
@@ -117,7 +117,7 @@
 	display: inline-block;
 	margin: 0 0.1em;
 	text-shadow: 0 1px 0 #fff;
-	line-height: 1.4;
+	line-height: 1.3;
 	white-space: nowrap
 }
 
