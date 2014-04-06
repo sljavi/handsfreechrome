@@ -1,15 +1,12 @@
-.body {
-	background: #fff;
-}
-
 #background {
+	background: rgb(77, 147, 165);
+	background-image: radial-gradient(circle farthest-side at right bottom,#AA8490,#1d2b64 80%,#0e153a);
 	position:fixed;
 	top:0;
 	left:0;
 	width:100%;
 	height:100%;
 	z-index: -1;
-	opacity: 0.8;
 }
 
 #main_header {
@@ -20,17 +17,18 @@
 	cursor: pointer;
 }
 #main_header a, #main_header a:visited, #main_header a:hover, #main_header a:active {
-  color: rgb(255, 229, 84);
+  color: #E9D699;
+  text-decoration: none;
 }
 
- #sub_header {
+#sub_header {
  	margin-top: -10px;
 	text-align: center;
 	font-size: 17px;
 	font-family: verdana;
 	white-space: nowrap;
 	font-weight: 500;
-	color: black;
+	color:  #E9D699;
  }
 
 #menu {
@@ -43,7 +41,6 @@
     background-color: #111;
     background-image: linear-gradient(#444, #111);
     border-radius: 18px;
-   /* box-shadow: 0 2px 1px #9c9c9c;*/
 }
 
 
@@ -79,18 +76,6 @@
     height: 0;
 }
 
-#intro {
-	display: block;
-}
-
-a {
-	text-decoration: none;
-}
-
-#notes {
-	margin-top: 8%;
-}
-
 .category {
 	font-family: verdana;
 	font-size: 17px;
@@ -102,6 +87,21 @@ a {
 .category p {
 	font-size: 17px;
 	text-align: left;
+	color: #E6DAB6	;
+}
+
+.category ul li {
+	font-size: 17px;
+	text-align: left;
+	color: #E6DAB6	;
+}
+
+.category a {
+	color: white;
+}
+
+.category h3 {
+	color: #E6DAB6;
 }
 
 #command_guide kbd {
@@ -121,6 +121,6 @@ a {
 	white-space: nowrap
 }
 
-#donate li {
+#features li {
 	margin-top: 10px;
 }
