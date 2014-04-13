@@ -555,7 +555,7 @@ $(function() {
 				var n = inputs.index(document.activeElement) + 1;
 				var start = n;
 				var pass = false;
-				while (!contains(["password", "text", "number"], inputs.eq(n).attr('type'))) {
+				while (!contains(["password", "text", "number", "search"], inputs.eq(n).attr('type'))) {
 					if (n === inputs.length) { 
 						n = 0;
 						pass = true;
