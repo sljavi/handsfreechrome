@@ -1,3 +1,52 @@
+.install_button {
+	-moz-box-shadow:inset 0px 1px 0px 0px #caefab;
+	-webkit-box-shadow:inset 0px 1px 0px 0px #caefab;
+	box-shadow:inset 0px 1px 0px 0px #caefab;
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #77d42a), color-stop(1, #5cb811) );
+	background:-moz-linear-gradient( center top, #77d42a 5%, #5cb811 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#77d42a', endColorstr='#5cb811');
+	background-color:#77d42a;
+	-webkit-border-top-left-radius:16px;
+	-moz-border-radius-topleft:16px;
+	border-top-left-radius:16px;
+	-webkit-border-top-right-radius:16px;
+	-moz-border-radius-topright:16px;
+	border-top-right-radius:16px;
+	-webkit-border-bottom-right-radius:16px;
+	-moz-border-radius-bottomright:16px;
+	border-bottom-right-radius:16px;
+	-webkit-border-bottom-left-radius:16px;
+	-moz-border-radius-bottomleft:16px;
+	border-bottom-left-radius:16px;
+	text-indent:0;
+	border:1px solid #268a16;
+	display:block;
+	color:#3a6117;
+	font-family:Arial;
+	font-size:21px;
+	font-weight:bold;
+	font-style:normal;
+	height:43px;
+	line-height:43px;
+	width:200px;
+	text-decoration:none;
+	text-align:center;
+	text-shadow:1px 1px 0px #aade7c;
+	margin: auto;
+	margin-top: 30px;
+	padding: 0px 15px;
+}
+
+.install_button:active {
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #5cb811), color-stop(1, #77d42a) );
+	background:-moz-linear-gradient( center top, #5cb811 5%, #77d42a 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#5cb811', endColorstr='#77d42a');
+	background-color:#5cb811;
+	position:relative;
+	top:1px;
+}
+
+
 #background {
 	background: rgb(77, 147, 165);
 	background-image: radial-gradient(circle farthest-side at right bottom,#AA8490,#1d2b64 80%,#0e153a);
@@ -76,6 +125,13 @@
     height: 0;
 }
 
+.category p.flash{
+	background: #CABD93;
+	color: black;
+	border-radius: 10px;
+	padding: 10px;
+}
+
 .category {
 	font-family: verdana;
 	font-size: 17px;
@@ -87,7 +143,8 @@
 .category p {
 	font-size: 17px;
 	text-align: left;
-	color: #E9D699	;
+	color: #E9D699;
+	line-height: 23px;
 }
 
 .category ul li {

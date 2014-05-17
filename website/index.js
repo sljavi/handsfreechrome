@@ -12,4 +12,7 @@ $(function(){
 	menu_items.eq(3).on('click', function(){
 		document.location.href = '/contact.html';
 	})
+	$('.install_button').on('click', function(){
+		chrome.webstore.install("https://chrome.google.com/webstore/detail/ddgmnkioeodkdacpjblmihodjgmebnld");
+	});
 });

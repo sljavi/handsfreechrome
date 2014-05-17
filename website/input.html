@@ -3,6 +3,9 @@
 <head>
 	<title>Hands Free Input</title>
 	<meta name="description" content="Hands Free for Chrome, a Chrome extension to browse the web using only your voice, free to download and use. A mic is required.">
+	<link rel="icon" 
+		  type="image/png" 
+		  href="icon16.png">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 	<script type="text/javascript">
 		$(function() {
@@ -123,6 +126,10 @@
 					//	alert("failure to send message to prod background.js");
 					//	console.log("failure to send message to background.js");
 					//}
+				});
+				chrome.runtime.sendMessage('ddgmnkioeodkdacpjblmihodjgmebnld', {message: command},
+				function(response){
+					//do nothing
 				});
 				chrome.runtime.sendMessage('ofkkpamamfkbbnjoojjjplmamdlhkchl', {message: command},
 				function(response) {

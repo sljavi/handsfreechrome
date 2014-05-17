@@ -27,8 +27,8 @@ function openInputWindow() {
 	chrome.windows.create(
     {
 	   'url': 'https://handsfreechrome.com/input.html',
-	   'height': 300,//50, 
-	   'width': 400,//50,
+	   'height': 300,
+	   'width': 400,
 	   'left': screen.width - 400,
 	   'top': -10
    },

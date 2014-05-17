@@ -6,6 +6,9 @@
 		<meta charset="utf-8"/>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 		<link rel="stylesheet" type="text/css" href="index.css">
+		<link rel="icon" 
+		  type="image/png" 
+		  href="icon16.png">
 		<link href='http://fonts.googleapis.com/css?family=Marcellus+SC|Antic+Slab|Poiret+One|Cinzel' rel='stylesheet' type='text/css'>
 		<script src="index.js"></script>
 	</head>
@@ -22,24 +25,23 @@
 		</ul>
 		</ul>
 		<div id="command_guide" class="category">
-			<h3>Installation and Usage Guide</h3>
-			<p>When you first add Hands Free to your Chrome browser, you'll be asked for various permissions which will allow the extension to do things like create and close tabs when commanded.</p>
+			<p class="flash">
+				<span><strong>Are you using a Mac?</strong></span><br>
+				In order to effectively use Hands Free on a Mac, first go to System Preferences, then to Sound, then to Input. If there's a little checkbox option that says "Use ambient noise reduction," make sure that it is <i>not</i> checked.
+			</p>
 
-			<p>You can then hit Ctrl + Space on any webpage to open the Hands Free input window. This is the window that listens to you and hears your commands. The first time it opens, it will ask you for permission to access your mic. It goes without saying that without access to the mic, Hands Free cannot function. You won't need to grant this permission again the next time you use the extension.</p>
+			<h3>Installation and Usage Guide</h3>
+			<p>When you first add Hands Free to your Chrome browser, you'll be asked for various permissions which will allow the extension to do things like create and close tabs when commanded. Afterwards it may be necessary to restart the browser.</p>
+
+			<p>You can then hit Ctrl + Space on any webpage to open the Hands Free input window. This is the window that listens to you and hears your commands. The first time it opens, it will ask you for permission to access your mic.</p>
 
 			<p>The input window can also be opened by clicking on the newly added Hands Free icon in the upper right hand corner of your browser.</p>
 
-			<p>After that, you can minimize the input window or leave it in front-- it makes no difference. You may find it useful to leave it visible so that you can see whether your command was correctly heard.</p>
+			<p>After that, you can minimize the input window or leave it visible-- it makes no difference. You may find it useful to leave it visible so that you can see whether your command was correctly heard.</p>
 
-			<p>The words that appear above the line in the input window when you speak are words that Hands Free is still processing-- once they move to beneath the line, Hands Free is finished taking that input and is ready for a new command.</p>
+			<p>Hands Free does not support multiple windows-- you must use multiple tabs within a single window. Don't open any additional tabs in the input window.</p>
 
-			<p>You can hit Ctrl + Space again at any time to close the input window (thus turning off Hands Free), or just say <kbd>done</kbd>.</p>
-
-			<p>Hands Free does not support multiple windows-- you must use multiple tabs within a single window. The input window does not count and may be considered an exception. Also, don't open any additional tabs in the input window.</p>
-
-			<p>Hands Free will prove extremely difficult to use in areas with any backgroud noise, such as music or people talking. Background noise makes it very difficult for the voice recognition to understand your commands.</p>
-
-			<p>Hands Free is only available in English at the present time, but in the future many languages will be supported.</p>
+			<p>Hands Free will prove extremely difficult to use in areas with any background noise, such as music or people talking. Background noise makes it very difficult for the voice recognition to understand your commands.</p>
 
 			<p>Hands Free turns itself off automatically after 3 minutes pass without receiving a new command. You can refresh the input window to turn it back on, or close the input window and open it again.</p>
 
@@ -47,9 +49,9 @@
 
 			<p>If dictation mode freezes up somehow, or Hands Free just won't listen to you, and refreshing isn't an option, try using the <kbd>close tab</kbd>, <kbd>new tab</kbd>, and <kbd>go to</kbd> commands to escape the lock. If you're in dictation mode, make sure to say <kbd>stop</kbd> first.</p>
 
-			<p>It'll take a little playing around, maybe for a few days, before you get used to the occasional pitfalls and learn your way out of them. Rest assured many of them will be fixed in time.</p>
+			<p>For the time being you'll be unable to use Hands Free to log into any sites, since usernames and passwords are generally not dictionary words and therefore will not be recognized by the voice recognition. For this you'll need phonetic mode, which has not yet been implemented.</p>
 
-			<p>Incidentally, for the time being you won't be able to use Hands Free to log into any sites, since usernames and passwords are generally not dictionary words and therefore will not be recognized by the voice recognition. For this you'll need phonetic mode, which has not yet been implemented.</p>
+			<p>Hands Free is only available in English at the present time, but in the future support will be added for many other languages.</p>
 
 			<h3>Command Guide</h3>
 
