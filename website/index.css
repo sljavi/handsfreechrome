@@ -1,4 +1,4 @@
-.install_button {
+#install_button {
 	-moz-box-shadow:inset 0px 1px 0px 0px #caefab;
 	-webkit-box-shadow:inset 0px 1px 0px 0px #caefab;
 	box-shadow:inset 0px 1px 0px 0px #caefab;
@@ -20,7 +20,7 @@
 	border-bottom-left-radius:16px;
 	text-indent:0;
 	border:1px solid #268a16;
-	display:block;
+	display:none;
 	color:#3a6117;
 	font-family:Arial;
 	font-size:21px;
@@ -37,7 +37,7 @@
 	padding: 0px 15px;
 }
 
-.install_button:active {
+#install_button:active {
 	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #5cb811), color-stop(1, #77d42a) );
 	background:-moz-linear-gradient( center top, #5cb811 5%, #77d42a 100% );
 	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#5cb811', endColorstr='#77d42a');
@@ -81,14 +81,14 @@
  }
 
 #menu {
-	width: 50%;
+	width: 60%;
     min-width: 700px;
     margin: 10px auto 0 auto;
     padding: 5px 0;
     list-style: none;
     text-align: center;
     background-color: #111;
-    background-image: linear-gradient(#444, #111);
+    background-image: linear-gradient(#363131, #111);
     border-radius: 18px;
 }
 
@@ -96,11 +96,19 @@
 
 #menu li {
 	display: inline-block;
-    width: 23%;   
+    width: 18%;   
     position: relative;
     padding: 0;
     cursor: pointer;
 }
+
+#menu li:nth-child(n + 4){
+	width: 12%;
+}
+#menu li:nth-child(1){
+	width: 22%;
+}
+
 
 #menu a {
     height: 25px;
@@ -126,6 +134,7 @@
 }
 
 .category p.flash{
+	display: none;
 	background: #CABD93;
 	color: black;
 	border-radius: 10px;
@@ -161,7 +170,7 @@
 	color: #E9D699;
 }
 
-#command_guide kbd {
+kbd {
 	padding: 0.03em 0.3em;
 	border: 1px solid #ccc;
 	font-size: 14px;
