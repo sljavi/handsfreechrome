@@ -120,23 +120,13 @@
 			var sendCommand = function(command) {
 				console.log("sending: " + command);
 				//sends to both dev extension and prod extension
-				chrome.runtime.sendMessage('ebbnefnjapcaoonkjcholcencjifgiej', {message: command},
-				function(response) {
-					//if (!response.success) {
-					//	alert("failure to send message to prod background.js");
-					//	console.log("failure to send message to background.js");
-					//}
-				});
 				chrome.runtime.sendMessage('ddgmnkioeodkdacpjblmihodjgmebnld', {message: command},
 				function(response){
-					//do nothing
+					//prod
 				});
-				chrome.runtime.sendMessage('ofkkpamamfkbbnjoojjjplmamdlhkchl', {message: command},
+				chrome.runtime.sendMessage('jocidfnbnmnflgidijkgaeloiibdbfic', {message: command},
 				function(response) {
-					// if (!response.success) {
-					// 	alert("failure to send message to dev background.js");
-					// 	console.log("failure to send message to background.js");
-					// }
+					// dev
 				});
 			};
 

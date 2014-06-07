@@ -14,8 +14,17 @@
 		<script src="index.js"></script>
 	</head>
 	<body>
+		<div id="fb-root"></div>
+		<script>(function(d, s, id) {
+		  var js, fjs = d.getElementsByTagName(s)[0];
+		  if (d.getElementById(id)) return;
+		  js = d.createElement(s); js.id = id;
+		  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.0";
+		  fjs.parentNode.insertBefore(js, fjs);
+		}(document, 'script', 'facebook-jssdk'));</script>
 		<div id="background"></div>
 		<div id="main_header"><a href="index.html">Hands Free for Chrome</a></div>
+		<div class="fb-like" data-href="https://www.facebook.com/handsfreeforchrome" data-width="100" data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div>
 		<div id="sub_header">
 		A Chrome extension to browse the web using only your voice, free to download and use. A mic is required.</div>
 		<ul id="menu">
