@@ -1,171 +1,157 @@
-#install_button {
-	-moz-box-shadow:inset 0px 1px 0px 0px #caefab;
-	-webkit-box-shadow:inset 0px 1px 0px 0px #caefab;
-	box-shadow:inset 0px 1px 0px 0px #caefab;
-	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #77d42a), color-stop(1, #5cb811) );
-	background:-moz-linear-gradient( center top, #77d42a 5%, #5cb811 100% );
-	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#77d42a', endColorstr='#5cb811');
-	background-color:#77d42a;
-	-webkit-border-top-left-radius:16px;
-	-moz-border-radius-topleft:16px;
-	border-top-left-radius:16px;
-	-webkit-border-top-right-radius:16px;
-	-moz-border-radius-topright:16px;
-	border-top-right-radius:16px;
-	-webkit-border-bottom-right-radius:16px;
-	-moz-border-radius-bottomright:16px;
-	border-bottom-right-radius:16px;
-	-webkit-border-bottom-left-radius:16px;
-	-moz-border-radius-bottomleft:16px;
-	border-bottom-left-radius:16px;
-	text-indent:0;
-	border:1px solid #268a16;
-	display:none;
-	color:#3a6117;
-	font-family:Arial;
-	font-size:21px;
-	font-weight:bold;
-	font-style:normal;
-	height:43px;
-	line-height:43px;
-	width:200px;
-	text-decoration:none;
-	text-align:center;
-	text-shadow:1px 1px 0px #aade7c;
-	margin: auto;
-	margin-top: 30px;
-	padding: 0px 15px;
+html {
+	height: 100%;
 }
 
-#install_button:active {
-	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #5cb811), color-stop(1, #77d42a) );
-	background:-moz-linear-gradient( center top, #5cb811 5%, #77d42a 100% );
-	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#5cb811', endColorstr='#77d42a');
-	background-color:#5cb811;
-	position:relative;
-	top:1px;
+body {
+	padding-top: 20px;
+	background: -webkit-linear-gradient(top, #2F2727, #0A2E57);
+	background: -moz-linear-gradient(top, #2F2727, #0A2E57);
+	background:     -ms-linear-gradient(top, #2F2727, #0A2E57); /* For pre-releases of IE 10*/
+  	background:      -o-linear-gradient(top, #2F2727, #0A2E57); /* For old Opera (11.1 to 12.0) */ 
+  	background:         linear-gradient(top, #2F2727, #0A2E57); /* Standard syntax; must be last */
+	height: 100%;
+	margin: 0;
+	background-repeat: no-repeat;
+	background-attachment: fixed;
 }
 
-
-#background {
-	background: rgb(77, 147, 165);
-	background-image: radial-gradient(circle farthest-side at right bottom,#AA8490,#1d2b64 80%,#0e153a);
-	position:fixed;
-	top:0;
-	left:0;
-	width:100%;
-	height:100%;
-	z-index: -1;
+a {
+	color: #7CBCF2;
 }
 
-#main_header {
-	text-align: center;
-	font-size: 60px;
-	font-family: 'Cinzel', serif;
-	white-space: nowrap;
-	cursor: pointer;
+.footer {
+    padding-top: 40px;
+    padding-bottom: 40px;
+    margin-top: 40px;
+    border-top: 1px solid #eee;
 }
-#main_header a, #main_header a:visited, #main_header a:hover, #main_header a:active {
-  color: #E9D699;
-  text-decoration: none;
-}
-
-#sub_header {
- 	margin-top: -10px;
-	text-align: center;
-	font-size: 17px;
-	font-family: verdana;
-	white-space: nowrap;
-	font-weight: 500;
-	color:  #E9D699;
- }
-
-#menu {
-	width: 60%;
-    min-width: 700px;
-    margin: 10px auto 0 auto;
-    padding: 5px 0;
-    list-style: none;
+/* Main marketing message and sign up button */
+.jumbotron {
     text-align: center;
-    background-color: #111;
-    background-image: linear-gradient(#363131, #111);
-    border-radius: 18px;
+    background-color: transparent;
+    padding-bottom: 25px;
+}
+.jumbotron .btn {
+    padding: 14px 24px;
+    font-size: 21px;
 }
 
+@media (min-width: 768px) {
+    #collapsing-navbar li {
+    	display: inline-block;
+    	width: 18%;
+    	height: 100%;
+    	position: relative;
+    	margin: auto;
+    	float: none;
+    	vertical-align: middle;
+    	padding: 15px 0px;
+    }
+    #collapsing-navbar li a {
+    	height: 100%;
+    	vertical-align: middle;
+    	padding: 0px;
+    	font-size: 16px;
+    }
+	#collapsing-navbar li:nth-child(1){
+		width: 24%;
+	}
+	#collapsing-navbar li:nth-child(2){
+		width: 22%;
+	}
+	#collapsing-navbar li:nth-child(3){
+		width: 18%;
+	}
+	#collapsing-navbar li:nth-child(4){
+		width: 12%;
+	}
+	#collapsing-navbar li:nth-child(5){
+		width: 15%;
+	}
 
+    .navbar-collapse {
+    	width: 100%;
+    	height: 100%;
+    }
 
-#menu li {
-	display: inline-block;
-    width: 18%;   
-    position: relative;
-    padding: 0;
-    cursor: pointer;
-    vertical-align: middle;
+    .nav {
+    	top: 0px;
+    	position: absolute;
+    	width: 85%;
+    	height: 100%;
+    	margin-left: 20px;
+    	display: inline-block
+    }
+}
+@media (min-width: 992px) {
+	#collapsing-navbar li:nth-child(4){
+		width: 16% !important;
+	}
+	#collapsing-navbar li a {
+    	font-size: 18px;
+    }
+    .nav {
+    	margin-left: 40px;
+    }
+}
+@media (min-width: 1200px){
+	.nav {
+		margin-left: 70px;
+	}
 }
 
-#menu li:nth-child(n + 4){
-	width: 12%;
-}
-#menu li:nth-child(1){
-	width: 22%;
+#install_button {
+	display: none;
 }
 
-
-#menu a {
-    height: 25px;
-    color: #DAD4C1;
-    font-family: verdana;
-    font-weight: bold;
-    font-size: 15px;
-    text-decoration: none;
+.social_media_container {
+	width: 300px;
+	margin: auto;
 }
 
-#menu li:hover > a {
-    color: #fafafa;
+#twitter-widget-0 {
+	float: right;
 }
 
-/* Clear floated elements */
-#menu:after {
-    visibility: hidden;
-    display: block;
-    font-size: 0;
-    content: " ";
-    clear: both;
-    height: 0;
+.social_media_container div.fb-like{
+	float: left;
 }
-
 
 .category {
 	font-family: verdana;
 	font-size: 17px;
-	width: 675px;
-	margin: auto;
 	margin-top: 30px;
 }
 
 .category p {
 	font-size: 17px;
 	text-align: left;
-	color: #E9D699;
-	line-height: 23px;
+	line-height: 25px;
 }
 
-.category p.flash{
+.jumbotron p.flash {
 	display: none;
+	margin-top: 12px;
 	background: #CABD93;
 	color: black;
 	border-radius: 10px;
 	padding: 10px;
+	width: 65%;
+	font-size: 16px;
+	text-align: left;
+}
+
+.flash a {
+	color: indigo;
 }
 
 .category ul li {
 	font-size: 17px;
 	text-align: left;
-	color: #E9D699;
 }
 
 .category a {
-	color: white;
+	color: #7CBCF2;
 }
 
 .category h3 {
@@ -191,4 +177,9 @@ kbd {
 
 #features li {
 	margin-top: 10px;
+}
+
+#not_using_chrome {
+	width: 65%;
+	font-size: 18px;
 }

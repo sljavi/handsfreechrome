@@ -1,35 +1,79 @@
 <!DOCTYPE html>
-<html>
-	<head>
-		<title>Hands Free for Chrome</title>
-		<meta name="description" content="Hands Free for Chrome, a Chrome extension to browse the web using only your voice, free to download and use. A mic is required.">
-		<meta charset="utf-8"/>
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-		<link rel="stylesheet" type="text/css" href="index.css">
-		<link href='http://fonts.googleapis.com/css?family=Marcellus+SC|Antic+Slab|Poiret+One|Cinzel' rel='stylesheet' type='text/css'>
-		<link rel="icon" 
-		  type="image/png" 
-		  href="icon16.png">
-		<script src="index.js"></script>
-	</head>
-	<body>
-		<div id="background"></div>
-		<div id="main_header"><a href="index.html">Hands Free for Chrome</a></div>
-		<div id="sub_header">
-		A Chrome extension to browse the web using only your voice, free to download and use. A mic is required.</div>
-		<ul id="menu">
-			<li><a href="usage.html">Installation & Usage</a></li>
-			<li><a href="commands.html">Command Guide</a></li>
-			<li><a href="development.html">Development</a></li>
-			<li><a href="donate.html">Donate</a></li>
-			<li><a href="contact.html">Contact</a></li>
-		</ul>
-		<div id="donate" class="category">
-			<p>Hands Free can make an enormous difference to those who would otherwise be unable to peruse the news or search for information.</p>
+<html lang="en">
 
-			<p>If you would like to make a donation to express your support and encourage further development, you can do so via this handy <a href="https://pledgie.com/campaigns/24704">donations-accepting page</a>.</p>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-			<p>Your contributions are greatly appreciated.</p>
-		</div>
-	</body>
+	<title>Hands Free for Chrome</title>
+	<meta name="description" content="Donate to Hands Free for Chrome and support its development.">
+	<meta charset="utf-8"/>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	<link rel="icon" 
+  		  type="image/png" 
+  		  href="icon16.png">
+  	<link rel="chrome-webstore-item" href="https://chrome.google.com/webstore/detail/ddgmnkioeodkdacpjblmihodjgmebnld">
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="index.css">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <nav id="main_nav" class="navbar navbar-default" role="navigation">
+            <div class="container-fluid">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#collapsing-navbar">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="index.html">Hands Free</a>
+                </div>
+
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="collapsing-navbar">
+                    <ul class="nav navbar-nav">
+                        <li><a href="usage.html">Installation &amp; Usage</a>
+                        </li>
+                        <li><a href="commands.html">Command Guide</a>
+                        </li>
+                        <li><a href="development.html">Development</a>
+                        </li>
+                        <li><a href="donate.html">Donate</a>
+                        </li>
+                        <li><a href="contact.html">Contact</a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- /.navbar-collapse -->
+            </div>
+            <!-- /.container-fluid -->
+        </nav>
+
+        <div class="row">
+            <div class="col-lg-12" style="margin-left:12%; color: white; width: 80%; font-size:16px;">
+            	<div class="category">
+					<p>Hands Free can make an enormous difference to those who would otherwise be unable to peruse the news or search for information.</p>
+
+					<p>If you would like to make a donation to express your support and encourage further development, you can do so via this handy <a href="https://pledgie.com/campaigns/24704">donations-accepting page</a>.</p>
+
+					<p>Your contributions are greatly appreciated.</p>
+				</div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p style="color:white; float:right;">&copy; 2014</p>
+        </div>
+
+    </div>
+</body>
+
 </html>
