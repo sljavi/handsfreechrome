@@ -1,4 +1,5 @@
 $(function() {
+	var input_url = "http://127.0.0.1:8000";
 	var map_is_on = false;
 	var guide_is_on = false;
 	var show_is_on = false;
@@ -28,7 +29,14 @@ $(function() {
 	//used for blade runner mode....'zoom...enhance'
 	$('body').css({ '-webkit-transition': '0.6s ease-in-out' });
 	var blurred = false;
-
+    
+    var commandAliases = {};
+    chrome.storage.sync.get({
+	"commandAliases": {}
+    }, function(items) {
+	console.log(items);
+	commandAliases = items.commandAliases;
+    });
 	//ctrl+space to turn extension on/off
 	window.onkeydown = function(e) {
 		if (e.ctrlKey === true && e.keyCode === 32) {
@@ -503,6 +511,10 @@ $(function() {
 		};
 
 		this.call = function( command ){
+
+			console.log(command, commandAliases);
+			command = commandAliases[command] || command;
+			console.log(command);
 			var key = {
 				'map'			: map,
 				'guide'			: guide,
@@ -545,7 +557,7 @@ $(function() {
 				'keep scrolling left'	: keep_scrolling_left
 			};
 			console.log("Page has received a command from Hands Free: " + command);
-			if (window.location.origin === 'https://handsfreechrome.com/input.html') {
+			if (window.location.origin === input_url + '/input.html') {
 				return -1;
 			}
 			if ( command.split(" ")[0] + command.split(" ")[1] === "goto" ) {
@@ -569,7 +581,7 @@ $(function() {
 			}
 			lastMessage = request;
 			lastTime = (new Date()).getTime();
-			if (window.location.href === 'https://handsfreechrome.com/input.html') {
+			if (window.location.href === input_url + '/input.html') {
 				inform_input_page(request.dictModeOn);
 				return;
 			}

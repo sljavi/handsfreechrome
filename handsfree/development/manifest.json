@@ -8,6 +8,7 @@
   "description": "Navigate the web hands free!",
   "version": "1.2",
   "background": { "scripts": ["background-min.js"] },
+  "options_page": "options.html",
   "content_scripts": [ 
 	{
 		"matches": ["http://*/*", "https://*/*"],
@@ -18,10 +19,11 @@
     "default_icon": "icon.png"
   },
   "externally_connectable": {
-    "matches": ["*://*.handsfreechrome.com/*"]
+    "matches": ["*://*.handsfreechrome.com/*", "http://127.0.0.1:8000/*"]
   },
   "permissions": [
 	 "history",
+	 "storage",
    "tabs"
   ],
   "web_accessible_resources": ["jquery-1.10.2.min.map"]

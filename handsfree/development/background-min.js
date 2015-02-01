@@ -2,6 +2,7 @@ var inputWindowId = null;
 var time_of_last_request = 0;
 var dictation_mode = false;
 var last_message = null;
+var input_url = 'http://127.0.0.1:8000';
 
 function contains(a, obj) {
     for (var i = 0; i < a.length; i++) {
@@ -24,13 +25,9 @@ if (typeof String.prototype.endsWith !== 'function') {
 }
 
 function openInputWindow() {
-	chrome.windows.create(
+	chrome.tabs.create(
     {
-	   'url': 'https://handsfreechrome.com/input.html',
-	   'height': 300,
-	   'width': 400,
-	   'left': screen.width - 400,
-	   'top': -10
+	   'url': input_url + '/input.html',
    },
    function(window) {
 		inputWindowId = window.id;
@@ -77,7 +74,7 @@ function executeMessage( message, dictation_message ) {
 					return;
 				}
 				//don't let any other commands reach the input window
-				if (window.tabs[0].url === 'https://handsfreechrome.com/input.html') {
+				if (window.tabs[0].url === input_url + '/input.html') {
 					return;
 				}
 				if (message === "full screen") {
@@ -136,7 +133,7 @@ function executeMessage( message, dictation_message ) {
 	} else {
 		chrome.windows.getAll( {populate:true}, function(windows){
 			windows.forEach(function(window){
-				if (window.tabs[0].url === 'https://handsfreechrome.com/input.html') {
+				if (window.tabs[0].url === input_url + '/input.html') {
 					return;
 				}
 				chrome.tabs.query({
@@ -156,12 +153,20 @@ function executeMessage( message, dictation_message ) {
 chrome.runtime.onMessageExternal.addListener(
 	function(request, sender, sendResponse) {
 		// don't allow access from other pages
-		if (sender.url !== "https://www.handsfreechrome.com/input.html"
-			&& sender.url !== "https://handsfreechrome.com/input.html") {
+		if (sender.url !== input_url + "/input.html"
+			&& sender.url !== input_url + "/input.html") {
 			alert("Nevermind, bad URL from message sender.");
 			console.log("Nevermind, bad URL from message sender.");
 			console.log("URL: " + sender.url);
 			return;
+		}
+		if (request.getAliases) {
+			chrome.storage.sync.get({
+				commandAliases: {}
+			}, function(items) {
+				sendResponse({commandAliases: items.commandAliases});
+			});
+			return true;
 		}
 		//check that message is not empty
 		if (!request.message) {
@@ -183,7 +188,7 @@ chrome.runtime.onMessageExternal.addListener(
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
 	if(sender.tab){
-		if(sender.tab.url !== "https://www.handsfreechrome.com"){
+		if(sender.tab.url !== input_url){
 			if (request.greeting.dictModeOn) {
 				console.log("turning on dictation mode in the background window");
 				dictation_mode = true;
@@ -204,8 +209,8 @@ chrome.runtime.onMessage.addListener(
 				var open = true;
 				chrome.windows.getAll( {populate:true}, function(windows){
 					windows.forEach(function(window){
-						if (window.tabs[0].url === 'https://handsfreechrome.com/input.html') {
-							console.log("bang");
+						if (window.tabs[0].url === input_url + '/input.tml') {
+							consolelog("bang");
 							chrome.windows.remove( window.id );
 							open = false;
 						}
