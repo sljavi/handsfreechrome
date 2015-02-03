@@ -11,7 +11,7 @@ $(function() {
     }
     
     var commandAliases;
-    var extensionId = 'imkgopofdhkeoailpjklljakhdckphai';
+    var extensionId = 'abdnibopiogmoekjlgmndfhkijfhnpig';
     // prod id = 'ddgmnkioeodkdacpjblmihodjgmebnld'
     chrome.runtime.sendMessage(extensionId, {getAliases: true},
                                function(response) {

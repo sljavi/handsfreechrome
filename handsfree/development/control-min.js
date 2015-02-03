@@ -1,5 +1,5 @@
 $(function() {
-    var input_url = "http://127.0.0.1:8000";
+    var input_url = "https://127.0.0.1:8000";
     var map_is_on = false;
     var guide_is_on = false;
     var show_is_on = false;

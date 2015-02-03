@@ -2,7 +2,7 @@ var inputWindowId = null;
 var time_of_last_request = 0;
 var dictation_mode = false;
 var last_message = null;
-var input_url = 'http://127.0.0.1:8000';
+var input_url = 'https://127.0.0.1:8000';
 
 function contains(a, obj) {
     for (var i = 0; i < a.length; i++) {
