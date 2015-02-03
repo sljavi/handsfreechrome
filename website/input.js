@@ -281,6 +281,7 @@ $(function() {
                 }
                 document.getElementById('inputDisplay').innerHTML = final_transcript;
                 document.getElementById('interimDisplay').innerHTML = interim_transcript;
+                if(interim_transcript) document.title = interim_transcript;
             }
             recognition.start();
         }
