@@ -133,6 +133,7 @@ $(function() {
         $('.numTag').remove();
         map_is_on = false;
         guide_is_on = false;
+        show_is_on = false;
     }
     
     function startScrolling( direction, speed ) {
