@@ -11,11 +11,17 @@ $(function() {
     }
     
     var commandAliases;
+    var timeoutDuration = 180000;
     var extensionId = 'abdnibopiogmoekjlgmndfhkijfhnpig';
     // prod id = 'ddgmnkioeodkdacpjblmihodjgmebnld'
     chrome.runtime.sendMessage(extensionId, {getAliases: true},
                                function(response) {
                                    commandAliases = response.commandAliases;
+                               });
+
+    chrome.runtime.sendMessage(extensionId, {getTimeoutDuration: true},
+                               function(response) {
+                                   timeoutDuration = response.timeoutDuration;
                                });
     //for inputting text to forms
     var dictation_mode = false;
@@ -245,11 +251,11 @@ $(function() {
                 if (timeSinceLastStart < 1000) {
                     console.log("setting timeout");
                     setTimeout(recognition.start, 1000 - timeSinceLastStart);
-                } else if (new Date().getTime() - lastInputAt < 180000) {
+                } else if (new Date().getTime() - lastInputAt < timeoutDuration) {
                     console.log("starting immediately");
                     recognition.start();
                 } else {
-                    alert("No speech detected for more than 3 minutes, turning off. Refresh input window to reactivate.")
+                    alert("No speech detected for more than "+timeoutDuration/60000+" minutes, turning off. Refresh input window to reactivate.")
                 }
             };
             

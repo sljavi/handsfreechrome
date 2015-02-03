@@ -169,6 +169,14 @@ chrome.runtime.onMessageExternal.addListener(
             });
             return true;
         }
+        if (request.getTimeoutDuration) {
+            chrome.storage.sync.get({
+                timeoutDuration: 180000
+            }, function(items) {
+                sendResponse({timeoutDuration: items.timeoutDuration});
+            });
+            return true;
+        }
         //check that message is not empty
         if (!request.message) {
             return;
