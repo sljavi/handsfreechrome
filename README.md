@@ -7,7 +7,7 @@ Chrome extension for hands-free exploration of the world wide web!
 Development
 -----------
 
-This extension uses an external web page to get around some microphone restrictions Chrome has. This means you need to set up a local server in order to work on certain parts of the code. A python file is included which set up a local HTTPS server. You can start it up with the command
+This extension uses an external web page to get around some microphone restrictions Chrome has. This means you need to set up a local server in order to work on certain parts of the code. A python file is included which sets up a local HTTPS server. You can start it up with the command
 
      python website/local-server.py
 
