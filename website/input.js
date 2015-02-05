@@ -98,16 +98,18 @@ $(function() {
     
     /*Checks to see if command is valid.*/
     /*Checks against three word commands first, then against two word commands, then against single word commands*/
-    var matchesValidCommands = function(three_commands) {           
+    var matchesValidCommands = function(three_commands) {
+        command = commandAliases[three_commands[0] + " " + three_commands[1] + " " + three_commands[2]] || three_commands[0] + " " + three_commands[1] + " " + three_commands[2];
         for (var i = 0; i < valid_triple_commands.length; i++) {
-            if (three_commands[0] + " " + three_commands[1] + " " + three_commands[2] === valid_triple_commands[i] ||
+            if (command === valid_triple_commands[i] ||
                 three_commands[0] + " " + three_commands[1] === "go to") {
                 console.log(three_commands[0] + " " + three_commands[1] + " " + three_commands[2]);
                 return 3;
             }
         }
+        command = commandAliases[three_commands[0] + " " + three_commands[1]] || three_commands[0] + " " + three_commands[1];
         for (var i = 0; i < valid_double_commands.length; i++) {
-            if (three_commands[0] + " " + three_commands[1] === valid_double_commands[i]) {
+            if (command === valid_double_commands[i]) {
                 console.log(three_commands[0] + " " + three_commands[1]);
                 return 2;
             }
