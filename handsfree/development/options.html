@@ -5,11 +5,14 @@
   </head>
 
   <body>
-    <label>Down Aliases: <textarea id="down-aliases"></textarea></label><br>
+    <div id="aliases">
+    </div>
     <label>Stop listening after this much inactivity (minutes): <input type="number" id="timeout-duration"></input></label><br>
+    <label>Open input page in tab (opens in separate window by default) : <input type="checkbox" id="open-in-tab"></input></label><br>
     <button id="save">Save</button><br>
     <span id="status"></span>
 
+    <script src="jquery.js"></script>
     <script src="options.js"></script>
   </body>
 </html>

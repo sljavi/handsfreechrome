@@ -25,14 +25,32 @@ if (typeof String.prototype.endsWith !== 'function') {
 }
 
 function openInputWindow() {
-    chrome.tabs.create(
-        {
-            'url': input_url + '/input.html',
-        },
-        function(window) {
-            inputWindowId = window.id;
+    chrome.storage.sync.get({
+        "openInTab": false
+    }, function(items) {
+        if(items.openInTab) {
+            chrome.tabs.create(
+                {
+                    'url': input_url + '/input.html',
+                },
+                function(window) {
+                    inputWindowId = window.id;
+                }
+            );
+        } else {
+            chrome.windows.create(
+                {
+                    'url': 'https://handsfreechrome.com/input.html',
+                    'height': 300,
+                    'width': 400,
+                    'left': screen.width - 400,
+                    'top': -10
+                },
+                function(window) {
+                    inputWindowId = window.id;
+                });
         }
-    );
+    });
 }
 
 chrome.browserAction.onClicked.addListener(function() {
