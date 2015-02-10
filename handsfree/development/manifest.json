@@ -1,28 +1,30 @@
 {
-  "manifest_version": 2,
-  "icons": { "16": "icon16.png",
-           "48": "icon48.png",
-          "128": "icon128.png"
-  },
-  "name": "Hands Free for Chrome",
-  "description": "Navigate the web hands free!",
-  "version": "1.2",
-  "background": { "scripts": ["background-min.js"] },
-  "content_scripts": [ 
-	{
-		"matches": ["http://*/*", "https://*/*"],
-		"js": ["visibility.js", "jquery.js", "control-min.js"]
-	}
-  ],
-  "browser_action": {
-    "default_icon": "icon.png"
-  },
-  "externally_connectable": {
-    "matches": ["*://*.handsfreechrome.com/*"]
-  },
-  "permissions": [
-	 "history",
-   "tabs"
-  ],
-  "web_accessible_resources": ["jquery-1.10.2.min.map"]
+    "manifest_version": 2,
+    "icons": { "16": "icon16.png",
+               "48": "icon48.png",
+               "128": "icon128.png"
+             },
+    "name": "Hands Free for Chrome",
+    "description": "Navigate the web hands free!",
+    "version": "1.2",
+    "background": { "scripts": ["background-min.js"] },
+    "options_page": "options.html",
+    "content_scripts": [ 
+	    {
+		    "matches": ["http://*/*", "https://*/*"],
+		    "js": ["visibility.js", "jquery.js", "control-min.js"]
+	    }
+    ],
+    "browser_action": {
+        "default_icon": "icon.png"
+    },
+    "externally_connectable": {
+        "matches": ["*://*.handsfreechrome.com/*", "https://127.0.0.1:8000/*"]
+    },
+    "permissions": [
+	    "history",
+	    "storage",
+        "tabs"
+    ],
+    "web_accessible_resources": ["jquery-1.10.2.min.map"]
 }
