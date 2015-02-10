@@ -32,16 +32,15 @@ $(function() {
     
     var commandAliases = {};
     chrome.storage.sync.get({
-        "commandAliases": {}
+        commandAliases: {}
     }, function(items) {
-        console.log(items);
         commandAliases = items.commandAliases;
     });
+
     //ctrl+space to turn extension on/off
     window.onkeydown = function(e) {
         if (e.ctrlKey === true && e.keyCode === 32) {
-            chrome.runtime.sendMessage({greeting: "TOGGLE_EXTENSION_ON_OFF" }, function(response) {
-            });
+            chrome.runtime.sendMessage({greeting: "TOGGLE_EXTENSION_ON_OFF" });
             return !(e.keyCode == 32);
         }
     };
@@ -159,9 +158,7 @@ $(function() {
         } else {
             dictation_mode = false;
         }
-        chrome.runtime.sendMessage({greeting: {dictModeOn : dictation_mode} }, function(response) {
-            //console.log(response);
-        });
+        chrome.runtime.sendMessage({ greeting: {dictModeOn : dictation_mode} });
     }
     
     function inform_input_page(turn_on) {
@@ -513,9 +510,8 @@ $(function() {
         
         this.call = function( command ){
             
-            console.log(command, commandAliases);
             command = commandAliases[command] || command;
-            console.log(command);
+
             var key = {
                 'map'           : map,
                 'guide'         : guide,
