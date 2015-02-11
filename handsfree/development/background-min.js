@@ -40,7 +40,7 @@ function openInputWindow() {
         } else {
             chrome.windows.create(
                 {
-                    'url': 'https://handsfreechrome.com/input.html',
+                    'url': input_url + '/input.html',
                     'height': 300,
                     'width': 400,
                     'left': screen.width - 400,
@@ -238,7 +238,6 @@ chrome.runtime.onMessage.addListener(
                     chrome.windows.getAll( {populate:true}, function(windows){
                         windows.forEach(function(window){
                             if (window.tabs[0].url === input_url + '/input.tml') {
-                                consolelog("bang");
                                 chrome.windows.remove( window.id );
                                 open = false;
                             }
