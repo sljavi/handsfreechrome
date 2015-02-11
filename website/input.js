@@ -12,7 +12,7 @@ $(function() {
     
     var commandAliases;
     var timeoutDuration = 180000;
-    var extensionId = 'ejngnnggbljhnbmbcigilmjphhjjpbbi';
+    var extensionId = 'gakmidkmfmcgonnichkbaggmfofpical';
     // prod id = 'ddgmnkioeodkdacpjblmihodjgmebnld'
     chrome.runtime.sendMessage(extensionId, {getAliases: true},
                                function(response) {
