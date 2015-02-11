@@ -26,7 +26,6 @@ elif majorVersion == 3:
 	from http.server import HTTPServer, SimpleHTTPRequestHandler
 	server_address = ('', 8000)
 	httpd = HTTPServer(server_address, SimpleHTTPRequestHandler)
-
 	httpd.socket = ssl.wrap_socket(
 		httpd.socket,
 		certfile='server.pem',
