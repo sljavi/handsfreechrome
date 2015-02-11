@@ -7,12 +7,12 @@
     "name": "Hands Free for Chrome",
     "description": "Navigate the web hands free!",
     "version": "1.2",
-    "background": { "scripts": ["background-min.js"] },
+    "background": { "scripts": ["background.js"] },
     "options_page": "options.html",
     "content_scripts": [ 
 	    {
 		    "matches": ["http://*/*", "https://*/*"],
-		    "js": ["visibility.js", "jquery.js", "control-min.js"]
+		    "js": ["visibility.js", "jquery.js", "control.js"]
 	    }
     ],
     "browser_action": {
