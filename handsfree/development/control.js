@@ -1,13 +1,12 @@
 $(function() {
-    var input_url = "https://127.0.0.1:8000";
+    var DEV_MODE = true;
+    var input_url = DEV_MODE ? "https://127.0.0.1:8000" :  "https://handsfreechrome.com";
     var map_is_on = false;
     var guide_is_on = false;
     var show_is_on = false;
     var zoomLevel = 1.0;
     var dictation_mode = false;
     var bladeRunnerMode = false;
-    
-    var input_is_open = null;
     
     // used for all scrolling commands
     var scrollContainer = $('html, body');
