@@ -9,24 +9,24 @@ $(function() {
     
     var input_is_open = null;
     
-    //used for all scrolling commands
+    // used for all scrolling commands
     var scrollContainer = $('html, body');
     
-    //used for the "keep scrolling up/down" commands
+    // used for the "keep scrolling up/down" commands
     var scrollSpeed = 800;
     var currentDirection = null;
     var currentSpeed = null;
     
-    //stops commands from being double-executed....the voice recognition often registers input 2-3 times
-    //This check is in place in background.js too....I don't recall why I did it twice. Extra safety!
+    // stops commands from being double-executed....the voice recognition often registers input 2-3 times
+    // This check is in place in background.js too....I don't recall why I did it twice. Extra safety!
     var lastMessage = null;
     var lastTime = (new Date()).getTime();
     var commandDelay = null;
     
-    //stops the maptag number from being placed into a text input at the moment it is selected
+    // stops the maptag number from being placed into a text input at the moment it is selected
     var inputNumberBugFix = false;
     
-    //used for blade runner mode....'zoom...enhance'
+    // used for blade runner mode....'zoom...enhance'
     $('body').css({ '-webkit-transition': '0.6s ease-in-out' });
     var blurred = false;
     
@@ -37,7 +37,7 @@ $(function() {
         commandAliases = items.commandAliases;
     });
 
-    //ctrl+space to turn extension on/off
+    // ctrl+space to turn extension on/off
     window.onkeydown = function(e) {
         if (e.ctrlKey === true && e.keyCode === 32) {
             chrome.runtime.sendMessage({greeting: "TOGGLE_EXTENSION_ON_OFF" });
@@ -45,7 +45,7 @@ $(function() {
         }
     };
     
-    //embedded help page...non-compact HTML in usage.html
+    // embedded help page...non-compact HTML in usage.html
     $('body').append('<div id="hfc_help" style="display:none;"><h2>Hands Free Chrome Command Guide</h2><p>Say <kbd>help</kbd> again to hide this guide. Use the scrolling commands to scroll up or down. </p><p style="font-style: italic">Note: the most common problem is a command being misheard by the speech engine. By observing the Hands Free input window, you can see what it thinks you said. This may help you learn the proper enunciations necessary in order to be understood more readily. </p><h3>Scrolling</h3><p>To scroll up a small amount, say <kbd>up</kbd>.<br>To scroll down a small amount, say <kbd>down</kbd>.<br>To scroll a small amount to the right, say <kbd>right</kbd>.<br>To scroll a small amount to the left, say <kbd>left</kbd>.</p><p>To page up, say <kbd>rise</kbd>.<br>To page down, say <kbd>fall</kbd>.</p><p>To scroll to the bottom of the page, say <kbd>bottom</kbd>.<br>To scroll to the top of the page, say <kbd>top</kbd>.</p><p>To set the page scrolling continuously up, say <kbd>keep scrolling up</kbd>.<br>To set the page scrolling continuously down, say <kbd>keep scrolling down</kbd>.<br>To stop the page from continously scrolling, say <kbd>stop</kbd>.<br>To control the speed of scrolling, say <kbd>faster</kbd> or <kbd>slower</kbd>. The changes will be small, but you can issue these commands repeatedly for incremental gains.</p><h3>Clicking</h3><p>To paint number tags alongside what are most likely visible, clickable elements on the page, say <kbd>map</kbd>. The tags will appear near the upper left corner of the corresponding link, image, or input form. Use your best judgement to tell which is which.</p><p>To click a numbered element, simply speak the number. Enunciate very clearly.</p><p>If you decide not to click on anything, saying <kbd>map</kbd> a second time will hide the number tags, as will using any of the scrolling commands.</p><p>If the element you wish to click is not numbered by <kbd>map</kbd>, try using <kbd>guide</kbd> instead. Saying <kbd>guide</kbd> while the <kbd>map</kbd> tags are active will hide the existing tags and draw new ones. The same is true in reverse.</p><p>The system by which clickable elements are numbered will be heavily improved in the future, but for the time being there may be many frustrations in the placement of the numbers.</p><p>To alleviate this, there is a <kbd>show</kbd> command, which will sloppily paint numbers over nearly everything, including elements you cannot see and therefore cannot click on. It\'s a last resort. But if <kbd>map</kbd> and <kbd>guide</kbd> don\'t paint a number next to the element you wish to click, the odds are very high that <kbd>show</kbd> will get the job done.</p><p>Again, saying <kbd>show</kbd> while <kbd>map</kbd> or <kbd>guide</kbd> are active will just hide the existing tags and draw new ones.</p><p><i>Note: There is currently no support for dropdown menus.</i></p><h3>Dictation Mode</h3><p>If you’ve clicked a text input, Hands Free will switch into dictation mode, and anything you say will be written as text into the selected text input.</p><p>To turn off dictation mode and return to the normal control functionality, say <kbd>stop</kbd>.<br>To submit the textbox you’re typing in (the equivalent of pressing ‘enter’), say <kbd>go</kbd>. This is what you want when you finish typing in a searchbox, for example.<br>To move the cursor to the next input in the form (for example, from username to password), say <kbd>next</kbd>.<br><br>To remove the last word you entered from the textbox, say <kbd>undo</kbd>.</p><h3>Navigation</h3><p>To go to ANY website, say the name of the website on its own with the domain specified. There is no need to say “www.”<br>Examples: <kbd>google.com</kbd>, <kbd>en.wikipedia.org</kbd> (pronounced E-N-dot-wikipedia-dot-org), <kbd>mit.edu</kbd> (pronounced M-I-T-dot-E-D-U), <kbd>fr.wikipedia.org</kbd> (pronounced F-R-dot-wikipedia-dot-org)</p><p>To go to a particular .com website, say <kbd>go to [website name]</kbd>. You can include the .com or omit it.<br>Examples: <kbd>go to google</kbd>, <kbd>go to google.com</kbd>, <kbd>go to amazon</kbd>, <kbd>go to facebook</kbd></p><p style="font-style: italic">Note: there are some websites with longer names which will register erroneously with the engine. For example, there is no way to reach freecreditreport.com, which will be heard as “free credit report.com”, and will consequently send you to report.com.</p><p>To go back one page in your history, say <kbd>back</kbd>.<br>To go forward one page in your history, say <kbd>forward</kbd>.</p><p>To go to google.com, say <kbd>home</kbd>. This will also automatically put the extension into dictation mode, and is the fastest way to search for things.</p><p style="font-style: italic">Note: Google can be used to indirectly reach almost any website that you can\'t navigate to directly via Hands Free. For instance, going to Google and searching for "free credit report.com" will correctly bring up as a result the actual "freecreditreport.com", which you can then click on.</p><h3>Controlling Tabs</h3><p>To open a new tab, say <kbd>new tab</kbd>.</p><p style="font-style: italic">Note: When opening a new tab, only the "go to" command and tab control commands will work unless you have installed the new tab redirect extension, which will cause new tabs to default to a page of your choosing. That extension can be found on <a href="https://chrome.google.com/webstore/detail/new-tab-redirect/icpgjfneehieebagbmdbhnlpiopdcmna?hl=en">the Chrome Web Store.</a></p><p>To close the current tab, say <kbd>close tab</kbd>.<br>To switch the active tab to the next tab in the window, say <kbd>switch</kbd>.</p><h3>Controlling the Window</h3><p>To enter or exit full screen mode, say <kbd>full screen</kbd>. All commands work just the same in full screen mode.<br>To minimize, say <kbd>minimize</kbd>.</p><p style="font-style: italic">Note: Unfortunately the ‘maximize’ command is broken in Chrome. You may be able to restore your window from a minimized state by using the full screen command and then toggling it off, but this has lately proved unreliable. Using the minimize command is currently not recommended.</p><p>To close all Chrome windows entirely, say <kbd>exit</kbd> or <kbd>quit</kbd>.</p><h3>Zooming</h3><p>To zoom in, say <kbd>zoom in</kbd><br>To zoom out, say <kbd>zoom out</kbd>.<br>To restore the zoom level to normal, say <kbd>zoom normal</kbd>.</p><h3>Refreshing</h3><p>To reload the page, say <kbd>reload</kbd> or <kbd>refresh</kbd>.</p><h3>Closing Hands Free</h3><p>Lastly, to turn off Hands Free, say <kbd>done</kbd>.</p></div>');
     
     $('div#hfc_help').css({
@@ -96,8 +96,10 @@ $(function() {
         'white-space': 'nowrap'
     });
     
-    //utility functions
-    function contains(a, obj) {
+    // Utility functions
+
+    // Check whether an object is present in an array, returns bool
+    var contains = function(a, obj) {
         for (var i = 0; i < a.length; i++) {
             if (a[i] === obj) {
                 return true;
@@ -105,37 +107,44 @@ $(function() {
         }
         return false;
     }
-    
+
+    // Add startsWith method to String type, returns bool
     if (typeof String.prototype.startsWith !== 'function') {
         String.prototype.startsWith = function (str){
             return this.slice(0, str.length) === str;
         };
     }
+    // Add endsWith method to String type, returns bool
     if (typeof String.prototype.endsWith !== 'function') {
         String.prototype.endsWith = function (str){
             return this.slice(-str.length) === str;
         };
     }
     
-    function isScrolledIntoView(elem) {
-        var docViewTop = $(window).scrollTop();
-        var docViewBottom = docViewTop + $(window).height();
+    // Checks if a DOM element is in the visible portion of the document
+    var isScrolledIntoView = function(elem) {
+        var $win = $(window);
+        var $elem = $(elem);
+        var docViewTop = $win.scrollTop();
+        var docViewBottom = docViewTop + $win.height();
         
-        var elemTop = $(elem).offset().top;
-        var elemBottom = elemTop + $(elem).height();
+        var elemTop = $elem.offset().top;
+        var elemBottom = elemTop + $elem.height();
         
         return ((elemBottom >= docViewTop) && (elemTop <= docViewBottom)
                 && (elemBottom <= docViewBottom) &&  (elemTop >= docViewTop) );
     }
     
-    function clearMapTags() {
+    // Removes the numbered tags created by the map, guide, and show commands.
+    var clearMapTags = function() {
         $('.numTag').remove();
         map_is_on = false;
         guide_is_on = false;
         show_is_on = false;
     }
     
-    function startScrolling( direction, speed ) {
+    // Used for the "keep scrolling [up/down]" commands
+    var startScrolling = function( direction, speed ) {
         if ( direction === "up" ) {operator = "-=";}
         if ( direction === "down" ) {operator = "+=";}
         currentDirection = direction;
@@ -151,8 +160,8 @@ $(function() {
         );
     }
     
-    function switch_mode(turn_on) {
-        //console.log("mode switched");
+    // Switch between dictation mode and control mode. Inform background.js of the change.
+    var switch_mode = function(turn_on) {
         if (turn_on) {
             dictation_mode = true;
         } else {
@@ -161,11 +170,12 @@ $(function() {
         chrome.runtime.sendMessage({ greeting: {dictModeOn : dictation_mode} });
     }
     
-    function inform_input_page(turn_on) {
+    // Used to directly inform input.js that we have switched modes.
+    var inform_input_page = function() {
         document.getElementById('modeSwitch').click();
     }
     
-    //encapsulates all user command functionality involving DOM manipulation
+    // encapsulates all user command functionality involving DOM manipulation
     var commandCenter = new (function () {
         var map = function() {
             if (!map_is_on){
@@ -571,15 +581,15 @@ $(function() {
     
     chrome.runtime.onMessage.addListener(
         function(request, sender, sendResponse) {
-            //this time-checking thing to skip redundant request...I think we're already doing
-            //this in background.js....can we remove this here?
+            // this time-checking thing to skip redundant requests...I think we're already doing
+            // this in background.js....can we remove this here?
             if (request === lastMessage && (new Date()).getTime() - lastTime < 1000 ) {
                 return;
             }
             lastMessage = request;
             lastTime = (new Date()).getTime();
             if (window.location.href === input_url + '/input.html') {
-                inform_input_page(request.dictModeOn);
+                inform_input_page();
                 return;
             }
             if (request === "CHROME_DICTATION_STOP") {
@@ -624,31 +634,32 @@ $(function() {
                 return;
             }
             if (!dictation_mode) {
-                if (!map_is_on && !guide_is_on && !show_is_on && request === "4"){
-                    request = "fall";
+                if (!map_is_on && !guide_is_on && !show_is_on && request === '4'){
+                    request = 'fall';
                 }
-                if (!bladeRunnerMode && request === "zoom") {
+                if (!bladeRunnerMode && request === 'zoom') {
                     return;
                 }
                 if (commandCenter.call(request) === 0) {
-                    if (request === "att") request = "8";
-                    if (request === "sex") request = "6";
+                    if (request === 'att') request = '8';
+                    if (request === 'sex') request = '6';
                     clearTimeout(commandDelay);
                     commandDelay = setTimeout(function(){
-                        $('#'+request).trigger("click");
+                        $('#' + request).trigger('click');
                         clearMapTags();
                     }, 1000);
                 }
             } else {
-                if (!inputNumberBugFix && (!!parseInt(request) || request === "att" || request === "home") && contains(["", undefined], document.activeElement.value)) {
+                if (!inputNumberBugFix && (!!parseInt(request) || request === 'att' || 
+                        request === 'home') && contains(['', undefined], document.activeElement.value)) {
                     inputNumberBugFix = true;
                     return;
                 }
-                if (contains(["", undefined], document.activeElement.value)) {
-                    document.activeElement.value = "" + request;
+                if (contains(['', undefined], document.activeElement.value)) {
+                    document.activeElement.value = '' + request;
                     inputNumberBugFix = false;
                 } else {
-                    document.activeElement.value +=  " " + request;
+                    document.activeElement.value +=  ' ' + request;
                     inputNumberBugFix = false;
                 }
             }
