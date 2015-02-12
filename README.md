@@ -23,8 +23,7 @@ Production
 There are a few differences in the code between the development version of the extension and the production version:
 
 * The value of extensionId in website/input.js
-* The value of input_url in control.js
-* The value of input_url in background.js
+* DEV_MODE switch in control.js and background.js
 * "https://127.0.0.1:8000/*" can be removed from "externally connectable" in manifest.json
 
-However, the extension's primary author handles the updating of the production files from the dev files, so in theory you won't need to worry about it.
+However, the extension's primary author handles the updating of the production files from the dev files, so you won't need to worry about it.
