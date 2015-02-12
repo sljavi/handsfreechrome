@@ -3,6 +3,7 @@ $(function() {
     var map_is_on = false;
     var guide_is_on = false;
     var show_is_on = false;
+    var keep_show_is_on = false;
     var zoomLevel = 1.0;
     var dictation_mode = false;
     var bladeRunnerMode = false;
@@ -34,7 +35,6 @@ $(function() {
     chrome.storage.sync.get({
         "commandAliases": {}
     }, function(items) {
-        console.log(items);
         commandAliases = items.commandAliases;
     });
     //ctrl+space to turn extension on/off
@@ -130,10 +130,12 @@ $(function() {
     }
     
     function clearMapTags() {
-        $('.numTag').remove();
         map_is_on = false;
         guide_is_on = false;
-        show_is_on = false;
+        if (!keep_show_is_on) {
+            $('.numTag').remove();
+            show_is_on = false;
+        }
     }
     
     function startScrolling( direction, speed ) {
@@ -308,6 +310,16 @@ $(function() {
                 return;
             }
         };
+        var keep_showing = function() {
+            chrome.runtime.sendMessage({greeting: "KEEP_SHOWING"});
+            keep_show_is_on = true;
+            show();
+        }
+        var stop_showing = function() {
+            chrome.runtime.sendMessage({greeting: "STOP_SHOWING"});
+            keep_show_is_on = false;
+            clearMapTags();
+        }
         //we're going to have to make it an added function of this extension that whenever chrome says "oops did you mean..." it auto-redirects to google or something
         //otherwise the extension stops working completely because there's no control script because we're not on an http page
         var go_to = function(destination) {
@@ -512,14 +524,14 @@ $(function() {
         };
         
         this.call = function( command ){
-            
-            console.log(command, commandAliases);
             command = commandAliases[command] || command;
             console.log(command);
             var key = {
                 'map'           : map,
                 'guide'         : guide,
                 'show'          : show,
+                'keep showing'  : keep_showing,
+                'stop showing'  : stop_showing,
                 'go_to'         : go_to,
                 'home'          : home,
                 'down'          : down,
@@ -662,4 +674,11 @@ $(function() {
     if(document.location.href === "https://www.google.com/###") {
         switch_mode(true);
     }
+
+    chrome.runtime.sendMessage({greeting: "SHOW?"}, function(response) {
+        if (response) {
+            keep_show_is_on = true;
+            commandCenter.call('show');
+        }
+    });
 });

@@ -29,7 +29,7 @@ var commands = ["map",      //paints numbers next to anchor tags, images, forms,
                 "minimize", //minimize main chrome windows (should deactivate extension)
                 "full screen",  //toggle full screen mode
                 "new tab",      //opens a new tab
-                "close tab"     //closes current tab                
+                "close tab",     //closes current tab                
                 "keep scrolling down",  //sets browser scrolling continuously down until the end of the page
                 "keep scrolling up",    //sets browser scrolling continuously up until the end of the page
                 "keep scrolling left",  //sets browser scrolling continuously left until the end of the page
@@ -41,7 +41,6 @@ function save_options() {
 
     commands.forEach(function(command) {
         var aliases = $("#"+command.replace(/\s/g,"-")+"-aliases").val();
-        console.log(command, aliases);
         aliases = aliases.split(",");
         aliases.forEach(function(alias) {
             alias = alias.replace(/(^\s*)|(\s*$)/g, '');

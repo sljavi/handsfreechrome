@@ -3,6 +3,7 @@ var time_of_last_request = 0;
 var dictation_mode = false;
 var last_message = null;
 var input_url = 'https://127.0.0.1:8000';
+var keep_showing = false;
 
 function contains(a, obj) {
     for (var i = 0; i < a.length; i++) {
@@ -247,6 +248,12 @@ chrome.runtime.onMessage.addListener(
                             openInputWindow();
                         }
                     });
+                } else if (request.greeting === "KEEP_SHOWING") {
+                    keep_showing = true;
+                } else if (request.greeting === "STOP_SHOWING") {
+                    keep_showing = false;
+                } else if (request.greeting === "SHOW?") {
+                    sendResponse(keep_showing);
                 }
             }
         }

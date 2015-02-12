@@ -79,7 +79,9 @@ $(function() {
         "zoom out",     //zoom out WHOA WAIT WHAT DO YOU MEAN
         "zoom normal",  //return to standard level of zoom
         "new tab",      //opens a new tab
-        "close tab"     //closes current tab                
+        "close tab",    //closes current tab                
+        "keep showing",
+        "stop showing"
     ];
     
     var valid_triple_commands = [
