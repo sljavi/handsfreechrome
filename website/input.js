@@ -41,7 +41,7 @@ $(function() {
         "app",      // misheard word for "up"
         "op",       // misheard word for "up"
         "down",     // scrolls down 200 pixels
-        "town",     // mishear word for "down"
+        "town",     // misheard word for "down"
         "right",    // scrolls right 200 pixels
         "left",     // scrolls left 200 pixels
         "rise",     // page up
@@ -64,12 +64,13 @@ $(function() {
         "quit",     // closes all Chrome windows
         "done",     // close help, or turn off extension
         "Don",      // misheard word for "done"
+        "Dunn",     // misheard word for "done"
         "faster",   // increases speed of continuous scrolling
         "slower",   // decreases speed of continuous scrolling
         "flower",   // misheard word for "slower"
         "stop",     // stops continuous scrolling
         "help",     // brings up help page, or hides it
-        "minimize", // minimize main chrome windows (should deactivate extension)
+        "minimize", // minimize main chrome windows
         "Newtown"   // misheard word for "new tab"
     ];
     
