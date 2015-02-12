@@ -30,6 +30,7 @@ $(function() {
     $('body').css({ '-webkit-transition': '0.6s ease-in-out' });
     var blurred = false;
     
+    // if users have created any custom command aliases, fetch those now
     var commandAliases = {};
     chrome.storage.sync.get({
         commandAliases: {}
@@ -48,6 +49,7 @@ $(function() {
     // embedded help page...non-compact HTML in usage.html
     $('body').append('<div id="hfc_help" style="display:none;"><h2>Hands Free Chrome Command Guide</h2><p>Say <kbd>help</kbd> again to hide this guide. Use the scrolling commands to scroll up or down. </p><p style="font-style: italic">Note: the most common problem is a command being misheard by the speech engine. By observing the Hands Free input window, you can see what it thinks you said. This may help you learn the proper enunciations necessary in order to be understood more readily. </p><h3>Scrolling</h3><p>To scroll up a small amount, say <kbd>up</kbd>.<br>To scroll down a small amount, say <kbd>down</kbd>.<br>To scroll a small amount to the right, say <kbd>right</kbd>.<br>To scroll a small amount to the left, say <kbd>left</kbd>.</p><p>To page up, say <kbd>rise</kbd>.<br>To page down, say <kbd>fall</kbd>.</p><p>To scroll to the bottom of the page, say <kbd>bottom</kbd>.<br>To scroll to the top of the page, say <kbd>top</kbd>.</p><p>To set the page scrolling continuously up, say <kbd>keep scrolling up</kbd>.<br>To set the page scrolling continuously down, say <kbd>keep scrolling down</kbd>.<br>To stop the page from continously scrolling, say <kbd>stop</kbd>.<br>To control the speed of scrolling, say <kbd>faster</kbd> or <kbd>slower</kbd>. The changes will be small, but you can issue these commands repeatedly for incremental gains.</p><h3>Clicking</h3><p>To paint number tags alongside what are most likely visible, clickable elements on the page, say <kbd>map</kbd>. The tags will appear near the upper left corner of the corresponding link, image, or input form. Use your best judgement to tell which is which.</p><p>To click a numbered element, simply speak the number. Enunciate very clearly.</p><p>If you decide not to click on anything, saying <kbd>map</kbd> a second time will hide the number tags, as will using any of the scrolling commands.</p><p>If the element you wish to click is not numbered by <kbd>map</kbd>, try using <kbd>guide</kbd> instead. Saying <kbd>guide</kbd> while the <kbd>map</kbd> tags are active will hide the existing tags and draw new ones. The same is true in reverse.</p><p>The system by which clickable elements are numbered will be heavily improved in the future, but for the time being there may be many frustrations in the placement of the numbers.</p><p>To alleviate this, there is a <kbd>show</kbd> command, which will sloppily paint numbers over nearly everything, including elements you cannot see and therefore cannot click on. It\'s a last resort. But if <kbd>map</kbd> and <kbd>guide</kbd> don\'t paint a number next to the element you wish to click, the odds are very high that <kbd>show</kbd> will get the job done.</p><p>Again, saying <kbd>show</kbd> while <kbd>map</kbd> or <kbd>guide</kbd> are active will just hide the existing tags and draw new ones.</p><p><i>Note: There is currently no support for dropdown menus.</i></p><h3>Dictation Mode</h3><p>If you’ve clicked a text input, Hands Free will switch into dictation mode, and anything you say will be written as text into the selected text input.</p><p>To turn off dictation mode and return to the normal control functionality, say <kbd>stop</kbd>.<br>To submit the textbox you’re typing in (the equivalent of pressing ‘enter’), say <kbd>go</kbd>. This is what you want when you finish typing in a searchbox, for example.<br>To move the cursor to the next input in the form (for example, from username to password), say <kbd>next</kbd>.<br><br>To remove the last word you entered from the textbox, say <kbd>undo</kbd>.</p><h3>Navigation</h3><p>To go to ANY website, say the name of the website on its own with the domain specified. There is no need to say “www.”<br>Examples: <kbd>google.com</kbd>, <kbd>en.wikipedia.org</kbd> (pronounced E-N-dot-wikipedia-dot-org), <kbd>mit.edu</kbd> (pronounced M-I-T-dot-E-D-U), <kbd>fr.wikipedia.org</kbd> (pronounced F-R-dot-wikipedia-dot-org)</p><p>To go to a particular .com website, say <kbd>go to [website name]</kbd>. You can include the .com or omit it.<br>Examples: <kbd>go to google</kbd>, <kbd>go to google.com</kbd>, <kbd>go to amazon</kbd>, <kbd>go to facebook</kbd></p><p style="font-style: italic">Note: there are some websites with longer names which will register erroneously with the engine. For example, there is no way to reach freecreditreport.com, which will be heard as “free credit report.com”, and will consequently send you to report.com.</p><p>To go back one page in your history, say <kbd>back</kbd>.<br>To go forward one page in your history, say <kbd>forward</kbd>.</p><p>To go to google.com, say <kbd>home</kbd>. This will also automatically put the extension into dictation mode, and is the fastest way to search for things.</p><p style="font-style: italic">Note: Google can be used to indirectly reach almost any website that you can\'t navigate to directly via Hands Free. For instance, going to Google and searching for "free credit report.com" will correctly bring up as a result the actual "freecreditreport.com", which you can then click on.</p><h3>Controlling Tabs</h3><p>To open a new tab, say <kbd>new tab</kbd>.</p><p style="font-style: italic">Note: When opening a new tab, only the "go to" command and tab control commands will work unless you have installed the new tab redirect extension, which will cause new tabs to default to a page of your choosing. That extension can be found on <a href="https://chrome.google.com/webstore/detail/new-tab-redirect/icpgjfneehieebagbmdbhnlpiopdcmna?hl=en">the Chrome Web Store.</a></p><p>To close the current tab, say <kbd>close tab</kbd>.<br>To switch the active tab to the next tab in the window, say <kbd>switch</kbd>.</p><h3>Controlling the Window</h3><p>To enter or exit full screen mode, say <kbd>full screen</kbd>. All commands work just the same in full screen mode.<br>To minimize, say <kbd>minimize</kbd>.</p><p style="font-style: italic">Note: Unfortunately the ‘maximize’ command is broken in Chrome. You may be able to restore your window from a minimized state by using the full screen command and then toggling it off, but this has lately proved unreliable. Using the minimize command is currently not recommended.</p><p>To close all Chrome windows entirely, say <kbd>exit</kbd> or <kbd>quit</kbd>.</p><h3>Zooming</h3><p>To zoom in, say <kbd>zoom in</kbd><br>To zoom out, say <kbd>zoom out</kbd>.<br>To restore the zoom level to normal, say <kbd>zoom normal</kbd>.</p><h3>Refreshing</h3><p>To reload the page, say <kbd>reload</kbd> or <kbd>refresh</kbd>.</p><h3>Closing Hands Free</h3><p>Lastly, to turn off Hands Free, say <kbd>done</kbd>.</p></div>');
     
+    // styling for embedded help page
     $('div#hfc_help').css({
         'background': '#EDE5A4',
         'overflow-y':'scroll',
@@ -177,6 +179,7 @@ $(function() {
     
     // encapsulates all user command functionality involving DOM manipulation
     var commandCenter = new (function () {
+        // paints numtags next to <a>, <button>, <input>, <img>, and <textarea> elements
         var map = function() {
             if (!map_is_on){
                 clearMapTags();
@@ -233,6 +236,8 @@ $(function() {
                 return;
             }
         };
+
+        // paints numtags next to <span> and <li> elements
         var guide = function() {
             if (!guide_is_on){
                 clearMapTags();
@@ -258,6 +263,9 @@ $(function() {
                 return;
             }
         };
+
+        // same as 'map' command, but doesn't try to check whether elements are visible first,
+        // so long as they're scrolled into view.
         var show = function() {
             if (!show_is_on){
                 clearMapTags();
@@ -315,8 +323,8 @@ $(function() {
                 return;
             }
         };
-        //we're going to have to make it an added function of this extension that whenever chrome says "oops did you mean..." it auto-redirects to google or something
-        //otherwise the extension stops working completely because there's no control script because we're not on an http page
+
+        // sends active tab to the requested webpage. currently only works with .com, .org, .edu, .gov
         var go_to = function(destination) {
             if (destination === "undefined") {
                 //console.log("skipping a fake");
@@ -324,7 +332,7 @@ $(function() {
             }
             if ( !destination.endsWith(".com") && !destination.endsWith(".edu") && !destination.endsWith(".gov") && !destination.endsWith(".org") ) {
                 if (destination.endsWith(".") ) {
-                    destination = destination.slice(0,-1);
+                    destination = destination.slice(0, -1);
                 }
                 destination += ".com";
             }
@@ -332,6 +340,8 @@ $(function() {
             if (destination === "readit.com" || destination === "read.com") destination = "reddit.com";
             window.location.href = "http://www." + destination;
         };
+
+        // sends active tab straight to google.com, puts everything into dictation mode for easy googling
         var home = function() {
             /*We want to start in dictation mode when someone says home, but we can't just
               switch mode right here because the control script is about to be reloaded when
@@ -579,6 +589,7 @@ $(function() {
         };
     })();
     
+    // Listen for messages from background.js and handle them appropriately
     chrome.runtime.onMessage.addListener(
         function(request, sender, sendResponse) {
             // this time-checking thing to skip redundant requests...I think we're already doing
@@ -592,16 +603,19 @@ $(function() {
                 inform_input_page();
                 return;
             }
+            // end dictation mode without submitting active form
             if (request === "CHROME_DICTATION_STOP") {
                 dictation_mode = false;
                 $(document.activeElement).blur();
                 return;
             }
+            // submit active form, end dictation mode
             if (request === "CHROME_DICTATION_SUBMIT") {
                 dictation_mode = false;
                 $(document.activeElement).parents('form:first').submit();
                 return;
             }
+            // remove last dictated word from input element
             if (request === "CHROME_DICTATION_UNDO") {
                 var words = document.activeElement.value.split(" ");
                 if (words.length === 1){
@@ -633,7 +647,22 @@ $(function() {
                 inputs.eq(n).focus();
                 return;
             }
-            if (!dictation_mode) {
+            if (dictation_mode) {
+                // handles inserting dictated text into active input element
+                if (!inputNumberBugFix && (!!parseInt(request) || request === 'att' || 
+                        request === 'home') && contains(['', undefined], document.activeElement.value)) {
+                    inputNumberBugFix = true;
+                    return;
+                }
+                if (contains(['', undefined], document.activeElement.value)) {
+                    document.activeElement.value = '' + request;
+                    inputNumberBugFix = false;
+                } else {
+                    document.activeElement.value +=  ' ' + request;
+                    inputNumberBugFix = false;
+                }
+            } else {
+                // handles non-dictation commands; also some cushioning against incorrect commands
                 if (!map_is_on && !guide_is_on && !show_is_on && request === '4'){
                     request = 'fall';
                 }
@@ -649,23 +678,12 @@ $(function() {
                         clearMapTags();
                     }, 1000);
                 }
-            } else {
-                if (!inputNumberBugFix && (!!parseInt(request) || request === 'att' || 
-                        request === 'home') && contains(['', undefined], document.activeElement.value)) {
-                    inputNumberBugFix = true;
-                    return;
-                }
-                if (contains(['', undefined], document.activeElement.value)) {
-                    document.activeElement.value = '' + request;
-                    inputNumberBugFix = false;
-                } else {
-                    document.activeElement.value +=  ' ' + request;
-                    inputNumberBugFix = false;
-                }
             }
         }
     );
     
+    // If we've just executed the 'home' command, control.js will find itself loading
+    // at this URL, and therefore we should automatically start dictation mode.
     if(document.location.href === "https://www.google.com/###") {
         switch_mode(true);
     }

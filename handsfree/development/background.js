@@ -163,9 +163,10 @@ var executeMessage = function( message, is_dictation_message ) {
             });
         });
     } else {
+        // send dictation command to active tab of window
         chrome.windows.getAll( {populate:true}, function(windows){
             windows.forEach(function(window){
-                // don't send dictation to input.html
+                // but don't send dictation to input.html
                 if (window.tabs[0].url === input_url + '/input.html') {
                     return;
                 }
