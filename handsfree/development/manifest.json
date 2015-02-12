@@ -12,7 +12,8 @@
     "content_scripts": [ 
 	    {
 		    "matches": ["http://*/*", "https://*/*"],
-		    "js": ["visibility.js", "jquery.js", "control-min.js"]
+		    "js": ["visibility.js", "jquery.js", "control-min.js"],
+            "css": ["bootstrap-3.3.2-dist/css/bootstrap.css"]
 	    }
     ],
     "browser_action": {
