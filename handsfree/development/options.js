@@ -5,7 +5,7 @@ String.prototype.capitalize = function() {
 var commands = [
     'map',      // paints numbers next to anchor tags, images, forms, and buttons
     'guide',    // paints numbers next to spans and images
-    'show',     // paints numbers next to anchor tags, forms, buttons, images, and spans, regardless of whether they're visible
+    'show',     // paints numbers next to anchor tags, images, forms, buttons, and spans, regardless of whether they're visible
     'home',     // navigates directly to your homepage
     'up',       // scrolls up 200 pixels
     'down',     // scrolls down 200 pixels
@@ -69,8 +69,8 @@ function save_options() {
 
 function restore_options() {
     commands.forEach(function(command) {
-        $('#aliases').append('<label>' + command.capitalize() + ' Aliases: <textarea id='' + 
-            command.replace(/\s/g, '-') + '-aliases'></textarea></label><br>');
+        $('#aliases').append('<label>' + command.capitalize() + ' Aliases: <textarea id=""' + 
+            command.replace(/\s/g, '-') + '-aliases></textarea></label><br>');
     });
 
     chrome.storage.sync.get({
@@ -78,7 +78,7 @@ function restore_options() {
         timeoutDuration: 180000,
         openInTab: false
     }, function(items) {
-        aliasLists = {}; //  dictionary from command to list of aliases
+        aliasLists = {};   // dictionary from command to list of aliases
         for (alias in items.commandAliases) {
             if (!Object.prototype.hasOwnProperty.call(items.commandAliases, alias)) continue;
             command = items.commandAliases[alias];
