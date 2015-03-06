@@ -1,23 +1,24 @@
 {
     "manifest_version": 2,
-    "icons": { "16": "icon16.png",
-               "48": "icon48.png",
-               "128": "icon128.png"
+    "icons": { "16": "images/icon16.png",
+               "48": "images/icon48.png",
+               "128": "images/icon128.png"
              },
     "name": "Hands Free for Chrome",
     "description": "Navigate the web hands free!",
     "version": "1.2",
-    "background": { "scripts": ["background-min.js"] },
+    "background": { "scripts": ["background.js"] },
     "options_page": "options.html",
     "content_scripts": [ 
 	    {
 		    "matches": ["http://*/*", "https://*/*"],
-		    "js": ["visibility.js", "jquery.js", "control-min.js"],
+
+		    "js": ["vendor/visibility.js", "vendor/jquery.js", "control.js"]
             "css": ["bootstrap-3.3.2-dist/css/bootstrap.css"]
 	    }
     ],
     "browser_action": {
-        "default_icon": "icon.png"
+        "default_icon": "images/icon.png"
     },
     "externally_connectable": {
         "matches": ["*://*.handsfreechrome.com/*", "https://127.0.0.1:8000/*"]
@@ -27,5 +28,5 @@
 	    "storage",
         "tabs"
     ],
-    "web_accessible_resources": ["jquery-1.10.2.min.map"]
+    "web_accessible_resources": ["vendor/jquery-1.10.2.min.map"]
 }
