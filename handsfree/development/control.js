@@ -326,7 +326,6 @@ $(function() {
                 return;
             }
         };
-<<<<<<< HEAD:handsfree/development/control-min.js
         var keep_showing = function() {
             chrome.runtime.sendMessage({greeting: "KEEP_SHOWING"});
             keep_show_is_on = true;
@@ -339,10 +338,8 @@ $(function() {
         }
         //we're going to have to make it an added function of this extension that whenever chrome says "oops did you mean..." it auto-redirects to google or something
         //otherwise the extension stops working completely because there's no control script because we're not on an http page
-=======
 
         // sends active tab to the requested webpage. currently only works with .com, .org, .edu, .gov
->>>>>>> 4ac5dcd4764168f060d53a1db00f3b5f689f7715:handsfree/development/control.js
         var go_to = function(destination) {
             if (destination === "undefined") {
                 //console.log("skipping a fake");
@@ -547,10 +544,7 @@ $(function() {
         };
         
         this.call = function( command ){
-<<<<<<< HEAD:handsfree/development/control-min.js
-=======
             
->>>>>>> 4ac5dcd4764168f060d53a1db00f3b5f689f7715:handsfree/development/control.js
             command = commandAliases[command] || command;
 
             var key = {

@@ -259,20 +259,16 @@ chrome.runtime.onMessage.addListener(
                             open = false;
                         }
                     });
-<<<<<<< HEAD:handsfree/development/background-min.js
-                } else if (request.greeting === "KEEP_SHOWING") {
-                    keep_showing = true;
-                } else if (request.greeting === "STOP_SHOWING") {
-                    keep_showing = false;
-                } else if (request.greeting === "SHOW?") {
-                    sendResponse(keep_showing);
-                }
-=======
                     if (open) {
                         openInputWindow();
                     }
                 });
->>>>>>> 4ac5dcd4764168f060d53a1db00f3b5f689f7715:handsfree/development/background.js
+            } else if (request.greeting === "KEEP_SHOWING") {
+                keep_showing = true;
+            } else if (request.greeting === "STOP_SHOWING") {
+                keep_showing = false;
+            } else if (request.greeting === "SHOW?") {
+                sendResponse(keep_showing);
             }
         }
     }
