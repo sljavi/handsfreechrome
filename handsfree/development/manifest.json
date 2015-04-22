@@ -12,8 +12,7 @@
     "content_scripts": [ 
 	    {
 		    "matches": ["http://*/*", "https://*/*"],
-		    "js": ["vendor/visibility.js", "vendor/jquery.js", "control.js"],
-		    "css": ["bootstrap-3.3.2-dist/css/bootstrap.css"]
+		    "js": ["vendor/visibility.js", "vendor/jquery.js", "control.js"]
 	    }
     ],
     "browser_action": {
