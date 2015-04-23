@@ -2,17 +2,41 @@
 <html>
   <head>
     <title>Hands Free Chrome Options</title>
-  </head>
+    <link rel="stylesheet" type="text/css" href="bootstrap-3.3.2-dist/css/bootstrap.css">
+    <style>
+      .table > tbody > tr > td {
+          padding-top: 2px;
+          padding-bottom: 2px;
+          vertical-align: middle;
+      }
+      .table textarea.form-control {
+          width: 70%;
+      }
+    </style>
+</head>
 
-  <body>
-    <div id="aliases">
+  <body class="container">
+    <div class="row">
+      <div class="col-md-8">
+        <h1>Options</h1>
+        <label>Stop listening after this much inactivity (minutes): <input type="number" id="timeout-duration"></input></label><br>
+        <label>Open input page in tab (opens in separate window by default) : <input type="checkbox" id="open-in-tab"></input></label><br>
+        <table class="table table-hover" id="aliases">
+          <thead>
+            <tr>
+              <th class="col-md-3">Command</th>
+              <th class="col-md-5">Aliases</th>
+            </tr>
+          </thead>
+          <tbody>
+        </tbody>
+      </table>
+        <button id="save" class="btn btn-primary btn-lg">Save</button><br>
+        <span id="status"></span>
+        
+        <script src="vendor/jquery.js"></script>
+        <script src="options.js"></script>
+      </div>
     </div>
-    <label>Stop listening after this much inactivity (minutes): <input type="number" id="timeout-duration"></input></label><br>
-    <label>Open input page in tab (opens in separate window by default) : <input type="checkbox" id="open-in-tab"></input></label><br>
-    <button id="save">Save</button><br>
-    <span id="status"></span>
-
-    <script src="jquery.js"></script>
-    <script src="options.js"></script>
   </body>
 </html>

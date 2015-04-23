@@ -10,7 +10,7 @@ $(function() {
         };
     }
     
-    var commandAliases;
+    var commandAliases = {};
     var timeoutDuration = 180000;
     var extensionId = 'gakmidkmfmcgonnichkbaggmfofpical';
     // prod id = 'ddgmnkioeodkdacpjblmihodjgmebnld'
@@ -75,12 +75,14 @@ $(function() {
     ];
     
     var valid_double_commands = [
-        "full screen",  // toggle full screen mode
-        "zoom in",      // zoom in
-        "zoom out",     // zoom out WHOA WAIT WHAT DO YOU MEAN
-        "zoom normal",  // return to standard level of zoom
-        "new tab",      // opens a new tab
-        "close tab"     // closes current tab
+        "full screen",  //toggle full screen mode
+        "zoom in",      //zoom in
+        "zoom out",     //zoom out WHOA WAIT WHAT DO YOU MEAN
+        "zoom normal",  //return to standard level of zoom
+        "new tab",      //opens a new tab
+        "close tab",    //closes current tab                
+        "keep showing",
+        "stop showing",
     ];
     
     var valid_triple_commands = [

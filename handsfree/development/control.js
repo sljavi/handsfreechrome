@@ -4,6 +4,7 @@ $(function() {
     var map_is_on = false;
     var guide_is_on = false;
     var show_is_on = false;
+    var keep_show_is_on = false;
     var zoomLevel = 1.0;
     var dictation_mode = false;
     var bladeRunnerMode = false;
@@ -141,7 +142,10 @@ $(function() {
         $('.numTag').remove();
         map_is_on = false;
         guide_is_on = false;
-        show_is_on = false;
+        if (!keep_show_is_on) {
+            $('.numTag').remove();
+            show_is_on = false;
+        }
     }
     
     // Used for the "keep scrolling [up/down]" commands
@@ -322,6 +326,18 @@ $(function() {
                 return;
             }
         };
+        var keep_showing = function() {
+            chrome.runtime.sendMessage({greeting: "KEEP_SHOWING"});
+            keep_show_is_on = true;
+            show();
+        }
+        var stop_showing = function() {
+            chrome.runtime.sendMessage({greeting: "STOP_SHOWING"});
+            keep_show_is_on = false;
+            clearMapTags();
+        }
+        //we're going to have to make it an added function of this extension that whenever chrome says "oops did you mean..." it auto-redirects to google or something
+        //otherwise the extension stops working completely because there's no control script because we're not on an http page
 
         // sends active tab to the requested webpage. currently only works with .com, .org, .edu, .gov
         var go_to = function(destination) {
@@ -535,6 +551,8 @@ $(function() {
                 'map'           : map,
                 'guide'         : guide,
                 'show'          : show,
+                'keep showing'  : keep_showing,
+                'stop showing'  : stop_showing,
                 'go_to'         : go_to,
                 'home'          : home,
                 'down'          : down,
@@ -686,4 +704,11 @@ $(function() {
     if(document.location.href === "https://www.google.com/###") {
         switch_mode(true);
     }
+
+    chrome.runtime.sendMessage({greeting: "SHOW?"}, function(response) {
+        if (response) {
+            keep_show_is_on = true;
+            commandCenter.call('show');
+        }
+    });
 });

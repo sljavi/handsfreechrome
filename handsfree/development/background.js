@@ -4,6 +4,7 @@ var time_of_last_request = 0;
 var dictation_mode = false;
 var last_message = null;
 var input_url = DEV_MODE ? "https://127.0.0.1:8000" :  "https://handsfreechrome.com";
+var keep_showing = false;
 
 // Utility functions
 
@@ -262,6 +263,12 @@ chrome.runtime.onMessage.addListener(
                         openInputWindow();
                     }
                 });
+            } else if (request.greeting === "KEEP_SHOWING") {
+                keep_showing = true;
+            } else if (request.greeting === "STOP_SHOWING") {
+                keep_showing = false;
+            } else if (request.greeting === "SHOW?") {
+                sendResponse(keep_showing);
             }
         }
     }
