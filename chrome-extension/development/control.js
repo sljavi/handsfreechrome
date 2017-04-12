@@ -1,12 +1,12 @@
 $(function() {
     var DEV_MODE = true;
-    var input_url = DEV_MODE ? "https://localhost:8000/html" :  "https://handsfreechrome.com/html";
-    var map_is_on = false;
-    var guide_is_on = false;
-    var show_is_on = false;
-    var keep_show_is_on = false;
+    var inputURL = DEV_MODE ? "https://localhost:8000/html" :  "https://handsfreechrome.com/html";
+    var mapIsOn = false;
+    var guideIsOn = false;
+    var showIsOn = false;
+    var keepShowIsOn = false;
     var zoomLevel = 1.0;
-    var dictation_mode = false;
+    var dictationMode = false;
     var bladeRunnerMode = false;
     
     // used for all scrolling commands
@@ -115,7 +115,7 @@ $(function() {
             }
         }
         return false;
-    }
+    };
 
     // Add startsWith method to String type, returns bool
     if (typeof String.prototype.startsWith !== 'function') {
@@ -142,18 +142,18 @@ $(function() {
         
         return ((elemBottom >= docViewTop) && (elemTop <= docViewBottom)
                 && (elemBottom <= docViewBottom) &&  (elemTop >= docViewTop) );
-    }
+    };
     
     // Removes the numbered tags created by the map, guide, and show commands.
     var clearMapTags = function() {
         $('.numTag').remove();
-        map_is_on = false;
-        guide_is_on = false;
-        if (!keep_show_is_on) {
+        mapIsOn = false;
+        guideIsOn = false;
+        if (!keepShowIsOn) {
             $('.numTag').remove();
-            show_is_on = false;
+            showIsOn = false;
         }
-    }
+    };
     
     // Used for the "keep scrolling [up/down]" commands
     var startScrolling = function( direction, speed ) {
@@ -170,29 +170,25 @@ $(function() {
                 complete: function() { currentSpeed = null; }
             }
         );
-    }
+    };
     
     // Switch between dictation mode and control mode. Inform background.js of the change.
-    var switch_mode = function(turn_on) {
-        if (turn_on) {
-            dictation_mode = true;
-        } else {
-            dictation_mode = false;
-        }
-        chrome.runtime.sendMessage({ greeting: {dictModeOn : dictation_mode} });
-    }
+    var switchMode = function(turnOn) {
+        dictationMode = turnOn;
+        chrome.runtime.sendMessage({ greeting: {dictModeOn : dictationMode} });
+    };
     
     // Used to directly inform input.js that we have switched modes.
-    var inform_input_page = function() {
+    var informInputPage = function() {
         document.getElementById('modeSwitch').click();
-    }
+    };
     
     // encapsulates all user command functionality involving DOM manipulation
     var commandCenter = new (function () {
 
         // paints numtags next to <a>, <button>, <input>, <img>, and <textarea> elements
         var map = function() {
-            if (!map_is_on){
+            if (!mapIsOn){
                 clearMapTags();
                 var n = 1;
                 $('a, button, input, img, textarea').each(function(){
@@ -224,21 +220,21 @@ $(function() {
                                 } else if (contains(['text', 'password', 'number'], self.type)) {
                                     $('#' + id).click(function(){
                                         self.focus();
-                                        switch_mode(true);
+                                        switchMode(true);
                                     });
                                 }   
                                 break;
                             case 'TEXTAREA':
                                 $('#' + id).click(function(){
                                     self.focus();
-                                    switch_mode(true);
+                                    switchMode(true);
                                 });
                                 break;
                         }
                         n++;
                     }
                 });
-                map_is_on = true;
+                mapIsOn = true;
                 return;
             }
             else {
@@ -249,7 +245,7 @@ $(function() {
 
         // paints numtags next to <span> and <li> elements
         var guide = function() {
-            if (!guide_is_on){
+            if (!guideIsOn){
                 clearMapTags();
                 var n = 1;
                 $('span, li').each(function(){
@@ -265,7 +261,7 @@ $(function() {
                         n++;
                     }
                 });
-                guide_is_on = true;
+                guideIsOn = true;
                 return;
             }
             else {
@@ -277,7 +273,7 @@ $(function() {
         // same as 'map' command, but doesn't try to check whether elements are visible first,
         // so long as they're scrolled into view.
         var show = function() {
-            if (!show_is_on){
+            if (!showIsOn){
                 clearMapTags();
                 var n = 1;
                 $('a, button, input, img, textarea').each(function(){
@@ -311,21 +307,21 @@ $(function() {
                             } else if (contains(['text', 'password', 'number'], self.type)) {
                                 $('#'+id).click(function(){
                                     self.focus();
-                                    switch_mode(true);
+                                    switchMode(true);
                                 });
                             }   
                             break;
                         case 'TEXTAREA':
                             $('#'+id).click(function(){
                                 self.focus();
-                                switch_mode(true);
+                                switchMode(true);
                             });
                             break;
                         }
                         n++;
                     }
                 });
-                show_is_on = true;
+                showIsOn = true;
                 return;
             }
             else {
@@ -334,20 +330,20 @@ $(function() {
             }
         };
 
-        var keep_showing = function() {
+        var keepShowing = function() {
             chrome.runtime.sendMessage({greeting: "KEEP_SHOWING"});
-            keep_show_is_on = true;
+            keepShowIsOn = true;
             show();
-        }
+        };
 
-        var stop_showing = function() {
+        var stopShowing = function() {
             chrome.runtime.sendMessage({greeting: "STOP_SHOWING"});
-            keep_show_is_on = false;
+            keepShowIsOn = false;
             clearMapTags();
-        }
+        };
         
         // sends active tab to the requested webpage. currently only works with .com, .org, .edu, .gov
-        var go_to = function(destination) {
+        var goTo = function(destination) {
             if (destination === "undefined") {
                 //console.log("skipping a fake");
                 return;
@@ -490,7 +486,7 @@ $(function() {
             return;
         };
 
-        var zoom_out = function() {
+        var zoomOut = function() {
             $('body').css({ '-webkit-filter': 'blur(0px)' });
             $('html, body').animate(
                 { zoom: zoomLevel - 0.2 },
@@ -500,7 +496,7 @@ $(function() {
             return;
         };
 
-        var zoom_normal = function() {
+        var zoomNormal = function() {
             $('body').css({ '-webkit-filter': 'blur(0px)' });
             $('html, body').animate(
                 { zoom: 1.0 },
@@ -561,23 +557,23 @@ $(function() {
             scrollContainer.stop();
         };
 
-        var toggle_BR_mode = function() {
+        var toggleBRMode = function() {
             bladeRunnerMode = !bladeRunnerMode;
         };
 
-        var keep_scrolling_down = function() {
+        var keepScrollingDown = function() {
             startScrolling( "down", scrollSpeed );
         };
 
-        var keep_scrolling_up = function() {
+        var keepScrollingUp = function() {
             startScrolling( "up", scrollSpeed );
         };
 
-        var keep_scrolling_right = function() {
+        var keepScrollingRight = function() {
             console.log("not implemented");
         };
 
-        var keep_scrolling_left = function() {
+        var keepScrollingLeft = function() {
             console.log("not implemented");
         };
         
@@ -589,9 +585,9 @@ $(function() {
                 'map'           : map,
                 'guide'         : guide,
                 'show'          : show,
-                'keep showing'  : keep_showing,
-                'stop showing'  : stop_showing,
-                'go_to'         : go_to,
+                'keep showing'  : keepShowing,
+                'stop showing'  : stopShowing,
+                'go to'         : goTo,
                 'home'          : home,
                 'down'          : down,
                 'town'          : down, //misheard word
@@ -615,32 +611,29 @@ $(function() {
                 'refresh'       : reload,
                 'zoom'          : zoom,
                 'zoom in'       : zoom,
-                'zoom out'      : zoom_out,
-                'zoom normal'   : zoom_normal,
+                'zoom out'      : zoomOut,
+                'zoom normal'   : zoomNormal,
                 'enhance'       : enhance,
                 'help'          : help,
                 'slower'        : slower,
                 'faster'        : faster,
                 'stop'          : stop,
                 'hidehelp'      : hideHelp,
-                'Blade Runner mode'     : toggle_BR_mode,
-                'keep scrolling down'   : keep_scrolling_down,
-                'keep scrolling up'     : keep_scrolling_up,
-                'keep scrolling right'  : keep_scrolling_right,
-                'keep scrolling left'   : keep_scrolling_left
+                'Blade Runner mode'     : toggleBRMode,
+                'keep scrolling down'   : keepScrollingDown,
+                'keep scrolling up'     : keepScrollingUp,
+                'keep scrolling right'  : keepScrollingRight,
+                'keep scrolling left'   : keepScrollingLeft
             };
 
             console.log("Page has received a command from Hands Free: " + command);
-            if (window.location.origin === input_url + '/input.html') {
+
+            if (window.location.origin === inputURL + '/input.html') {
                 return -1;
-            }
-
-            if ( command.split(" ")[0] + command.split(" ")[1] === "goto" ) {
-                //console.log(command.split(" ")[2]);
-                key.go_to(command.split(" ")[2]);
-            }
-
-            if ( typeof key[command]  === 'function' ) {
+            } else if ( command.split(" ")[0] + ' ' + command.split(" ")[1] === "go to" ) {
+                key['go to'](command.split(" ")[2]);
+                return 1;
+            } else if ( typeof key[command]  === 'function' ) {
                 key[command]();
                 return 1;
             }
@@ -661,21 +654,21 @@ $(function() {
             lastMessage = request;
             lastTime = (new Date()).getTime();
 
-            if (window.location.href === input_url + '/input.html') {
-                inform_input_page();
+            if (window.location.href === inputURL + '/input.html') {
+                informInputPage();
                 return;
             }
 
             // end dictation mode without submitting active form
             if (request === "CHROME_DICTATION_STOP") {
-                dictation_mode = false;
+                dictationMode = false;
                 $(document.activeElement).blur();
                 return;
             }
 
             // submit active form, end dictation mode
             if (request === "CHROME_DICTATION_SUBMIT") {
-                dictation_mode = false;
+                dictationMode = false;
                 $(document.activeElement).parents('form:first').submit();
                 return;
             }
@@ -714,7 +707,7 @@ $(function() {
                 return;
             }
 
-            if (dictation_mode) {
+            if (dictationMode) {
                 // handles inserting dictated text into active input element
                 if (!inputNumberBugFix && (!!parseInt(request) || request === 'att' || 
                         request === 'home') && contains(['', undefined], document.activeElement.value)) {
@@ -730,7 +723,7 @@ $(function() {
                 }
             } else {
                 // handles non-dictation commands; also some cushioning against incorrect commands
-                if (!map_is_on && !guide_is_on && !show_is_on && request === '4'){
+                if (!mapIsOn && !guideIsOn && !showIsOn && request === '4'){
                     request = 'fall';
                 }
 
@@ -773,12 +766,12 @@ $(function() {
     // If we've just executed the 'home' command, control.js will find itself loading
     // at this URL, and therefore we should automatically start dictation mode.
     if(document.location.href === "https://www.google.com/###") {
-        switch_mode(true);
+        switchMode(true);
     }
 
     chrome.runtime.sendMessage({greeting: "SHOW?"}, function(response) {
         if (response) {
-            keep_show_is_on = true;
+            keepShowIsOn = true;
             commandCenter.callCommand('show');
         }
     });

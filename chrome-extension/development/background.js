@@ -1,10 +1,10 @@
 var DEV_MODE = true;
 var inputWindowId = null;
-var time_of_last_request = 0;
-var dictation_mode = false;
-var last_message = null;
-var input_url = DEV_MODE ? 'https://localhost:8000/html' : 'https://handsfreechrome.com/html';
-var keep_showing = false;
+var timeOfLastRequest = 0;
+var dictationMode = false;
+var lastMessage = null;
+var inputURL = DEV_MODE ? 'https://localhost:8000/html' : 'https://handsfreechrome.com/html';
+var keepShowing = false;
 
 ////////////////  Utility functions ////////////////////////
 
@@ -43,7 +43,7 @@ var openInputWindow = function() {
         if(items.openInTab) {
             chrome.tabs.create(
                 {
-                    'url': input_url + '/input.html',
+                    'url': inputURL + '/input.html',
                 },
                 function(window) {
                     inputWindowId = window.id;
@@ -52,7 +52,7 @@ var openInputWindow = function() {
         } else {
             chrome.windows.create(
                 {
-                    'url': input_url + '/input.html',
+                    'url': inputURL + '/input.html',
                     'height': 300,
                     'width': 400,
                     'left': screen.width - 400,
@@ -73,8 +73,8 @@ var sendCommandToControlScript = function( message ) {
     chrome.tabs.query({
                     active: true,
                     windowId: window.id
-                }, function( array_of_one_tab ){
-                    var tab = array_of_one_tab[0];
+                }, function( arrayOfOneTab ){
+                    var tab = arrayOfOneTab[0];
                     var id = tab.id;
                     if (message === 'close tab' || message === 'close time') {
                         chrome.tabs.remove(id);
@@ -93,32 +93,32 @@ var sendCommandToControlScript = function( message ) {
 // it gets sent to control.js.
 //
 // Also does a lot of checking to prevent command doubling.
-var executeMessage = function( message, is_dictation_message ) {
-    if (last_message && last_message.startsWith('keep') && last_message.endsWith(message)){
+var executeMessage = function( message, isDictationMessage ) {
+    if (lastMessage && lastMessage.startsWith('keep') && lastMessage.endsWith(message)){
         return;
     }
 
-    if (last_message === 'newtown' && message === 'new tab' && (new Date()).getTime() - time_of_last_request < 1000 ){
+    if (lastMessage === 'newtown' && message === 'new tab' && (new Date()).getTime() - timeOfLastRequest < 1000 ){
         return;
     }
 
     // don't double execute commands that are sent twice by mistake
-    if ( !parseInt(message) && message === last_message && (new Date()).getTime() - time_of_last_request < 1000 ) {
+    if ( !parseInt(message) && message === lastMessage && (new Date()).getTime() - timeOfLastRequest < 1000 ) {
         console.log('noticed time');
         return;
     }
 
-    last_message = message;
+    lastMessage = message;
 
-    if ( !is_dictation_message && message.endsWith('.com') ) {
+    if ( !isDictationMessage && message.endsWith('.com') ) {
         message = message.slice(0, -4);
     }
 
-    if ( !is_dictation_message && !message.startsWith('go to') ) {
-        time_of_last_request = (new Date()).getTime();
+    if ( !isDictationMessage && !message.startsWith('go to') ) {
+        timeOfLastRequest = (new Date()).getTime();
     }
 
-    if (!is_dictation_message) {
+    if (!isDictationMessage) {
         console.log('executing: ' + message);
         // handles execution of message
         chrome.windows.getAll( {populate:true}, function(windows){
@@ -134,7 +134,7 @@ var executeMessage = function( message, is_dictation_message ) {
                     return;
                 }
                 // don't let any other commands reach the input window
-                if (window.tabs[0].url === input_url + '/input.html') {
+                if (window.tabs[0].url === inputURL + '/input.html') {
                     return;
                 }
                 if (message === 'full screen') {
@@ -159,16 +159,16 @@ var executeMessage = function( message, is_dictation_message ) {
                     chrome.tabs.query(
                         {windowId: window.id},
                         // find current active tab and switch to the next one
-                        function( all_tabs ){
-                            for (var i = 0; i < all_tabs.length; i++) {
+                        function( allTabs ){
+                            for (var i = 0; i < allTabs.length; i++) {
                                 if (now) {
-                                    chrome.tabs.update(all_tabs[i].id, {active: true});
+                                    chrome.tabs.update(allTabs[i].id, {active: true});
                                     break;
                                 }
-                                if (all_tabs[i].active) {
+                                if (allTabs[i].active) {
                                     now = true;
-                                    if (i == all_tabs.length - 1) {
-                                        chrome.tabs.update(all_tabs[0].id, {active: true});
+                                    if (i == allTabs.length - 1) {
+                                        chrome.tabs.update(allTabs[0].id, {active: true});
                                         break;
                                     }
                                 }
@@ -185,14 +185,14 @@ var executeMessage = function( message, is_dictation_message ) {
         chrome.windows.getAll( {populate:true}, function(windows){
             windows.forEach(function(window){
                 // but don't send dictation to input.html
-                if (window.tabs[0].url === input_url + '/input.html') {
+                if (window.tabs[0].url === inputURL + '/input.html') {
                     return;
                 }
                 chrome.tabs.query({
                     active: true,
                     windowId: window.id
-                }, function( array_of_one_tab ){
-                    var tab = array_of_one_tab[0];
+                }, function( arrayOfOneTab ){
+                    var tab = arrayOfOneTab[0];
                     chrome.tabs.sendMessage(tab.id, message);
                 });
             });
@@ -205,8 +205,8 @@ chrome.runtime.onMessageExternal.addListener(
     function(request, sender, sendResponse) {
         console.log('received something');
         // ignore messages from all other pages
-        if (sender.url !== input_url + '/input.html'
-            && sender.url !== input_url + '/input.html') {
+        if (sender.url !== inputURL + '/input.html'
+            && sender.url !== inputURL + '/input.html') {
             alert('Nevermind, bad URL from message sender.');
             console.log('Nevermind, bad URL from message sender.');
             console.log('URL: ' + sender.url);
@@ -237,9 +237,9 @@ chrome.runtime.onMessageExternal.addListener(
             return;
         }
         if (request.message === 'CHROME_DICTATION_STOP' || request.message === 'CHROME_DICTATION_SUBMIT') {
-            dictation_mode = false;
+            dictationMode = false;
         }
-        if (dictation_mode) {
+        if (dictationMode) {
             console.log('called as dictation: ' + request.message);
             executeMessage( request.message, true );
         } else {
@@ -253,17 +253,17 @@ chrome.runtime.onMessageExternal.addListener(
 // when control.js detects that it has been asked to click on a form input.
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
-        if(sender.tab && sender.tab.url !== input_url){
+        if(sender.tab && sender.tab.url !== inputURL){
             if (request.greeting.dictModeOn) {
                 console.log('turning on dictation mode in the background window');
-                dictation_mode = true;
+                dictationMode = true;
                 // send message to input window to let it know
                 chrome.windows.get(inputWindowId, {populate:true}, function(window){
                     chrome.tabs.query({
                         active: true,
                         windowId: window.id
-                    }, function( array_of_one_tab ){
-                        var tab = array_of_one_tab[0];
+                    }, function( arrayOfOneTab ){
+                        var tab = arrayOfOneTab[0];
                         chrome.tabs.sendMessage(tab.id, {dictModeOn : true});
                     });
                 });
@@ -271,7 +271,7 @@ chrome.runtime.onMessage.addListener(
                 var open = true;
                 chrome.windows.getAll( {populate: true}, function(windows){
                     windows.forEach(function(window){
-                        if (window.tabs[0].url === input_url + '/input.tml') {
+                        if (window.tabs[0].url === inputURL + '/input.tml') {
                             chrome.windows.remove( window.id );
                             open = false;
                         }
@@ -281,11 +281,11 @@ chrome.runtime.onMessage.addListener(
                     }
                 });
             } else if (request.greeting === 'KEEP_SHOWING') {
-                keep_showing = true;
+                keepShowing = true;
             } else if (request.greeting === 'STOP_SHOWING') {
-                keep_showing = false;
+                keepShowing = false;
             } else if (request.greeting === 'SHOW?') {
-                sendResponse(keep_showing);
+                sendResponse(keepShowing);
             }
         }
     }

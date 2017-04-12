@@ -24,13 +24,13 @@ $(function() {
                                    timeoutDuration = response.timeoutDuration;
                                });
     // for inputting text to forms
-    var dictation_mode = false;
+    var dictationMode = false;
     $('#modeSwitch').click(function() {
         console.log('Switched modes');
-        dictation_mode = !dictation_mode;
+        dictationMode = !dictationMode;
     });
     
-    var valid_single_commands = [
+    var validSingleCommands = [
         'one',      // for map mode, since all other numbers are rendered as digits but these 10 as words
         'two',
         'three',
@@ -85,7 +85,7 @@ $(function() {
         'newtown'   // misheard word for "new tab"
     ];
     
-    var valid_double_commands = [
+    var validDoubleCommands = [
         'full screen',  // toggle full screen mode
         'zoom in',      // zoom in
         'zoom out',     // zoom out WHOA WAIT WHAT DO YOU MEAN
@@ -97,7 +97,7 @@ $(function() {
         'stop showing',
     ];
     
-    var valid_triple_commands = [
+    var validTripleCommands = [
         'keep scrolling down',  // sets browser scrolling continuously down until the end of the page
         'keep scrolling up',    // sets browser scrolling continuously up until the end of the page
         'keep scrolling left',  // sets browser scrolling continuously left until the end of the page
@@ -106,30 +106,30 @@ $(function() {
     ];
     
     for (var i = 1; i <= 400; i++) {
-        valid_single_commands.push( i.toString() );
+        validSingleCommands.push( i.toString() );
     }
     
     /* Checks to see if command is valid. */
     /* Checks against three word commands first, then against two word commands, then against single word commands */
-    var matchesValidCommands = function(three_commands) {
-        var command = commandAliases[three_commands.join(' ')] || three_commands.join(' ');
-        for (var i = 0; i < valid_triple_commands.length; i++) {
-            if (command === valid_triple_commands[i] ||
-                three_commands[0] + ' ' + three_commands[1] === 'go to') {
-                // console.log(three_commands.join(' '));
+    var matchesValidCommands = function(threeCommands) {
+        var command = commandAliases[threeCommands.join(' ')] || threeCommands.join(' ');
+        for (var i = 0; i < validTripleCommands.length; i++) {
+            if (command === validTripleCommands[i] ||
+                threeCommands[0] + ' ' + threeCommands[1] === 'go to') {
+                // console.log(threeCommands.join(' '));
                 return 3;
             }
         }
-        command = commandAliases[three_commands.slice(0, 2).join(' ')] || three_commands.slice(0, 2).join(' ');
-        for (var i = 0; i < valid_double_commands.length; i++) {
-            if (command === valid_double_commands[i]) {
-                // console.log(three_commands.slice(0, 2).join(' '));
+        command = commandAliases[threeCommands.slice(0, 2).join(' ')] || threeCommands.slice(0, 2).join(' ');
+        for (var i = 0; i < validDoubleCommands.length; i++) {
+            if (command === validDoubleCommands[i]) {
+                // console.log(threeCommands.slice(0, 2).join(' '));
                 return 2;
             }
         }
-        command = commandAliases[three_commands[0]] || three_commands[0];
-        for (var i = 0; i < valid_single_commands.length; i++) {
-            if (command === valid_single_commands[i]) {
+        command = commandAliases[threeCommands[0]] || threeCommands[0];
+        for (var i = 0; i < validSingleCommands.length; i++) {
+            if (command === validSingleCommands[i]) {
                 return 1;
             }
         }
@@ -146,39 +146,39 @@ $(function() {
     
     // handles spoken input, verifying validity before sending it to the extension
     var receiveInput = function(input) {
-        if (!dictation_mode) {
+        if (!dictationMode) {
             organizedInput = input.trim().split(' ');
-            non_empty_oi = [];
+            inputsArray = [];
             for (var i = 0; i < organizedInput.length; i++) {
                 if ( !(organizedInput[i].trim() === '') ) {
-                    non_empty_oi.push(organizedInput[i].trim().toLowerCase());
+                    inputsArray.push(organizedInput[i].trim().toLowerCase());
                 }
             }
             for (var i = 0; i < 3; i++) {
-                m = non_empty_oi[i];
+                m = inputsArray[i];
                 if ( typeof m === 'string' && (m.endsWith('.com') || m.endsWith('.gov') 
                         || m.endsWith('.org') || m.endsWith('.edu')) ) {
                     sendCommand('go to ' + m);
                     return;
                 }
             }
-            var match = matchesValidCommands( non_empty_oi.slice(0, 3) );
+            var match = matchesValidCommands( inputsArray.slice(0, 3) );
             if ( !match ) {
                 return;
             } else {
                 if (match === 1) {
-                    console.log('Valid command recognized: ' + non_empty_oi[0]);
-                    sendCommand(non_empty_oi[0]);
+                    console.log('Valid command recognized: ' + inputsArray[0]);
+                    sendCommand(inputsArray[0]);
                     return;
                 }
                 if (match === 2) {
-                    console.log('Valid command recognized: ' + non_empty_oi[0] + ' ' + non_empty_oi[1]);
-                    sendCommand(non_empty_oi[0] + ' ' + non_empty_oi[1]);
+                    console.log('Valid command recognized: ' + inputsArray[0] + ' ' + inputsArray[1]);
+                    sendCommand(inputsArray[0] + ' ' + inputsArray[1]);
                     return;
                 }
                 if (match === 3) {
-                    console.log('Valid command recognized: ' + non_empty_oi[0] + ' ' + non_empty_oi[1] + ' ' + non_empty_oi[2]);
-                    sendCommand(non_empty_oi[0] + ' ' + non_empty_oi[1] + ' ' + non_empty_oi[2]);
+                    console.log('Valid command recognized: ' + inputsArray[0] + ' ' + inputsArray[1] + ' ' + inputsArray[2]);
+                    sendCommand(inputsArray[0] + ' ' + inputsArray[1] + ' ' + inputsArray[2]);
                     return;
                 }
                 return;
@@ -189,48 +189,48 @@ $(function() {
               Send all input to the background window.
             */
             organizedInput = input.trim().split(' ');
-            non_empty_oi = [];
+            inputsArray = [];
             for (var i = 0; i < organizedInput.length; i++) {
                 if ( !(organizedInput[i].trim() === '') ) {
-                    non_empty_oi.push(organizedInput[i].trim());
+                    inputsArray.push(organizedInput[i].trim());
                 }
             }   
             // submit current form, end dictation mode
-            if (non_empty_oi[non_empty_oi.length - 1] === 'go'){
-                if(non_empty_oi.length > 1) {
-                    sendCommand(non_empty_oi.slice(0, non_empty_oi.length - 1).join(' '));
+            if (inputsArray[inputsArray.length - 1] === 'go'){
+                if(inputsArray.length > 1) {
+                    sendCommand(inputsArray.slice(0, inputsArray.length - 1).join(' '));
                 }
                 sendCommand('CHROME_DICTATION_SUBMIT');
                 console.log('dictation mode ended in input window');
-                dictation_mode = false;
+                dictationMode = false;
                 // move on to next input in form, or cycle back to first input if there are no more
-            } else if (non_empty_oi[non_empty_oi.length - 1] === 'next' ) {
-                if(non_empty_oi.length > 1) {
-                    sendCommand(non_empty_oi.slice(0, non_empty_oi.length - 1).join(' '));
+            } else if (inputsArray[inputsArray.length - 1] === 'next' ) {
+                if(inputsArray.length > 1) {
+                    sendCommand(inputsArray.slice(0, inputsArray.length - 1).join(' '));
                 }
                 sendCommand('CHROME_DICTATION_NEXT');
                 // stop dictation mode without submitting form, switch back to control mode
-            } else if (non_empty_oi[non_empty_oi.length - 1] === 'stop' ) {
-                if(non_empty_oi.length > 1) {
-                    sendCommand(non_empty_oi.slice(0, non_empty_oi.length - 1).join(' '));
+            } else if (inputsArray[inputsArray.length - 1] === 'stop' ) {
+                if(inputsArray.length > 1) {
+                    sendCommand(inputsArray.slice(0, inputsArray.length - 1).join(' '));
                 }
                 sendCommand('CHROME_DICTATION_STOP');
                 console.log('dictation mode ended in input window');
-                dictation_mode = false;
-            } else if (non_empty_oi[non_empty_oi.length - 1] === 'backspace' ) {
-                if(non_empty_oi.length > 1) {
-                    sendCommand(non_empty_oi.slice(0, non_empty_oi.length - 1).join(' '));
+                dictationMode = false;
+            } else if (inputsArray[inputsArray.length - 1] === 'backspace' ) {
+                if(inputsArray.length > 1) {
+                    sendCommand(inputsArray.slice(0, inputsArray.length - 1).join(' '));
                 }
                 sendCommand('CHROME_DICTATION_BACKSPACE');
             } else {
-                sendCommand(non_empty_oi.join(' '));
+                sendCommand(inputsArray.join(' '));
                 console.log('sent as dictation: ' + input);
             }
             return;
         }
     };
 
-    var final_transcript = '';
+    var finalTranscript = '';
     var lastStartedAt = 0;
     var lastInputAt = new Date().getTime();
     var recognizing = false;
@@ -278,7 +278,7 @@ $(function() {
             
             recognition.onresult = function(event) {
                 lastInputAt = new Date().getTime();
-                var interim_transcript = '';
+                var interimTranscript = '';
                 if (typeof event.results === 'undefined') {
                     recognition.onend = null;
                     recognition.stop();
@@ -286,25 +286,25 @@ $(function() {
                     return;
                 }
                 for (var i = event.resultIndex; i < event.results.length; ++i) {
-                    if (dictation_mode) {
+                    if (dictationMode) {
                         if (event.results[i].isFinal) {
-                            final_transcript += event.results[i][0].transcript;
+                            finalTranscript += event.results[i][0].transcript;
                             receiveInput(event.results[i][0].transcript);
                         } else {
-                            interim_transcript += event.results[i][0].transcript;
+                            interimTranscript += event.results[i][0].transcript;
                         }
                     } else {
                         if (event.results[i].isFinal) {
-                            final_transcript += event.results[i][0].transcript;
+                            finalTranscript += event.results[i][0].transcript;
                         } else {
-                            interim_transcript += event.results[i][0].transcript;
+                            interimTranscript += event.results[i][0].transcript;
                             receiveInput(event.results[i][0].transcript);
                         }
                     }
                 }
-                document.getElementById('inputDisplay').innerHTML = final_transcript;
-                document.getElementById('interimDisplay').innerHTML = interim_transcript;
-                if(interim_transcript) document.title = interim_transcript;
+                document.getElementById('inputDisplay').innerHTML = finalTranscript;
+                document.getElementById('interimDisplay').innerHTML = interimTranscript;
+                if(interimTranscript) document.title = interimTranscript;
             }
             recognition.start();
         }
