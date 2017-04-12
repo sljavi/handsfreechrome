@@ -26,7 +26,7 @@ $(function() {
     // for inputting text to forms
     var dictation_mode = false;
     $('#modeSwitch').click(function() {
-        console.log('Switched');
+        console.log('Switched modes');
         dictation_mode = !dictation_mode;
     });
     
@@ -86,12 +86,13 @@ $(function() {
     ];
     
     var valid_double_commands = [
-        'full screen',  //toggle full screen mode
-        'zoom in',      //zoom in
-        'zoom out',     //zoom out WHOA WAIT WHAT DO YOU MEAN
-        'zoom normal',  //return to standard level of zoom
-        'new tab',      //opens a new tab
-        'close tab',    //closes current tab                
+        'full screen',  // toggle full screen mode
+        'zoom in',      // zoom in
+        'zoom out',     // zoom out WHOA WAIT WHAT DO YOU MEAN
+        'zoom normal',  // return to standard level of zoom
+        'new tab',      // opens a new tab
+        'close tab',    // closes current tab
+        'close time',   // misheard command for "close tab"
         'keep showing',
         'stop showing',
     ];
@@ -111,7 +112,6 @@ $(function() {
     /* Checks to see if command is valid. */
     /* Checks against three word commands first, then against two word commands, then against single word commands */
     var matchesValidCommands = function(three_commands) {
-        console.log("validating: " + three_commands);
         var command = commandAliases[three_commands.join(' ')] || three_commands.join(' ');
         for (var i = 0; i < valid_triple_commands.length; i++) {
             if (command === valid_triple_commands[i] ||
@@ -140,7 +140,7 @@ $(function() {
     // the active tab, where it is executed by an injected content script (control.js)
     var sendCommand = function(command) {
         document.title = command;
-        console.log('sending: ' + command);
+        console.log('sending command: ' + command);
         chrome.runtime.sendMessage(extensionId, {message: command});
     };
     

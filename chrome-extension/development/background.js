@@ -76,7 +76,7 @@ var sendCommandToControlScript = function( message ) {
                 }, function( array_of_one_tab ){
                     var tab = array_of_one_tab[0];
                     var id = tab.id;
-                    if (message === 'close tab') {
+                    if (message === 'close tab' || message === 'close time') {
                         chrome.tabs.remove(id);
                         return;
                     }
@@ -97,21 +97,27 @@ var executeMessage = function( message, is_dictation_message ) {
     if (last_message && last_message.startsWith('keep') && last_message.endsWith(message)){
         return;
     }
-    if (last_message === 'Newtown' && message === 'new tab'){
+
+    if (last_message === 'newtown' && message === 'new tab' && (new Date()).getTime() - time_of_last_request < 1000 ){
         return;
     }
+
     // don't double execute commands that are sent twice by mistake
     if ( !parseInt(message) && message === last_message && (new Date()).getTime() - time_of_last_request < 1000 ) {
         console.log('noticed time');
         return;
     }
+
     last_message = message;
+
     if ( !is_dictation_message && message.endsWith('.com') ) {
         message = message.slice(0, -4);
     }
+
     if ( !is_dictation_message && !message.startsWith('go to') ) {
         time_of_last_request = (new Date()).getTime();
     }
+
     if (!is_dictation_message) {
         console.log('executing: ' + message);
         // handles execution of message
@@ -144,7 +150,7 @@ var executeMessage = function( message, is_dictation_message ) {
                     chrome.windows.update( window.id, {state: 'minimized' } );
                     return;
                 }
-                if (message === 'new tab' || message === 'Newtown') {
+                if (message === 'new tab' || message === 'newtown') {
                     chrome.tabs.create({ windowId: window.id });
                     return;
                 }
