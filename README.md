@@ -25,6 +25,6 @@ There are a few differences in the code between the development version of the e
 
 * The value of extensionId in website/input.js
 * DEV_MODE switch in control.js and background.js
-* "https://127.0.0.1:8000/*" can be removed from "externally connectable" in manifest.json
+* "https://localhost:8000/*" can be removed from "externally connectable" in manifest.json
 
 The repository owner handles the updating of the production files after changes to dev.
