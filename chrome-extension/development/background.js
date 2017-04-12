@@ -3,7 +3,7 @@ var inputWindowId = null;
 var time_of_last_request = 0;
 var dictation_mode = false;
 var last_message = null;
-var input_url = DEV_MODE ? "https://localhost:8000/html" : "https://handsfreechrome.com/html";
+var input_url = DEV_MODE ? 'https://localhost:8000/html' : 'https://handsfreechrome.com/html';
 var keep_showing = false;
 
 ////////////////  Utility functions ////////////////////////
@@ -38,7 +38,7 @@ if (typeof String.prototype.endsWith !== 'function') {
 // Users can adjust options so that it opens in a separate tab instead.
 var openInputWindow = function() {
     chrome.storage.sync.get({
-        "openInTab": false
+        'openInTab': false
     }, function(items) {
         if(items.openInTab) {
             chrome.tabs.create(
@@ -68,69 +68,87 @@ var openInputWindow = function() {
 // Add click handler to extension icon.
 chrome.browserAction.onClicked.addListener(openInputWindow);
 
+// send a command to the browser; also handles the "close tab" command
+var sendCommandToControlScript = function( message ) {
+    chrome.tabs.query({
+                    active: true,
+                    windowId: window.id
+                }, function( array_of_one_tab ){
+                    var tab = array_of_one_tab[0];
+                    var id = tab.id;
+                    if (message === 'close tab') {
+                        chrome.tabs.remove(id);
+                        return;
+                    }
+                    // if we've gotten here, it's a non-dictation DOM-level
+                    // command, so send it to control.js.
+                    chrome.tabs.sendMessage(id, message);
+                });
+};
+
 // Decide what to do with a command sent from input.js.
 //
-// If it's a browser level command (new tab, close tab, exit, done, minimize, switch),
+// If it's a browser level command (new tab, close tab, exit, done, full screen, minimize, switch),
 // then it handles it itself. Otherwise it's a dictation or a DOM level command and 
 // it gets sent to control.js.
 //
 // Also does a lot of checking to prevent command doubling.
 var executeMessage = function( message, is_dictation_message ) {
-    if (last_message && last_message.startsWith("keep") && last_message.endsWith(message)){
+    if (last_message && last_message.startsWith('keep') && last_message.endsWith(message)){
         return;
     }
-    if (last_message === "Newtown" && message === "new tab"){
+    if (last_message === 'Newtown' && message === 'new tab'){
         return;
     }
     // don't double execute commands that are sent twice by mistake
     if ( !parseInt(message) && message === last_message && (new Date()).getTime() - time_of_last_request < 1000 ) {
-        console.log("noticed time");
+        console.log('noticed time');
         return;
     }
     last_message = message;
-    if ( !is_dictation_message && message.endsWith(".com") ) {
+    if ( !is_dictation_message && message.endsWith('.com') ) {
         message = message.slice(0, -4);
     }
-    if ( !is_dictation_message && !message.startsWith("go to") ) {
+    if ( !is_dictation_message && !message.startsWith('go to') ) {
         time_of_last_request = (new Date()).getTime();
     }
     if (!is_dictation_message) {
-        console.log("executing: " + message);
+        console.log('executing: ' + message);
         // handles execution of message
         chrome.windows.getAll( {populate:true}, function(windows){
             windows.forEach(function(window){
-                if (message === "quit" || message === "exit") {
+                if (message === 'quit' || message === 'exit') {
                     chrome.windows.remove( window.id );
                     return;
                 }
-                if (message === "done" || message === "Don" || message === "Dunn") {
+                if (message === 'done' || message === 'Don' || message === 'Dunn') {
                     chrome.windows.remove( inputWindowId );
                     // hide help when extension is closed
-                    chrome.tabs.sendMessage(id, 'hidehelp');
+                    sendCommandToControlScript('hidehelp');
                     return;
                 }
                 // don't let any other commands reach the input window
                 if (window.tabs[0].url === input_url + '/input.html') {
                     return;
                 }
-                if (message === "full screen") {
-                    if (window.state !== "fullscreen") {
-                        chrome.windows.update( window.id, { state: "fullscreen" } );
+                if (message === 'full screen') {
+                    if (window.state !== 'fullscreen') {
+                        chrome.windows.update( window.id, { state: 'fullscreen' } );
                     }
-                    else if (window.state === "fullscreen") {
-                        chrome.windows.update( window.id, { state: "maximized" } );
+                    else if (window.state === 'fullscreen') {
+                        chrome.windows.update( window.id, { state: 'maximized' } );
                     }
                     return;
                 }
-                if (message === "minimize") {
-                    chrome.windows.update( window.id, {state: "minimized" } );
+                if (message === 'minimize') {
+                    chrome.windows.update( window.id, {state: 'minimized' } );
                     return;
                 }
-                if (message === "new tab" || message === "Newtown") {
+                if (message === 'new tab' || message === 'Newtown') {
                     chrome.tabs.create({ windowId: window.id });
                     return;
                 }
-                if (message === "switch") {
+                if (message === 'switch') {
                     var now = false;
                     chrome.tabs.query(
                         {windowId: window.id},
@@ -152,21 +170,8 @@ var executeMessage = function( message, is_dictation_message ) {
                         }
                     );
                 }
-                chrome.tabs.query({
-                    active: true,
-                    windowId: window.id
-                }, function( array_of_one_tab ){
-                    var tab = array_of_one_tab[0];
-                    var url = tab.url;
-                    var id = tab.id;
-                    if (message === "close tab") {
-                        chrome.tabs.remove(id);
-                        return;
-                    }
-                    // if we've gotten here, it's a non-dictation DOM-level
-                    // command, so send it to control.js.
-                    chrome.tabs.sendMessage(id, message);
-                });
+
+                sendCommandToControlScript(message);
             });
         });
     } else {
@@ -194,11 +199,11 @@ chrome.runtime.onMessageExternal.addListener(
     function(request, sender, sendResponse) {
         console.log('received something');
         // ignore messages from all other pages
-        if (sender.url !== input_url + "/input.html"
-            && sender.url !== input_url + "/input.html") {
-            alert("Nevermind, bad URL from message sender.");
-            console.log("Nevermind, bad URL from message sender.");
-            console.log("URL: " + sender.url);
+        if (sender.url !== input_url + '/input.html'
+            && sender.url !== input_url + '/input.html') {
+            alert('Nevermind, bad URL from message sender.');
+            console.log('Nevermind, bad URL from message sender.');
+            console.log('URL: ' + sender.url);
             return;
         }
         // if request is asking for the user's custom aliases,
@@ -225,14 +230,14 @@ chrome.runtime.onMessageExternal.addListener(
         if (!request.message) {
             return;
         }
-        if (request.message === "CHROME_DICTATION_STOP" || request.message === "CHROME_DICTATION_SUBMIT") {
+        if (request.message === 'CHROME_DICTATION_STOP' || request.message === 'CHROME_DICTATION_SUBMIT') {
             dictation_mode = false;
         }
         if (dictation_mode) {
-            console.log("called as dictation: " + request.message);
+            console.log('called as dictation: ' + request.message);
             executeMessage( request.message, true );
         } else {
-            console.log("called as command: " + request.message);
+            console.log('called as command: ' + request.message);
             executeMessage( request.message, false );
         }
     }
@@ -244,7 +249,7 @@ chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
         if(sender.tab && sender.tab.url !== input_url){
             if (request.greeting.dictModeOn) {
-                console.log("turning on dictation mode in the background window");
+                console.log('turning on dictation mode in the background window');
                 dictation_mode = true;
                 // send message to input window to let it know
                 chrome.windows.get(inputWindowId, {populate:true}, function(window){
@@ -256,7 +261,7 @@ chrome.runtime.onMessage.addListener(
                         chrome.tabs.sendMessage(tab.id, {dictModeOn : true});
                     });
                 });
-            } else if (request.greeting === "TOGGLE_EXTENSION_ON_OFF") {
+            } else if (request.greeting === 'TOGGLE_EXTENSION_ON_OFF') {
                 var open = true;
                 chrome.windows.getAll( {populate: true}, function(windows){
                     windows.forEach(function(window){
@@ -269,11 +274,11 @@ chrome.runtime.onMessage.addListener(
                         openInputWindow();
                     }
                 });
-            } else if (request.greeting === "KEEP_SHOWING") {
+            } else if (request.greeting === 'KEEP_SHOWING') {
                 keep_showing = true;
-            } else if (request.greeting === "STOP_SHOWING") {
+            } else if (request.greeting === 'STOP_SHOWING') {
                 keep_showing = false;
-            } else if (request.greeting === "SHOW?") {
+            } else if (request.greeting === 'SHOW?') {
                 sendResponse(keep_showing);
             }
         }
