@@ -19,7 +19,7 @@
         "default_icon": "images/icon.png"
     },
     "externally_connectable": {
-        "matches": ["*://*.handsfreechrome.com/*", "https://127.0.0.1:8000/*"]
+        "matches": ["*://*.handsfreechrome.com/*", "https://localhost:8000/*"]
     },
     "permissions": [
 	    "history",

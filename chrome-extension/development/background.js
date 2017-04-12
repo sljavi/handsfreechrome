@@ -3,10 +3,10 @@ var inputWindowId = null;
 var time_of_last_request = 0;
 var dictation_mode = false;
 var last_message = null;
-var input_url = DEV_MODE ? "https://127.0.0.1:8000" :  "https://handsfreechrome.com";
+var input_url = DEV_MODE ? "https://localhost:8000/html" : "https://handsfreechrome.com/html";
 var keep_showing = false;
 
-// Utility functions
+////////////////  Utility functions ////////////////////////
 
 // Check whether an object is present in an array, returns bool
 var contains = function(a, obj) {
@@ -16,7 +16,7 @@ var contains = function(a, obj) {
         }
     }
     return false;
-}
+};
 
 // Add startsWith method to String type, returns bool
 if (typeof String.prototype.startsWith !== 'function') {
@@ -30,6 +30,9 @@ if (typeof String.prototype.endsWith !== 'function') {
         return this.slice(-str.length) === str;
     };
 }
+
+////////////////////////////////////////////////////
+
 
 // Open input.html in a separate window by default.
 // Users can adjust options so that it opens in a separate tab instead.
@@ -60,7 +63,7 @@ var openInputWindow = function() {
                 });
         }
     });
-}
+};
 
 // Add click handler to extension icon.
 chrome.browserAction.onClicked.addListener(openInputWindow);
@@ -102,6 +105,8 @@ var executeMessage = function( message, is_dictation_message ) {
                 }
                 if (message === "done" || message === "Don" || message === "Dunn") {
                     chrome.windows.remove( inputWindowId );
+                    // hide help when extension is closed
+                    chrome.tabs.sendMessage(id, 'hidehelp');
                     return;
                 }
                 // don't let any other commands reach the input window
@@ -182,11 +187,12 @@ var executeMessage = function( message, is_dictation_message ) {
             });
         });
     }
-}
+};
 
 // Listen for messages from input.js
 chrome.runtime.onMessageExternal.addListener(
     function(request, sender, sendResponse) {
+        console.log('received something');
         // ignore messages from all other pages
         if (sender.url !== input_url + "/input.html"
             && sender.url !== input_url + "/input.html") {
