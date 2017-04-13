@@ -18,7 +18,7 @@ $(function() {
     var currentSpeed = null;
     
     // stops commands from being double-executed....the voice recognition often registers input 2-3 times
-    // This check is in place in background.js too....I don't recall why I did it twice. Extra safety!
+    // This check is in place in background.js too. To do: test if it's necessary in both places.
     var lastMessage = null;
     var lastTime = (new Date()).getTime();
     var commandDelay = null;
@@ -590,19 +590,19 @@ $(function() {
                 'go to'         : goTo,
                 'home'          : home,
                 'down'          : down,
-                'town'          : down, //misheard word
+                'town'          : down, // misheard word
                 'up'            : up,
-                'op'            : up,   //misheard word
+                'op'            : up,   // misheard word
                 'app'           : up,
                 'right'         : right,
                 'left'          : left,
                 'fall'          : fall,
-                'full'          : fall, //misheard word
-                'song'          : fall, //misheard word
-                'all'           : fall, //misheard word
+                'full'          : fall, // misheard word
+                'song'          : fall, // misheard word
+                'all'           : fall, // misheard word
                 'rise'          : rise,
-                'rice'          : rise, //misheard word
-                'frys'          : rise, //misheard word
+                'rice'          : rise, // misheard word
+                'frys'          : rise, // misheard word
                 'back'          : back,
                 'forward'       : forward,
                 'top'           : top,
@@ -610,6 +610,7 @@ $(function() {
                 'reload'        : reload,
                 'refresh'       : reload,
                 'zoom'          : zoom,
+                'resume'        : zoom, // misheard word
                 'zoom in'       : zoom,
                 'zoom out'      : zoomOut,
                 'zoom normal'   : zoomNormal,
@@ -619,7 +620,7 @@ $(function() {
                 'faster'        : faster,
                 'stop'          : stop,
                 'hidehelp'      : hideHelp,
-                'Blade Runner mode'     : toggleBRMode,
+                'blade runner mode'     : toggleBRMode,
                 'keep scrolling down'   : keepScrollingDown,
                 'keep scrolling up'     : keepScrollingUp,
                 'keep scrolling right'  : keepScrollingRight,
@@ -727,7 +728,7 @@ $(function() {
                     request = 'fall';
                 }
 
-                if (!bladeRunnerMode && request === 'zoom') {
+                if (!bladeRunnerMode && request === 'zoom' || request === 'resume') {
                     return;
                 }
 

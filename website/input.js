@@ -69,6 +69,7 @@ $(function() {
         'reload',   // refresh page
         'refresh',  // refresh page
         'zoom',     // zoom in
+        'resume',   // misheard word for "zoom"
         'enhance',  // only works in bladeRunnerMode; removes zoom blur
         'switch',   // changes to the next tab in the queue
         'exit',     // closes all Chrome windows
