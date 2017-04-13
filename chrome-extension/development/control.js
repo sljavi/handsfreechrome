@@ -724,11 +724,11 @@ $(function() {
                 }
             } else {
                 // handles non-dictation commands; also some cushioning against incorrect commands
-                if (!mapIsOn && !guideIsOn && !showIsOn && request === '4'){
+                if ( !mapIsOn && !guideIsOn && !showIsOn && request === '4' ) {
                     request = 'fall';
                 }
 
-                if (!bladeRunnerMode && request === 'zoom' || request === 'resume') {
+                if ( !bladeRunnerMode && (request === 'zoom' || request === 'resume') ) {
                     return;
                 }
 
