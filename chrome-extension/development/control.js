@@ -176,8 +176,8 @@ $(function() {
         );
     };
     
-    // Switch from control mode to dictation mode. Inform background.js of the change.
-    var switchDictationModeOn = function() {
+    // Switch from control mode to dictation mode. Inform background.js of the change, who in turn will inform input.js.
+    var switchDictationModeOnAndPropagate = function() {
         dictationMode = true;
         chrome.runtime.sendMessage({ greeting: {dictModeOn: true} });
     };
@@ -233,14 +233,14 @@ $(function() {
                                 } else if (contains(['text', 'password', 'number'], self.type)) {
                                     $('#' + id).click(function() {
                                         self.focus();
-                                        switchDictationModeOn();
+                                        switchDictationModeOnAndPropagate();
                                     });
                                 }   
                                 break;
                             case 'TEXTAREA':
                                 $('#' + id).click(function() {
                                     self.focus();
-                                    switchDictationModeOn();
+                                    switchDictationModeOnAndPropagate();
                                 });
                                 break;
                         }
@@ -320,14 +320,14 @@ $(function() {
                             } else if (contains(['text', 'password', 'number'], self.type)) {
                                 $('#'+id).click(function(){
                                     self.focus();
-                                    switchDictationModeOn();
+                                    switchDictationModeOnAndPropagate();
                                 });
                             }   
                             break;
                         case 'TEXTAREA':
                             $('#'+id).click(function(){
                                 self.focus();
-                                switchDictationModeOn();
+                                switchDictationModeOnAndPropagate();
                             });
                             break;
                         }
@@ -784,7 +784,7 @@ $(function() {
     // If we've just executed the 'home' command, control.js will find itself loading
     // at this URL, and therefore we should automatically start dictation mode.
     if(document.location.href === 'https://www.google.com/###') {
-        switchDictationModeOn();
+        switchDictationModeOnAndPropagate();
     }
 
     chrome.runtime.sendMessage({greeting: 'SHOW?'}, function(response) {
