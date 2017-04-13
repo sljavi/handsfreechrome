@@ -1,0 +1,9 @@
+The nature of this extension requires messages being communicated between 4 component scripts: input.js which is part of handsfreechrome.com/input.html (the input window), background.js (which operates invisibly in the background, belonging to no window), and two instances of control.js: one embedded in the input window, and one embedded in the web page of whichever active tab the user is actually interacting with.
+
+When a user clicks into an input form in that web page, that page's control.js observes this and activates dictation mode for itself. It sends a message to the chrome runtime propagating this information.
+
+Background.js picks up this message and turns on dictation mode for itself, and immediately sends back a message specifically to the control.js in the input window, targeting it via window and tab id, telling it to click the modeSwitch element on input.html so as to inform input.js to switch into dictation mode. Therefore control.js has a dual-role in this propagation. Control.js is coded to recognize when it is embedded in the input window, so that when it receives a message in this position it knows how to handle it.
+
+When the user says 'stop' or 'go', input.js shuts off dictation mode for itself and sends the message onwards to background.js, who recognizes it in turn and shuts off dictation mode for itself, and then sends it to control.js, who once again recognizes the message on its own and shuts off dictation mode for itself.
+
+Whenever the page redirects to a new location while dictation mode is active (perhaps by manual intervention by keyboard/mouse), control.js quickly sends a message to the chrome runtime to turn off dictation mode. Background.js receives this and acts accordingly, and as above sends a message back to the input window's control.js so that dictation mode is disabled in input.js as well.

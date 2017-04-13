@@ -14,6 +14,7 @@ $(function() {
     var timeoutDuration = 180000;
     var extensionId = 'hjlgjkkmkialmidaegfgnnflmoglkkek';
     // prod id = 'ddgmnkioeodkdacpjblmihodjgmebnld'
+
     chrome.runtime.sendMessage(extensionId, {getAliases: true},
                                function(response) {
                                    commandAliases = response.commandAliases;
@@ -23,6 +24,7 @@ $(function() {
                                function(response) {
                                    timeoutDuration = response.timeoutDuration;
                                });
+
     // for inputting text to forms
     var dictationMode = false;
     $('#modeSwitch').click(function() {
@@ -137,7 +139,7 @@ $(function() {
         return 0;
     };
     
-    // sends spoken command to extension's background script, which sends it to
+    // sends spoken command to extension's background script (background.js), which sends it to
     // the active tab, where it is executed by an injected content script (control.js)
     var sendCommand = function(command) {
         document.title = command;
@@ -204,13 +206,13 @@ $(function() {
                 sendCommand('CHROME_DICTATION_SUBMIT');
                 console.log('dictation mode ended in input window');
                 dictationMode = false;
-                // move on to next input in form, or cycle back to first input if there are no more
+            // move on to next input in form, or cycle back to first input if there are no more
             } else if (inputsArray[inputsArray.length - 1] === 'next' ) {
                 if(inputsArray.length > 1) {
                     sendCommand(inputsArray.slice(0, inputsArray.length - 1).join(' '));
                 }
                 sendCommand('CHROME_DICTATION_NEXT');
-                // stop dictation mode without submitting form, switch back to control mode
+            // stop dictation mode without submitting form, switch back to control mode
             } else if (inputsArray[inputsArray.length - 1] === 'stop' ) {
                 if(inputsArray.length > 1) {
                     sendCommand(inputsArray.slice(0, inputsArray.length - 1).join(' '));
@@ -310,5 +312,6 @@ $(function() {
             recognition.start();
         }
     };
+
     start();
 });

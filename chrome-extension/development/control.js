@@ -163,24 +163,37 @@ $(function() {
         currentSpeed = speed;
         scrollContainer.stop();
         scrollContainer.animate(
-            {scrollTop: operator + document.body.scrollHeight},
+            {
+                scrollTop: operator + document.body.scrollHeight
+            },
             {
                 duration: speed * document.body.scrollHeight / 50,
                 easing: 'linear',
-                complete: function() { currentSpeed = null; }
+                complete: function() {
+                    currentSpeed = null;
+                }
             }
         );
     };
     
-    // Switch between dictation mode and control mode. Inform background.js of the change.
-    var switchMode = function(turnOn) {
-        dictationMode = turnOn;
-        chrome.runtime.sendMessage({ greeting: {dictModeOn : dictationMode} });
+    // Switch from control mode to dictation mode. Inform background.js of the change.
+    var switchDictationModeOn = function() {
+        dictationMode = true;
+        chrome.runtime.sendMessage({ greeting: {dictModeOn: true} });
     };
     
     // Used to directly inform input.js that we have switched modes.
-    var informInputPage = function() {
+    var toggleInputWindowDictationMode = function() {
         document.getElementById('modeSwitch').click();
+    };
+
+    // make sure to switch background.js out of dictation mode whenever page changes.
+    // this mainly to avoid unexpected behavior if user is using manual page manipulation in addition to voice
+    window.onbeforeunload = function() {
+        // without this check it would fire whenever we refresh the input window
+        if (window.location.href !== inputURL + '/input.html') {
+            chrome.runtime.sendMessage({ greeting: {dictModeOn: false} });
+        }
     };
     
     // encapsulates all user command functionality involving DOM manipulation
@@ -191,7 +204,7 @@ $(function() {
             if (!mapIsOn){
                 clearMapTags();
                 var n = 1;
-                $('a, button, input, img, textarea').each(function(){
+                $('a, button, input, img, textarea').each(function() {
                     if ( isScrolledIntoView(this) && VISIBILITY.isVisible(this) ) {
                         var id = n;
                         var a = $(this).offset();                                   
@@ -202,32 +215,32 @@ $(function() {
                         switch( this.tagName ) {
                             case 'A':
                             case 'IMG':
-                                $('#' + id).click(function(){
+                                $('#' + id).click(function() {
                                     setTimeout(function() { self.click(); }, 10);
                                 });
                                 break;
                             case 'BUTTON':
-                                $('#' + id).click(function(){
+                                $('#' + id).click(function() {
                                     self.click();
                                 });
                                 break;
                             case 'INPUT':
                                 if (contains(['checkbox', 'radio', 'submit'], self.type)) {
-                                    $('#' + id).click(function(){
+                                    $('#' + id).click(function() {
                                         self.click();
                                     });
                                     break;
                                 } else if (contains(['text', 'password', 'number'], self.type)) {
-                                    $('#' + id).click(function(){
+                                    $('#' + id).click(function() {
                                         self.focus();
-                                        switchMode(true);
+                                        switchDictationModeOn();
                                     });
                                 }   
                                 break;
                             case 'TEXTAREA':
-                                $('#' + id).click(function(){
+                                $('#' + id).click(function() {
                                     self.focus();
-                                    switchMode(true);
+                                    switchDictationModeOn();
                                 });
                                 break;
                         }
@@ -307,14 +320,14 @@ $(function() {
                             } else if (contains(['text', 'password', 'number'], self.type)) {
                                 $('#'+id).click(function(){
                                     self.focus();
-                                    switchMode(true);
+                                    switchDictationModeOn();
                                 });
                             }   
                             break;
                         case 'TEXTAREA':
                             $('#'+id).click(function(){
                                 self.focus();
-                                switchMode(true);
+                                switchDictationModeOn();
                             });
                             break;
                         }
@@ -357,6 +370,7 @@ $(function() {
             }
             // sigh
             if (destination === 'readit.com' || destination === 'read.com') destination = 'reddit.com';
+
             window.location.href = 'http://www.' + destination;
         };
 
@@ -655,8 +669,11 @@ $(function() {
             lastMessage = request;
             lastTime = (new Date()).getTime();
 
+            // The ONLY message that background.js allows to reach the instance of control.js in the input window
+            // is the message telling it to toggle dictation mode for input.js. If this evaluates to true, then
+            // that's what the message is.
             if (window.location.href === inputURL + '/input.html') {
-                informInputPage();
+                toggleInputWindowDictationMode();
                 return;
             }
 
@@ -767,7 +784,7 @@ $(function() {
     // If we've just executed the 'home' command, control.js will find itself loading
     // at this URL, and therefore we should automatically start dictation mode.
     if(document.location.href === 'https://www.google.com/###') {
-        switchMode(true);
+        switchDictationModeOn();
     }
 
     chrome.runtime.sendMessage({greeting: 'SHOW?'}, function(response) {

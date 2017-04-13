@@ -98,6 +98,8 @@ var executeMessage = function( message, isDictationMessage ) {
         return;
     }
 
+    // the webSpeech engine very frequently sends 'newtown' then immediately corrects it to 'new tab'
+    // we would be better off making a lastMessageIsMisheard() function to make this generic instead of specific
     if (lastMessage === 'newtown' && message === 'new tab' && (new Date()).getTime() - timeOfLastRequest < 1000 ){
         return;
     }
@@ -120,23 +122,27 @@ var executeMessage = function( message, isDictationMessage ) {
 
     if (!isDictationMessage) {
         console.log('executing: ' + message);
+
+        if (message === 'done' || message === 'Don' || message === 'Dunn') {
+            chrome.windows.remove( inputWindowId );
+            // hide help when extension is closed
+            sendCommandToControlScript('hidehelp');
+            return;
+        }
+
         // handles execution of message
-        chrome.windows.getAll( {populate:true}, function(windows){
+        chrome.windows.getAll( {populate: true}, function(windows){
             windows.forEach(function(window){
                 if (message === 'quit' || message === 'exit') {
                     chrome.windows.remove( window.id );
                     return;
                 }
-                if (message === 'done' || message === 'Don' || message === 'Dunn') {
-                    chrome.windows.remove( inputWindowId );
-                    // hide help when extension is closed
-                    sendCommandToControlScript('hidehelp');
-                    return;
-                }
-                // don't let any other commands reach the input window
+
+                // Don't let any other commands reach the input window's content script (control.js)
                 if (window.tabs[0].url === inputURL + '/input.html') {
                     return;
                 }
+
                 if (message === 'full screen') {
                     if (window.state !== 'fullscreen') {
                         chrome.windows.update( window.id, { state: 'fullscreen' } );
@@ -205,9 +211,7 @@ chrome.runtime.onMessageExternal.addListener(
     function(request, sender, sendResponse) {
         console.log('received something');
         // ignore messages from all other pages
-        if (sender.url !== inputURL + '/input.html'
-            && sender.url !== inputURL + '/input.html') {
-            alert('Nevermind, bad URL from message sender.');
+        if (sender.url !== inputURL + '/input.html') {
             console.log('Nevermind, bad URL from message sender.');
             console.log('URL: ' + sender.url);
             return;
@@ -254,17 +258,33 @@ chrome.runtime.onMessageExternal.addListener(
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
         if(sender.tab && sender.tab.url !== inputURL){
-            if (request.greeting.dictModeOn) {
+            if (request.greeting.dictModeOn === true) {
                 console.log('turning on dictation mode in the background window');
                 dictationMode = true;
-                // send message to input window to let it know
-                chrome.windows.get(inputWindowId, {populate:true}, function(window){
+                // send message to the input window's content script (control.js) to let it know to turn on dictation mode
+                chrome.windows.get(inputWindowId, {populate: true}, function(window){
                     chrome.tabs.query({
                         active: true,
                         windowId: window.id
                     }, function( arrayOfOneTab ){
                         var tab = arrayOfOneTab[0];
-                        chrome.tabs.sendMessage(tab.id, {dictModeOn : true});
+                        chrome.tabs.sendMessage(tab.id, {dictModeOn: true});
+                    });
+                });
+            // This is only used to receive messages from onbeforeunload event handler in control.js.
+            // Otherwise background.js/input.js turn off dictation mode for themselves by recognizing
+            // stop/go commands as they pass through the chain of execution (input.js->backgrounds.js->control.js).
+            } else if (request.greeting.dictModeOn === false) {
+                console.log('turning off dictation mode in the background window because of onbeforeunload');
+                dictationMode = false;
+                // Send message to the input window's content script (control.js) to let it know to turn on dictation mode
+                chrome.windows.get(inputWindowId, {populate: true}, function(window){
+                    chrome.tabs.query({
+                        active: true,
+                        windowId: window.id
+                    }, function( arrayOfOneTab ){
+                        var tab = arrayOfOneTab[0];
+                        chrome.tabs.sendMessage(tab.id, {dictModeOn: false});
                     });
                 });
             } else if (request.greeting === 'TOGGLE_EXTENSION_ON_OFF') {
