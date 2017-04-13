@@ -348,13 +348,14 @@ $(function() {
                 //console.log("skipping a fake");
                 return;
             }
-            if ( !destination.endsWith('.com') && !destination.endsWith('.edu') && !destination.endsWith('.gov' && !destination.endsWith('.org') ) {
+            if ( !destination.endsWith('.com') && !destination.endsWith('.edu') && 
+                !destination.endsWith('.gov') && !destination.endsWith('.org') ) {
                 if (destination.endsWith('.') ) {
                     destination = destination.slice(0, -1);
                 }
                 destination += '.com';
             }
-            //sigh
+            // sigh
             if (destination === 'readit.com' || destination === 'read.com') destination = 'reddit.com';
             window.location.href = 'http://www.' + destination;
         };
@@ -674,7 +675,7 @@ $(function() {
             }
 
             // remove last dictated word from input element
-            if (request === 'HROME_DICTATION_BACKSPACE') {
+            if (request === 'CHROME_DICTATION_BACKSPACE') {
                 var words = document.activeElement.value.split(' ');
                 if (words.length === 1){
                     document.activeElement.value = '';
@@ -718,7 +719,7 @@ $(function() {
                     document.activeElement.value = '' + request;
                     inputNumberBugFix = false;
                 } else {
-                    document.activeElement.value +=  ' ' + request;
+                    document.activeElement.value += ' ' + request;
                     inputNumberBugFix = false;
                 }
             } else {
@@ -737,16 +738,16 @@ $(function() {
                     if (request === 'for') request = '4';
 
                     var textToDigitKey = {
-                        'one': '1',
-                        'two': '2',
-                        'three': '3',
-                        'four': '4',
-                        'five': '5',
-                        'six': '6',
-                        'seven': '7',
-                        'eight': '8',
-                        'nine': '9',
-                        'ten': '10'
+                        'one':      '1',
+                        'two':      '2',
+                        'three':    '3',
+                        'four':     '4',
+                        'five':     '5',
+                        'six':      '6',
+                        'seven':    '7',
+                        'eight':    '8',
+                        'nine':     '9',
+                        'ten':      '10'
                     };
 
                     // map command uses numeric keys but WebSpeech renders first
