@@ -1,6 +1,6 @@
 $(function() {
     var DEV_MODE = true;
-    var inputURL = DEV_MODE ? "https://localhost:8000/html" :  "https://handsfreechrome.com/html";
+    var inputURL = DEV_MODE ? 'https://localhost:8000/html' : 'https://handsfreechrome.com/html';
     var mapIsOn = false;
     var guideIsOn = false;
     var showIsOn = false;
@@ -41,7 +41,7 @@ $(function() {
     // ctrl + space to turn extension on/off
     window.onkeydown = function(e) {
         if (e.ctrlKey === true && e.keyCode === 32) {
-            chrome.runtime.sendMessage({greeting: "TOGGLE_EXTENSION_ON_OFF" });
+            chrome.runtime.sendMessage({greeting: 'TOGGLE_EXTENSION_ON_OFF' });
             return !(e.keyCode === 32);
         }
     };
@@ -157,8 +157,8 @@ $(function() {
     
     // Used for the "keep scrolling [up/down]" commands
     var startScrolling = function( direction, speed ) {
-        if ( direction === "up" ) {operator = "-=";}
-        if ( direction === "down" ) {operator = "+=";}
+        if ( direction === 'up' ) {operator = '-=';}
+        if ( direction === 'down' ) {operator = '+=';}
         currentDirection = direction;
         currentSpeed = speed;
         scrollContainer.stop();
@@ -331,32 +331,32 @@ $(function() {
         };
 
         var keepShowing = function() {
-            chrome.runtime.sendMessage({greeting: "KEEP_SHOWING"});
+            chrome.runtime.sendMessage({greeting: 'KEEP_SHOWING'});
             keepShowIsOn = true;
             show();
         };
 
         var stopShowing = function() {
-            chrome.runtime.sendMessage({greeting: "STOP_SHOWING"});
+            chrome.runtime.sendMessage({greeting: 'STOP_SHOWING'});
             keepShowIsOn = false;
             clearMapTags();
         };
         
         // sends active tab to the requested webpage. currently only works with .com, .org, .edu, .gov
         var goTo = function(destination) {
-            if (destination === "undefined") {
+            if (destination === 'undefined') {
                 //console.log("skipping a fake");
                 return;
             }
-            if ( !destination.endsWith(".com") && !destination.endsWith(".edu") && !destination.endsWith(".gov") && !destination.endsWith(".org") ) {
-                if (destination.endsWith(".") ) {
+            if ( !destination.endsWith('.com') && !destination.endsWith('.edu') && !destination.endsWith('.gov' && !destination.endsWith('.org') ) {
+                if (destination.endsWith('.') ) {
                     destination = destination.slice(0, -1);
                 }
-                destination += ".com";
+                destination += '.com';
             }
             //sigh
-            if (destination === "readit.com" || destination === "read.com") destination = "reddit.com";
-            window.location.href = "http://www." + destination;
+            if (destination === 'readit.com' || destination === 'read.com') destination = 'reddit.com';
+            window.location.href = 'http://www.' + destination;
         };
 
         // sends active tab straight to google.com, puts everything into dictation mode for easy googling
@@ -368,10 +368,10 @@ $(function() {
               and tell the control script to automatically go into dictation mode if it finds itself
               loading at that URL, where it would never otherwise be. That bit is the last thing in this file.*/
             var needsRefresh = false;
-            if(location.hostname === "www.google.com") {
+            if(location.hostname === 'www.google.com') {
                 needsRefresh = true;
             }
-            window.location.href = "https://www.google.com/###";
+            window.location.href = 'https://www.google.com/###';
             if (needsRefresh) setDelay(function(){location.reload();}, 500);
         };
 
@@ -562,83 +562,82 @@ $(function() {
         };
 
         var keepScrollingDown = function() {
-            startScrolling( "down", scrollSpeed );
+            startScrolling('down', scrollSpeed );
         };
 
         var keepScrollingUp = function() {
-            startScrolling( "up", scrollSpeed );
+            startScrolling('up', scrollSpeed );
         };
 
         var keepScrollingRight = function() {
-            console.log("not implemented");
+            console.log('not implemented');
         };
 
         var keepScrollingLeft = function() {
-            console.log("not implemented");
+            console.log('not implemented');
+        };
+
+        var key = {
+            'map'           : map,
+            'guide'         : guide,
+            'show'          : show,
+            'keep showing'  : keepShowing,
+            'stop showing'  : stopShowing,
+            'go to'         : goTo,
+            'home'          : home,
+            'down'          : down,
+            'town'          : down, // misheard word
+            'up'            : up,
+            'op'            : up,   // misheard word
+            'app'           : up,
+            'right'         : right,
+            'left'          : left,
+            'fall'          : fall,
+            'full'          : fall, // misheard word
+            'song'          : fall, // misheard word
+            'all'           : fall, // misheard word
+            'rise'          : rise,
+            'rice'          : rise, // misheard word
+            'frys'          : rise, // misheard word
+            'back'          : back,
+            'forward'       : forward,
+            'top'           : top,
+            'bottom'        : bottom,
+            'reload'        : reload,
+            'refresh'       : reload,
+            'zoom'          : zoom,
+            'resume'        : zoom, // misheard word
+            'zoom in'       : zoom,
+            'zoom out'      : zoomOut,
+            'zoom normal'   : zoomNormal,
+            'enhance'       : enhance,
+            'help'          : help,
+            'slower'        : slower,
+            'faster'        : faster,
+            'stop'          : stop,
+            'hidehelp'      : hideHelp,
+            'blade runner mode'     : toggleBRMode,
+            'keep scrolling down'   : keepScrollingDown,
+            'keep scrolling up'     : keepScrollingUp,
+            'keep scrolling right'  : keepScrollingRight,
+            'keep scrolling left'   : keepScrollingLeft
         };
         
         this.callCommand = function( command ){
-            
             command = commandAliases[command] || command;
-
-            var key = {
-                'map'           : map,
-                'guide'         : guide,
-                'show'          : show,
-                'keep showing'  : keepShowing,
-                'stop showing'  : stopShowing,
-                'go to'         : goTo,
-                'home'          : home,
-                'down'          : down,
-                'town'          : down, // misheard word
-                'up'            : up,
-                'op'            : up,   // misheard word
-                'app'           : up,
-                'right'         : right,
-                'left'          : left,
-                'fall'          : fall,
-                'full'          : fall, // misheard word
-                'song'          : fall, // misheard word
-                'all'           : fall, // misheard word
-                'rise'          : rise,
-                'rice'          : rise, // misheard word
-                'frys'          : rise, // misheard word
-                'back'          : back,
-                'forward'       : forward,
-                'top'           : top,
-                'bottom'        : bottom,
-                'reload'        : reload,
-                'refresh'       : reload,
-                'zoom'          : zoom,
-                'resume'        : zoom, // misheard word
-                'zoom in'       : zoom,
-                'zoom out'      : zoomOut,
-                'zoom normal'   : zoomNormal,
-                'enhance'       : enhance,
-                'help'          : help,
-                'slower'        : slower,
-                'faster'        : faster,
-                'stop'          : stop,
-                'hidehelp'      : hideHelp,
-                'blade runner mode'     : toggleBRMode,
-                'keep scrolling down'   : keepScrollingDown,
-                'keep scrolling up'     : keepScrollingUp,
-                'keep scrolling right'  : keepScrollingRight,
-                'keep scrolling left'   : keepScrollingLeft
-            };
-
-            console.log("Page has received a command from Hands Free: " + command);
+            console.log('Page has received a command from Hands Free: ' + command);
 
             if (window.location.origin === inputURL + '/input.html') {
-                return -1;
-            } else if ( command.split(" ")[0] + ' ' + command.split(" ")[1] === "go to" ) {
-                key['go to'](command.split(" ")[2]);
-                return 1;
+                return;
+            } else if ( command.split(' ')[0] + ' ' + command.split(' ')[1] === 'go to' ) {
+                key['go to'](command.split(' ')[2]);
+                return;
             } else if ( typeof key[command]  === 'function' ) {
                 key[command]();
-                return 1;
+                return;
             }
 
+            // 0 signifies to the caller that this is a most likely a number command for the map
             return 0;
         };
     })();
@@ -661,39 +660,39 @@ $(function() {
             }
 
             // end dictation mode without submitting active form
-            if (request === "CHROME_DICTATION_STOP") {
+            if (request === 'CHROME_DICTATION_STOP') {
                 dictationMode = false;
                 $(document.activeElement).blur();
                 return;
             }
 
             // submit active form, end dictation mode
-            if (request === "CHROME_DICTATION_SUBMIT") {
+            if (request === 'CHROME_DICTATION_SUBMIT') {
                 dictationMode = false;
                 $(document.activeElement).parents('form:first').submit();
                 return;
             }
 
             // remove last dictated word from input element
-            if (request === "CHROME_DICTATION_BACKSPACE") {
-                var words = document.activeElement.value.split(" ");
+            if (request === 'HROME_DICTATION_BACKSPACE') {
+                var words = document.activeElement.value.split(' ');
                 if (words.length === 1){
-                    document.activeElement.value = "";
+                    document.activeElement.value = '';
                 }
                 else {
-                    document.activeElement.value = words.slice(0, words.length - 1).join(" ");
+                    document.activeElement.value = words.slice(0, words.length - 1).join(' ');
                 }
                 return;
             }
 
-            if (request === "CHROME_DICTATION_NEXT") {
+            if (request === 'CHROME_DICTATION_NEXT') {
                 // move focus to next text input in current form. if we're on the last one, go back to the first one.
                 var inputs = $(document.activeElement).closest('form').find(':input');
                 if (inputs.length <= 1) return;
                 var n = inputs.index(document.activeElement) + 1;
                 var start = n;
                 var pass = false;
-                while (!contains(["password", "text", "number", "search"], inputs.eq(n).attr('type'))) {
+                while (!contains(['password', 'text', 'number', 'search'], inputs.eq(n).attr('type'))) {
                     if (n === inputs.length) { 
                         n = 0;
                         pass = true;
@@ -766,11 +765,11 @@ $(function() {
     
     // If we've just executed the 'home' command, control.js will find itself loading
     // at this URL, and therefore we should automatically start dictation mode.
-    if(document.location.href === "https://www.google.com/###") {
+    if(document.location.href === 'https://www.google.com/###') {
         switchMode(true);
     }
 
-    chrome.runtime.sendMessage({greeting: "SHOW?"}, function(response) {
+    chrome.runtime.sendMessage({greeting: 'SHOW?'}, function(response) {
         if (response) {
             keepShowIsOn = true;
             commandCenter.callCommand('show');
