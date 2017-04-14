@@ -105,7 +105,19 @@ $(function() {
         'line-height': '1.4',
         'white-space': 'nowrap'
     });
-    
+
+    // adds CSS to map tags, overriding any in-page css resets
+    var styleMapTags = function() {
+        $('span.numTag').css({
+            'background': 'white',
+            'border': '1px solid black',
+            'color': 'black',
+            'font-size': '10pt',
+            'position': 'absolute',
+            'z-index': '999'
+        });
+    };
+
     // Checks if a DOM element is in the visible portion of the document
     var isScrolledIntoView = function(elem) {
         var $win = $(window);
@@ -184,8 +196,9 @@ $(function() {
                     if ( isScrolledIntoView(this) && VISIBILITY.isVisible(this) ) {
                         var id = n;
                         var a = $(this).offset();                                   
-                        $('body').append('<span class="numTag" id="' + id + '" style="background:white; border: 1px solid black; color: black; font-size: 10pt; position:absolute; z-index:999;">' + id + '</span>');
+                        $('body').append('<span class="numTag" id="' + id + '">' + id + '</span>');
                         $('#' + id).css({left: a.left - 25, top: a.top});
+                        styleMapTags();
                         
                         var self = this;
                         switch( this.tagName ) {
@@ -241,8 +254,10 @@ $(function() {
                     if ( isScrolledIntoView(this) && VISIBILITY.isVisible(this) ) {
                         var id = n;
                         var offset = $(this).offset();
-                        $('body').append('<span class="numTag" id="' + id + '" style="background:white; border: 1px solid black; font-size: 10pt; position:absolute; z-index:999;">' + id + '</span>');
+                        $('body').append('<span class="numTag" id="' + id + '">' + id + '</span>');
                         $('#' + id).css({left: offset.left - 25, top: offset.top});
+                        styleMapTags();
+
                         var span = this;
                         $('#' + id).click(function(){
                             setTimeout(function() { span.click(); }, 10);
@@ -269,43 +284,43 @@ $(function() {
                     if ( isScrolledIntoView(this) ) {
                         var id = n;
                         var a = $(this).offset();                                   
-                        $('body').append('<span class="numTag" id="' + id + '" style="background:white; border: 1px solid black; font-size: 10pt; position:absolute; z-index:999;">' + id + '</span>');
+                        $('body').append('<span class="numTag" id="' + id + '">' + id + '</span>');
                         $('#' + id).css({left: a.left - 25, top: a.top});
+                        styleMapTags();
                         
                         var self = this;
-                        switch( this.tagName )
-                        {
-                        case 'A':
-                        case 'IMG':
-                        case 'SPAN':
-                            $('#' + id).click(function(){
-                                setTimeout(function() { self.click(); }, 10);
-                            });
-                            break;
-                        case 'BUTTON':
-                            $('#' + id).click(function(){
-                                self.click();
-                            });
-                            break;
-                        case 'INPUT':
-                            if (['checkbox', 'radio', 'submit'].includes(self.type)) {
+                        switch( this.tagName ) {
+                            case 'A':
+                            case 'IMG':
+                            case 'SPAN':
+                                $('#' + id).click(function(){
+                                    setTimeout(function() { self.click(); }, 10);
+                                });
+                                break;
+                            case 'BUTTON':
                                 $('#' + id).click(function(){
                                     self.click();
                                 });
                                 break;
-                            } else if (['text', 'password', 'number'].includes(self.type)) {
+                            case 'INPUT':
+                                if (['checkbox', 'radio', 'submit'].includes(self.type)) {
+                                    $('#' + id).click(function(){
+                                        self.click();
+                                    });
+                                    break;
+                                } else if (['text', 'password', 'number'].includes(self.type)) {
+                                    $('#' + id).click(function(){
+                                        self.focus();
+                                        switchDictationModeOnAndPropagate();
+                                    });
+                                }
+                                break;
+                            case 'TEXTAREA':
                                 $('#' + id).click(function(){
                                     self.focus();
                                     switchDictationModeOnAndPropagate();
                                 });
-                            }   
-                            break;
-                        case 'TEXTAREA':
-                            $('#' + id).click(function(){
-                                self.focus();
-                                switchDictationModeOnAndPropagate();
-                            });
-                            break;
+                                break;
                         }
                         n++;
                     }
