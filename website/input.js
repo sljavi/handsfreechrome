@@ -1,5 +1,5 @@
 $(function() {
-  
+
     var commandAliases = {};
     var timeoutDuration = 180000;
     var extensionId = 'hjlgjkkmkialmidaegfgnnflmoglkkek';
@@ -230,6 +230,7 @@ $(function() {
     var lastInputAt = new Date().getTime();
     var recognizing = false;
     
+    // starts up and maintains the WebSpeech speech recognition engine, dispatches its output to receiveInput
     var start = function() {
         if ('webkitSpeechRecognition' in window) {
             var recognition = new webkitSpeechRecognition();
