@@ -9,7 +9,7 @@ Development
 
 Hands Free uses an external web page to take voice input, which allows it to circumvent the microphone restrictions on Chrome extensions. This means it's necessary to run a local HTTPS server in order to work on certain portions of the code. A python script is included which does this automatically when run. Assuming you have Python installed, the server can be started by just running the script local-server.py in the website subdirectory.
 
-Once the server is running, open Chrome, go to `Settings > Extensions > Load unpacked extension...`, and choose the folder      `handsfree/development/`.
+Once the server is running, open Chrome, go to `Settings > Extensions > Load unpacked extension...`, and choose the folder      `handsfree/chrome-extension/development/`.
 
 The extension will be assigned a random ID, which you must copy into the file website/input.js as the value of the "extensionId" variable.
 
