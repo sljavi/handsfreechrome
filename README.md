@@ -13,9 +13,9 @@ Once the server is running, open Chrome, go to `Settings > Extensions > Load unp
 
 The extension will be assigned a random ID, which you must copy into the file website/input.js as the value of the "extensionId" variable.
 
-When the development version of the extension is activated, it will open a window at `https://127.0.0.1:8000/input.html`, and Chrome will tell you the SSL certificate isn't trusted, you're in danger, etc. Click "Advanced" and proceed anyway. Then open the Chrome Dev Tools and go to the Security tab. Click "View Certificate," then go to the Details tab in the window which pops up and select "Copy to File." Keep all default options picked in the export wizard; the file name can be anything.
+When the development version of the extension is activated, it will open a window at `https://127.0.0.1:8000/html/input.html`, and Chrome will tell you the SSL certificate isn't trusted, you're in danger, etc. Click "Advanced" and proceed anyway. Then open the Chrome Dev Tools and go to the Security tab. Click "View Certificate," then go to the Details tab in the window which pops up and select "Copy to File." Keep all default options picked in the export wizard; the file name can be anything.
 
-Finally, in Chrome go to Settings > Advanced Settings > Manage certificates... and import the certificate file to Trusted Root Certificate Authorities. Now the page will be accepted as valid HTTPS, and there will be no warning from Chrome.
+Finally, in Chrome go to `Settings > Advanced Settings > Manage certificates...` and import the certificate file to `Trusted Root Certificate Authorities`. Now the page will be accepted as valid HTTPS, and there will be no warning from Chrome.
 
 
 Production
