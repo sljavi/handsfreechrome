@@ -106,31 +106,6 @@ $(function() {
         'white-space': 'nowrap'
     });
     
-    // Utility functions
-
-    // Check whether an object is present in an array, returns bool
-    var contains = function(a, obj) {
-        for (var i = 0; i < a.length; i++) {
-            if (a[i] === obj) {
-                return true;
-            }
-        }
-        return false;
-    };
-
-    // Add startsWith method to String type, returns bool
-    if (typeof String.prototype.startsWith !== 'function') {
-        String.prototype.startsWith = function (str){
-            return this.slice(0, str.length) === str;
-        };
-    }
-    // Add endsWith method to String type, returns bool
-    if (typeof String.prototype.endsWith !== 'function') {
-        String.prototype.endsWith = function (str){
-            return this.slice(-str.length) === str;
-        };
-    }
-    
     // Checks if a DOM element is in the visible portion of the document
     var isScrolledIntoView = function(elem) {
         var $win = $(window);
@@ -209,8 +184,8 @@ $(function() {
                     if ( isScrolledIntoView(this) && VISIBILITY.isVisible(this) ) {
                         var id = n;
                         var a = $(this).offset();                                   
-                        $('body').append('<span class="numTag" id="' + id + '" style="background:white; border: 1px solid black; font-size: 10pt; position:absolute; z-index:999;">' + id + '</span>');
-                        $('#'+id).css({left: a.left - 25, top: a.top});
+                        $('body').append('<span class="numTag" id="' + id + '" style="background:white; border: 1px solid black; color: black; font-size: 10pt; position:absolute; z-index:999;">' + id + '</span>');
+                        $('#' + id).css({left: a.left - 25, top: a.top});
                         
                         var self = this;
                         switch( this.tagName ) {
@@ -226,12 +201,12 @@ $(function() {
                                 });
                                 break;
                             case 'INPUT':
-                                if (contains(['checkbox', 'radio', 'submit'], self.type)) {
+                                if (['checkbox', 'radio', 'submit'].includes(self.type)) {
                                     $('#' + id).click(function() {
                                         self.click();
                                     });
                                     break;
-                                } else if (contains(['text', 'password', 'number'], self.type)) {
+                                } else if (['text', 'password', 'number'].includes(self.type)) {
                                     $('#' + id).click(function() {
                                         self.focus();
                                         switchDictationModeOnAndPropagate();
@@ -267,9 +242,9 @@ $(function() {
                         var id = n;
                         var offset = $(this).offset();
                         $('body').append('<span class="numTag" id="' + id + '" style="background:white; border: 1px solid black; font-size: 10pt; position:absolute; z-index:999;">' + id + '</span>');
-                        $('#'+id).css({left: offset.left - 25, top: offset.top});
+                        $('#' + id).css({left: offset.left - 25, top: offset.top});
                         var span = this;
-                        $('#'+id).click(function(){
+                        $('#' + id).click(function(){
                             setTimeout(function() { span.click(); }, 10);
                         });
                         n++;
@@ -295,7 +270,7 @@ $(function() {
                         var id = n;
                         var a = $(this).offset();                                   
                         $('body').append('<span class="numTag" id="' + id + '" style="background:white; border: 1px solid black; font-size: 10pt; position:absolute; z-index:999;">' + id + '</span>');
-                        $('#'+id).css({left: a.left - 25, top: a.top});
+                        $('#' + id).css({left: a.left - 25, top: a.top});
                         
                         var self = this;
                         switch( this.tagName )
@@ -303,30 +278,30 @@ $(function() {
                         case 'A':
                         case 'IMG':
                         case 'SPAN':
-                            $('#'+id).click(function(){
+                            $('#' + id).click(function(){
                                 setTimeout(function() { self.click(); }, 10);
                             });
                             break;
                         case 'BUTTON':
-                            $('#'+id).click(function(){
+                            $('#' + id).click(function(){
                                 self.click();
                             });
                             break;
                         case 'INPUT':
-                            if (contains(['checkbox', 'radio', 'submit'], self.type)) {
-                                $('#'+id).click(function(){
+                            if (['checkbox', 'radio', 'submit'].includes(self.type)) {
+                                $('#' + id).click(function(){
                                     self.click();
                                 });
                                 break;
-                            } else if (contains(['text', 'password', 'number'], self.type)) {
-                                $('#'+id).click(function(){
+                            } else if (['text', 'password', 'number'].includes(self.type)) {
+                                $('#' + id).click(function(){
                                     self.focus();
                                     switchDictationModeOnAndPropagate();
                                 });
                             }   
                             break;
                         case 'TEXTAREA':
-                            $('#'+id).click(function(){
+                            $('#' + id).click(function(){
                                 self.focus();
                                 switchDictationModeOnAndPropagate();
                             });
@@ -712,7 +687,7 @@ $(function() {
                 var n = inputs.index(document.activeElement) + 1;
                 var start = n;
                 var pass = false;
-                while (!contains(['password', 'text', 'number', 'search'], inputs.eq(n).attr('type'))) {
+                while (!['password', 'text', 'number', 'search'].includes(inputs.eq(n).attr('type'))) {
                     if (n === inputs.length) { 
                         n = 0;
                         pass = true;
@@ -730,11 +705,11 @@ $(function() {
             if (dictationMode) {
                 // handles inserting dictated text into active input element
                 if (!inputNumberBugFix && (!!parseInt(request) || request === 'att' || 
-                        request === 'home') && contains(['', undefined], document.activeElement.value)) {
+                        request === 'home') && ['', undefined].includes(document.activeElement.value)) {
                     inputNumberBugFix = true;
                     return;
                 }
-                if (contains(['', undefined], document.activeElement.value)) {
+                if (['', undefined].includes(document.activeElement.value)) {
                     document.activeElement.value = '' + request;
                     inputNumberBugFix = false;
                 } else {

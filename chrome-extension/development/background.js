@@ -7,34 +7,6 @@ var inputDomain = DEV_MODE ? 'https://localhost:8000/html' : 'https://handsfreec
 var inputWindowURL = inputDomain + '/input.html';
 var keepShowing = false;
 
-////////////////  Utility functions ////////////////////////
-
-// Check whether an object is present in an array, returns bool
-var contains = function(a, obj) {
-    for (var i = 0; i < a.length; i++) {
-        if (a[i] === obj) {
-            return true;
-        }
-    }
-    return false;
-};
-
-// Add startsWith method to String type, returns bool
-if (typeof String.prototype.startsWith !== 'function') {
-    String.prototype.startsWith = function (str){
-        return this.slice(0, str.length) === str;
-    };
-}
-// Add endsWith method to String type, returns bool
-if (typeof String.prototype.endsWith !== 'function') {
-    String.prototype.endsWith = function (str){
-        return this.slice(-str.length) === str;
-    };
-}
-
-////////////////////////////////////////////////////
-
-
 // Open input.html in a separate window by default.
 // Users can adjust options so that it opens in a separate tab instead.
 var openInputWindow = function() {
