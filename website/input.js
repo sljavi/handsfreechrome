@@ -35,21 +35,22 @@ $(function() {
     var validSingleCommands = [
         'one',      // for map mode, since all other numbers are rendered as digits but these 10 as words
         'two',
+        'to',       // misheard word for "two"
         'three',
         'four',
         'for',      // misheard word for "four"
         'five',
         'six',
+        'sex',      // misheard word for "6"
         'seven',
         'eight',
+        'att',      // misheard word for "8"
         'nine',
         'ten',
         'map',      // paints numbers next to anchor tags, images, forms, and buttons
         'guide',    // paints numbers next to spans and images
         'show',     // paints numbers next to anchor tags, forms, buttons, images, and spans, regardless of whether they're visible
         'home',     // navigates directly to your homepage
-        'att',      // misheard word for "8"
-        'sex',      // sheard word for "6"
         'up',       // scrolls up 200 pixels
         'app',      // misheard word for "up"
         'op',       // misheard word for "up"
@@ -84,7 +85,8 @@ $(function() {
         'flower',   // misheard word for "slower"
         'stop',     // stops continuous scrolling
         'help',     // brings up help page, or hides it
-        'minimize', // minimize main chrome windows
+        'minimize', // minimize main chrome window
+        'maximize', // maximize main chrome window
         'newtown'   // misheard word for "new tab"
     ];
     
@@ -157,7 +159,7 @@ $(function() {
                     inputsArray.push(organizedInput[i].trim().toLowerCase());
                 }
             }
-            for (var i = 0; i < 3; i++) {
+            for (var i = 0; i < inputsArray.length; i++) {
                 m = inputsArray[i];
                 if ( typeof m === 'string' && (m.endsWith('.com') || m.endsWith('.gov') 
                         || m.endsWith('.org') || m.endsWith('.edu')) ) {

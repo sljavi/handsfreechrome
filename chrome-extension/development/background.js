@@ -88,7 +88,7 @@ var sendCommandToControlScript = function( message ) {
 
 // Decide what to do with a command sent from input.js.
 //
-// If it's a browser level command (new tab, close tab, exit, done, full screen, minimize, switch),
+// If it's a browser level command (new tab, close tab, exit, done, full screen, minimize, maximize, switch),
 // then it handles it itself. Otherwise it's a dictation or a DOM level command and 
 // it gets sent to control.js.
 //
@@ -111,10 +111,6 @@ var executeMessage = function( message, isDictationMessage ) {
     }
 
     lastMessage = message;
-
-    if ( !isDictationMessage && message.endsWith('.com') ) {
-        message = message.slice(0, -4);
-    }
 
     if ( !isDictationMessage && !message.startsWith('go to') ) {
         timeOfLastRequest = (new Date()).getTime();
@@ -153,8 +149,15 @@ var executeMessage = function( message, isDictationMessage ) {
                     return;
                 }
                 if (message === 'minimize') {
-                    chrome.windows.update( window.id, {state: 'minimized' } );
+                    if (window.state !== 'minimized') {
+                        chrome.windows.update( window.id, { state: 'minimized' } );
+                    } else {
+                        chrome.windows.update( window.id, { state: 'maximized' } );
+                    }
                     return;
+                }
+                if (message === 'maximize') {
+                    chrome.windows.update( window. id, {state: 'maximized' } );
                 }
                 if (message === 'new tab' || message === 'newtown') {
                     chrome.tabs.create({ windowId: window.id });
