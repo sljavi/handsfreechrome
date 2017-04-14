@@ -1,6 +1,7 @@
 $(function() {
     var DEV_MODE = true;
-    var inputURL = DEV_MODE ? 'https://localhost:8000/html' : 'https://handsfreechrome.com/html';
+    var inputDomain = DEV_MODE ? 'https://localhost:8000/html' : 'https://handsfreechrome.com/html';
+    var inputWindowURL = inputDomain + '/input.html';
     var mapIsOn = false;
     var guideIsOn = false;
     var showIsOn = false;
@@ -191,7 +192,7 @@ $(function() {
     // this mainly to avoid unexpected behavior if user is using manual page manipulation in addition to voice
     window.onbeforeunload = function() {
         // without this check it would fire whenever we refresh the input window
-        if (window.location.href !== inputURL + '/input.html') {
+        if (window.location.href !== inputWindowURL) {
             chrome.runtime.sendMessage({ greeting: {dictModeOn: false} });
         }
     };
@@ -643,7 +644,7 @@ $(function() {
             command = commandAliases[command] || command;
             console.log('Page has received a command from Hands Free: ' + command);
 
-            if (window.location.origin === inputURL + '/input.html') {
+            if (window.location.origin === inputWindowURL) {
                 return;
             } else if ( command.split(' ')[0] + ' ' + command.split(' ')[1] === 'go to' ) {
                 key['go to'](command.split(' ')[2]);
@@ -673,7 +674,7 @@ $(function() {
             // The ONLY message that background.js allows to reach the instance of control.js in the input window
             // is the message telling it to toggle dictation mode for input.js. If this evaluates to true, then
             // that's what the message is.
-            if (window.location.href === inputURL + '/input.html') {
+            if (window.location.href === inputWindowURL) {
                 toggleInputWindowDictationMode();
                 return;
             }

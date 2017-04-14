@@ -3,7 +3,8 @@ var inputWindowId = null;
 var timeOfLastRequest = 0;
 var dictationMode = false;
 var lastMessage = null;
-var inputURL = DEV_MODE ? 'https://localhost:8000/html' : 'https://handsfreechrome.com/html';
+var inputDomain = DEV_MODE ? 'https://localhost:8000/html' : 'https://handsfreechrome.com/html';
+var inputWindowURL = inputDomain + '/input.html';
 var keepShowing = false;
 
 ////////////////  Utility functions ////////////////////////
@@ -43,7 +44,7 @@ var openInputWindow = function() {
         if(items.openInTab) {
             chrome.tabs.create(
                 {
-                    'url': inputURL + '/input.html',
+                    'url': inputWindowURL,
                 },
                 function(window) {
                     inputWindowId = window.id;
@@ -52,7 +53,7 @@ var openInputWindow = function() {
         } else {
             chrome.windows.create(
                 {
-                    'url': inputURL + '/input.html',
+                    'url': inputWindowURL,
                     'height': 300,
                     'width': 400,
                     'left': screen.width - 400,
@@ -135,7 +136,7 @@ var executeMessage = function( message, isDictationMessage ) {
                 }
 
                 // Don't let any other commands reach the input window's content script (control.js)
-                if (window.tabs[0].url === inputURL + '/input.html') {
+                if (window.tabs[0].url === inputWindowURL) {
                     return;
                 }
 
@@ -194,7 +195,7 @@ var executeMessage = function( message, isDictationMessage ) {
         chrome.windows.getAll( {populate:true}, function(windows){
             windows.forEach(function(window){
                 // but don't send dictation to input.html
-                if (window.tabs[0].url === inputURL + '/input.html') {
+                if (window.tabs[0].url === inputWindowURL) {
                     return;
                 }
                 chrome.tabs.query({
@@ -214,7 +215,7 @@ chrome.runtime.onMessageExternal.addListener(
     function(request, sender, sendResponse) {
         console.log('received something');
         // ignore messages from all other pages
-        if (sender.url !== inputURL + '/input.html') {
+        if (sender.url !== inputWindowURL) {
             console.log('Nevermind, bad URL from message sender.');
             console.log('URL: ' + sender.url);
             return;
