@@ -100,11 +100,11 @@ a {
 	}
 }
 
-#install_button {
+#install-button {
 	display: none;
 }
 
-.social_media_container {
+.social-media-container {
 	width: 300px;
 	margin: auto;
 }
@@ -113,7 +113,7 @@ a {
 	float: right;
 }
 
-.social-media-container div.fb-like{
+.social-media-container div.fb-like {
 	float: left;
 }
 
@@ -179,7 +179,7 @@ kbd {
 	margin-top: 10px;
 }
 
-#not_using_chrome {
+#not-using-chrome {
 	width: 65%;
 	font-size: 18px;
 }

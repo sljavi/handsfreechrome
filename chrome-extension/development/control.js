@@ -1,7 +1,7 @@
 $(function() {
     var DEV_MODE = true;
-    var inputDomain = DEV_MODE ? 'https://localhost:8000/html' : 'https://handsfreechrome.com/html';
-    var inputWindowURL = inputDomain + '/input.html';
+    var inputDomain = DEV_MODE ? 'https://localhost:8000' : 'https://handsfreechrome.com';
+    var inputWindowURL = inputDomain + '/html/input.html';
     var mapIsOn = false;
     var guideIsOn = false;
     var showIsOn = false;
@@ -171,16 +171,23 @@ $(function() {
     };
     
     // Used to directly inform input.js that we have switched modes.
-    var toggleInputWindowDictationMode = function() {
-        document.getElementById('modeSwitch').click();
+    // Only used in the instance of control.js embedded in the input window.
+    var toggleInputWindowDictationMode = function(dictationMode) {
+        if (dictationMode) {
+            document.getElementById('dictationEnable').click();
+        } else {
+            document.getElementById('dictationDisable').click();
+        }
     };
 
-    // make sure to switch background.js out of dictation mode whenever page changes.
-    // this mainly to avoid unexpected behavior if user is using manual page manipulation in addition to voice
+    // make sure to switch all scripts out of dictation mode whenever a page changes or refreshes, to avoid bugs.
+    // this is mainly to avoid unexpected behavior if user is using manual page manipulation in addition to voice
     window.onbeforeunload = function() {
-        // without this check it would fire whenever we refresh the input window
+        // have to distinguish between input window and main window so background.js knows who's left to inform
         if (window.location.href !== inputWindowURL) {
-            chrome.runtime.sendMessage({ greeting: {dictModeOn: false} });
+            chrome.runtime.sendMessage({ greeting: {dictModeOn: false, origin: 'mainWindow'} });
+        } else {
+            chrome.runtime.sendMessage({ greeting: {dictModeOn: false, origin: 'inputWindow'} });
         }
     };
     
@@ -665,7 +672,8 @@ $(function() {
             // is the message telling it to toggle dictation mode for input.js. If this evaluates to true, then
             // that's what the message is.
             if (window.location.href === inputWindowURL) {
-                toggleInputWindowDictationMode();
+                console.log(request);
+                toggleInputWindowDictationMode(request.dictModeOn);
                 return;
             }
 

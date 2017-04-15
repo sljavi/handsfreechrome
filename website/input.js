@@ -17,9 +17,14 @@ $(function() {
 
     // for inputting text to forms
     var dictationMode = false;
-    $('#modeSwitch').click(function() {
-        console.log('Switched modes');
-        dictationMode = !dictationMode;
+    $('#dictationEnable').click(function() {
+        console.log('dictation mode enabled in input.js');
+        dictationMode = true;
+    });
+
+    $('#dictationDisable').click(function() {
+        console.log('dictation mode disabled in input.js');
+        dictationMode = false;
     });
     
     var validSingleCommands = [
@@ -225,11 +230,14 @@ $(function() {
         }
     };
 
-    var finalTranscript = '';
     var lastStartedAt = 0;
     var lastInputAt = new Date().getTime();
     var recognizing = false;
-    
+
+    var addLastInputToPreviousInputsDisplay = function(input) {
+        $('#previousInputsDisplay').prepend('<div>' + input + '</div>');
+    };
+
     // starts up and maintains the WebSpeech speech recognition engine, dispatches its output to receiveInput
     var start = function() {
         if ('webkitSpeechRecognition' in window) {
@@ -241,7 +249,6 @@ $(function() {
             recognition.onstart = function() {
                 recognizing = true;
                 lastStartedAt = new Date().getTime();
-                document.getElementById('inputDisplay').innerHTML = 'Started';
             };
             
             recognition.onerror = function(event) {
@@ -268,38 +275,44 @@ $(function() {
                     recognition.start();
                 } else {
                     alert('No speech detected for ' + timeoutDuration / 60000 +
-                        ' minutes, turning off. Refresh input window to reactivate')
+                        ' minutes, turning off. Refresh input window to reactivate.')
                 }
             };
             
             recognition.onresult = function(event) {
                 lastInputAt = new Date().getTime();
                 var interimTranscript = '';
+
                 if (typeof event.results === 'undefined') {
                     recognition.onend = null;
                     recognition.stop();
                     alert('results were undefined');
                     return;
                 }
+
                 for (var i = event.resultIndex; i < event.results.length; ++i) {
                     if (dictationMode) {
                         if (event.results[i].isFinal) {
-                            finalTranscript += event.results[i][0].transcript;
                             receiveInput(event.results[i][0].transcript);
+                            addLastInputToPreviousInputsDisplay(event.results[i][0].transcript);
                         } else {
                             interimTranscript += event.results[i][0].transcript;
                         }
                     } else {
                         if (event.results[i].isFinal) {
-                            finalTranscript += event.results[i][0].transcript;
+                            addLastInputToPreviousInputsDisplay(event.results[i][0].transcript);
                         } else {
                             interimTranscript += event.results[i][0].transcript;
                             receiveInput(event.results[i][0].transcript);
                         }
                     }
                 }
-                document.getElementById('inputDisplay').innerHTML = finalTranscript;
-                document.getElementById('interimDisplay').innerHTML = interimTranscript;
+
+                if (interimTranscript !== '') {
+                    document.getElementById('interimDisplay').innerHTML = interimTranscript;
+                } else {
+                    document.getElementById('interimDisplay').innerHTML = '<br>';
+                }
                 if(interimTranscript) document.title = interimTranscript;
             }
             recognition.start();
