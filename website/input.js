@@ -174,9 +174,8 @@ $(function() {
 
             // detect "go to" commands
             for (var i = 0; i < inputsArray.length; i++) {
-                m = inputsArray[i];
-                if ( typeof m === 'string' && (m.endsWith('.com') || m.endsWith('.gov') 
-                        || m.endsWith('.org') || m.endsWith('.edu')) ) {
+                var m = inputsArray[i];
+                if ( m.endsWith('.com') || m.endsWith('.gov') || m.endsWith('.org') || m.endsWith('.edu') ) {
                     sendCommand('go to ' + m);
                     return;
                 }
