@@ -26,6 +26,14 @@ $(function() {
     
     // stops the maptag number from being placed into a text input at the moment it is selected
     var inputNumberBugFix = false;
+
+    // used for YouTube commands
+    var mainVideo = document.getElementsByTagName('video')[0];
+
+    // the above variable seems to become undefined unpredictably for unknown reasons, so we reset before using it
+    var checkMainVideo = function() {
+        mainVideo = mainVideo || document.getElementsByTagName('video')[0];
+    };
     
     // used for blade runner mode....'zoom...enhance'
     $('body').css({ '-webkit-transition': '0.6s ease-in-out' });
@@ -48,7 +56,7 @@ $(function() {
     };
     
     // embedded help page...non-compact but identical HTML in commands.html
-    $('body').append('<div id="hfc-help" style="display:none;"><h2>Hands Free Chrome Command Guide</h2><p>Say <kbd>help</kbd> again to hide this guide. Use the scrolling commands to scroll up or down. </p><p style="font-style: italic">Note: the most common problem is a command being misheard by the speech engine. By observing the Hands Free input window, you can see what it thinks you said. This may help you learn the proper enunciations necessary in order to be understood more readily. </p><h3>Scrolling</h3><p>To scroll up a small amount, say <kbd>up</kbd>.<br>To scroll down a small amount, say <kbd>down</kbd>.<br>To scroll a small amount to the right, say <kbd>right</kbd>.<br>To scroll a small amount to the left, say <kbd>left</kbd>.</p><p>To page up, say <kbd>rise</kbd>.<br>To page down, say <kbd>fall</kbd>.</p><p>To scroll to the bottom of the page, say <kbd>bottom</kbd>.<br>To scroll to the top of the page, say <kbd>top</kbd>.</p><p>To set the page scrolling continuously up, say <kbd>keep scrolling up</kbd>.<br>To set the page scrolling continuously down, say <kbd>keep scrolling down</kbd>.<br>To stop the page from continously scrolling, say <kbd>stop</kbd>.<br>To control the speed of scrolling, say <kbd>faster</kbd> or <kbd>slower</kbd>. The changes will be small, but you can issue these commands repeatedly for incremental gains.</p><h3>Clicking</h3><p>To paint number tags alongside what are most likely visible, clickable elements on the page, say <kbd>map</kbd>. The tags will appear near the upper left corner of the corresponding link, image, or input form. Use your best judgement to tell which is which.</p><p>To click a numbered element, simply speak the number. Enunciate very clearly.</p><p>If you decide not to click on anything, saying <kbd>map</kbd> a second time will hide the number tags, as will using any of the scrolling commands.</p><p>If the element you wish to click is not numbered by <kbd>map</kbd>, try using <kbd>guide</kbd> instead. Saying <kbd>guide</kbd> while the <kbd>map</kbd> tags are active will hide the existing tags and draw new ones. The same is true in reverse.</p><p>The system by which clickable elements are numbered will be heavily improved in the future, but for the time being there may be many frustrations in the placement of the numbers.</p><p>To alleviate this, there is a <kbd>show</kbd> command, which will sloppily paint numbers over nearly everything, including elements you cannot see and therefore cannot click on. It\'s a last resort. But if <kbd>map</kbd> and <kbd>guide</kbd> don\'t paint a number next to the element you wish to click, the odds are very high that <kbd>show</kbd> will get the job done.</p><p>Again, saying <kbd>show</kbd> while <kbd>map</kbd> or <kbd>guide</kbd> are active will just hide the existing tags and draw new ones.</p><p><i>Note: There is currently no support for dropdown menus.</i></p><h3>Dictation Mode</h3><p>If you’ve clicked a text input, Hands Free will switch into dictation mode, and anything you say will be written as text into the selected text input.</p><p>To turn off dictation mode and return to the normal control functionality, say <kbd>stop</kbd>.<br>To submit the textbox you’re typing in (the equivalent of pressing ‘enter’), say <kbd>go</kbd>. This is what you want when you finish typing in a searchbox, for example.<br>To move the cursor to the next input in the form (for example, from username to password), say <kbd>next</kbd>.<br><br>To remove the last word you entered from the textbox, say <kbd>backspace</kbd>.</p><h3>Navigation</h3><p>To go to ANY website, say the name of the website on its own with the domain specified. There is no need to say “www.”<br>Examples: <kbd>google.com</kbd>, <kbd>en.wikipedia.org</kbd> (pronounced E-N-dot-wikipedia-dot-org), <kbd>mit.edu</kbd> (pronounced M-I-T-dot-E-D-U), <kbd>fr.wikipedia.org</kbd> (pronounced F-R-dot-wikipedia-dot-org)</p><p>To go to a particular .com website, say <kbd>go to [website name]</kbd>. You can include the .com or omit it.<br>Examples: <kbd>go to google</kbd>, <kbd>go to google.com</kbd>, <kbd>go to amazon</kbd>, <kbd>go to facebook</kbd></p><p style="font-style: italic">Note: there are some websites with longer names which will register erroneously with the engine. For example, there is no way to reach freecreditreport.com, which will be heard as “free credit report.com”, and will consequently send you to report.com.</p><p>To go back one page in your history, say <kbd>back</kbd>.<br>To go forward one page in your history, say <kbd>forward</kbd>.</p><p>To go to google.com, say <kbd>home</kbd>. This will also automatically put the extension into dictation mode, and is the fastest way to search for things.</p><p style="font-style: italic">Note: Google can be used to indirectly reach almost any website that you can\'t navigate to directly via Hands Free. For instance, going to Google and searching for "free credit report.com" will correctly bring up as a result the actual "freecreditreport.com", which you can then click on.</p><h3>Controlling Tabs</h3><p>To open a new tab, say <kbd>new tab</kbd>.</p><p style="font-style: italic">Note: When opening a new tab, only the "go to" command and tab control commands will work unless you have installed the new tab redirect extension, which will cause new tabs to default to a page of your choosing. That extension can be found on <a href="https://chrome.google.com/webstore/detail/new-tab-redirect/icpgjfneehieebagbmdbhnlpiopdcmna?hl=en">the Chrome Web Store.</a></p><p>To close the current tab, say <kbd>close tab</kbd>.<br>To switch the active tab to the next tab in the window, say <kbd>switch</kbd>.</p><h3>Controlling the Window</h3><p>To enter or exit full screen mode, say <kbd>full screen</kbd>.<br>To minimize, say <kbd>minimize</kbd>.<br>To maximize, say <kbd>maximize</kbd>.</p><p>To close all Chrome windows entirely, say <kbd>exit</kbd> or <kbd>quit</kbd>.</p><h3>Zooming</h3><p>To zoom in, say <kbd>zoom in</kbd><br>To zoom out, say <kbd>zoom out</kbd>.<br>To restore the zoom level to normal, say <kbd>zoom normal</kbd>.</p><h3>Refreshing</h3><p>To reload the page, say <kbd>reload</kbd> or <kbd>refresh</kbd>.</p><h3>Closing Hands Free</h3><p>Lastly, to turn off Hands Free, say <kbd>done</kbd>.</p></div>');
+    $('body').append('<div id="hfc-help" style="display:none;"><h2>Hands Free Chrome Command Guide</h2><p>Say <kbd>help</kbd> to bring up a copy of this command guide.</p> <p style="font-style: italic">Note: the most common problem is a command being misheard by the speech engine. By observing the Hands Free input window, you can see what it thinks you said. This may help you learn the proper enunciations necessary in order to be understood more readily.</p> <p style="font-style: italic">Also note that the wording for many commands was chosen based on what the speech recognition engine recognized most consistently and accurately. Many common mishearings have been hardcoded to be recognized, so for instance when you say "pause" and it hears "paws," it will still work.</p> <h3>Scrolling</h3> <p>To scroll up a small amount, say <kbd>up</kbd>.<br> To scroll down a small amount, say <kbd>down</kbd>.<br> To scroll a small amount to the right, say <kbd>right</kbd>.<br> To scroll a small amount to the left, say <kbd>left</kbd>.</p> <p>To page up, say <kbd>rise</kbd>.<br> To page down, say <kbd>fall</kbd>.</p> <p>To scroll to the bottom of the page, say <kbd>bottom</kbd>.<br> To scroll to the top of the page, say <kbd>top</kbd>.</p> <p>To set the page scrolling continuously up, say <kbd>keep scrolling up</kbd>.<br> To set the page scrolling continuously down, say <kbd>keep scrolling down</kbd>.<br> To stop the page from continously scrolling, say <kbd>stop</kbd>.<br> To control the speed of scrolling, say <kbd>faster</kbd> or <kbd>slower</kbd>. The changes will be small, but you can issue these commands repeatedly for incremental gains.</p> <h3>Clicking</h3> <p>To see numbered tags alongside clickable elements on the page, say <kbd>map</kbd>. If <kbd>map</kbd> does not place a numbered tag next to the element you wish to click, try <kbd>guide</kbd> or <kbd>show</kbd> instead. These commands do the same thing, but they select different items for numbering. Using one after another will hide the previous command\'s tags before creating new ones.</p> <p>The tags will appear near the upper left corner of the corresponding item. Although the exact spacing can be unpredictable, a given number tag will always be to the immediate left of the element it corresponds to.</p> <p>To click a numbered element, simply speak the number.</p> <p>If you decide not to click anything, saying <kbd>map</kbd>/<kbd>guide</kbd>/<kbd>show</kbd> a second time will hide the number tags, as will using any of the scrolling commands.</p> <p><i>Note: There is currently no support for dropdown menus.</i></p> <h3>Dictation Mode</h3> <p>If you’ve clicked a text input, Hands Free will switch into dictation mode, and anything you say will be written as text into the selected text input.</p> <p>To turn off dictation mode and return to the normal control functionality, say <kbd>stop</kbd>.<br> To submit the textbox you’re typing in (the equivalent of pressing ‘enter’), say <kbd>go</kbd>. This is what you want when you finish typing in a searchbox, for example.<br> To move the cursor to the next input in the form (for example, from username to password), say <kbd>next</kbd>.<br> <br> To remove the last word you entered from the textbox, say <kbd>backspace</kbd>.</p> <h3>Navigation</h3> <p>To go to ANY website, say the name of the website on its own with the domain specified. There is no need to say “www.”<br> Examples: <kbd>google.com</kbd>, <kbd>en.wikipedia.org</kbd> (pronounced E-N-dot-wikipedia-dot-org), <kbd>mit.edu</kbd> (pronounced M-I-T-dot-E-D-U), <kbd>fr.wikipedia.org</kbd> (pronounced F-R-dot-wikipedia-dot-org)</p> <p>To go to a particular .com website, say <kbd>go to [website name]</kbd>. You can include the .com or omit it.<br> Examples: <kbd>go to google</kbd>, <kbd>go to google.com</kbd>, <kbd>go to amazon</kbd>, <kbd>go to facebook</kbd></p> <p style="font-style: italic">Note: there are some websites with longer names which will register erroneously with the engine. For example, there is no way to reach freecreditreport.com, which will be heard as “free credit report.com”, and will consequently send you to report.com.</p> <p>To go back one page in your history, say <kbd>back</kbd>.<br> To go forward one page in your history, say <kbd>forward</kbd>.</p> <p>To go to google.com, say <kbd>home</kbd>. This will also automatically put the extension into dictation mode, and is the fastest way to search for things.</p> <p style="font-style: italic">Note: Google can be used to indirectly reach almost any website that you can\'t navigate to directly via Hands Free. For instance, going to Google and searching for "free credit report.com" will correctly bring up as a result the actual "freecreditreport.com", which you can then click on.</p> <h3>Controlling Tabs</h3> <p>To open a new tab, say <kbd>new tab</kbd>.</p> <p style="font-style: italic">Note: There is another Chrome extension which will automatically direct new tabs to a page of your choosing. That extension can be found on <a href="https://chrome.google.com/webstore/detail/new-tab-redirect/icpgjfneehieebagbmdbhnlpiopdcmna?hl=en">the Chrome Web Store.</a></p> <p>To close the current tab, say <kbd>close tab</kbd>.<br> To switch the active tab to the next tab in the window, say <kbd>switch</kbd>.</p> <p>To toggle mute on the current tab (muting/unmuting the entire tab), say <kbd>silence</kbd>.</p> <h3>Controlling the Window</h3> <p>To enter or exit full screen mode, say <kbd>full screen</kbd>. All commands work just the same in full screen mode.<br> To minimize, say <kbd>minimize</kbd>.<br> To maximize, say <kbd>maximize</kbd>.</p> <p>To close all Chrome windows entirely, say <kbd>exit</kbd> or <kbd>quit</kbd>.</p> <h3>Zooming</h3> <p>To zoom in, say <kbd>zoom in</kbd><br> To zoom out, say <kbd>zoom out</kbd>.<br> To restore the zoom level to normal, say <kbd>zoom normal</kbd>.</p> <h3>Refreshing</h3> <p>To reload the page, say <kbd>reload</kbd> or <kbd>refresh</kbd>.</p> <h3>YouTube</h3> <p>These commands are only applicable if you are viewing a video on youtube.com. They may work on videos playing on other websites, but success is not guaranteed.</p> <p>To pause the video, say <kbd>pause</kbd>.<br> To unpause the video, say <kbd>play</kbd>.</p> <p>To seek forward 15 seconds in the video, say <kbd>skip</kbd>.<br> To seek forward 60 seconds in the video, say <kbd>jump</kbd>.<br> To seek forward 5 minutes in the video, say <kbd>leap</kbd>.<br> To seek backward 30 seconds in the video, say <kbd>rewind</kbd>.</p> <p>To increase the video\'s volume by 20% or to max (whichever comes first), say <kbd>increase volume</kbd>.<br> To decrease the video\'s volume by 20% or to minimum (whichever comes first), say <kbd>decrease volume</kbd>.</p> <p>To mute the video, say <kbd>mute</kbd>.<br> To unmute the video, say <kbd>unmute</kbd>.</p> <p>To restart the video, say <kbd>restart</kbd>.</p> <h3>Closing Hands Free</h3> <p>Lastly, to turn off Hands Free, say <kbd>done</kbd>.</p></div>');
     
     // styling for embedded help page
     $('#hfc-help').css({
@@ -389,6 +397,7 @@ $(function() {
             if (needsRefresh) setDelay(function(){location.reload();}, 500);
         };
 
+        // scrolls down 200 pixels
         var down = function() {
             scrollContainer.stop();
             clearMapTags();
@@ -400,6 +409,7 @@ $(function() {
             return;
         };
 
+        // scrolls up 200 pixels
         var up = function() {
             scrollContainer.stop();
             clearMapTags();
@@ -411,6 +421,7 @@ $(function() {
             return;
         };
 
+        // scrolls right 200 pixels
         var right = function() {
             clearMapTags();
             var amount = '+=' + 200;
@@ -421,6 +432,7 @@ $(function() {
             return;
         };
 
+        // scrolls left 200 pixels
         var left = function() {
             clearMapTags();
             var amount = '-=' + 200;
@@ -431,6 +443,7 @@ $(function() {
             return;
         };
 
+        // page down
         var fall = function() {
             scrollContainer.stop();
             clearMapTags();
@@ -442,6 +455,7 @@ $(function() {
             return;
         };
 
+        // page up
         var rise = function() {
             scrollContainer.stop();
             clearMapTags();
@@ -453,16 +467,19 @@ $(function() {
             return;
         };
 
+        // navigate to previous page in browser history
         var back = function() {
             window.history.back();
             return;
         };
 
+        // navigate to next page in browser history
         var forward = function() {
             window.history.forward();
             return;
         };
 
+        // scroll to top of page
         var top = function() {
             scrollContainer.stop();
             clearMapTags();
@@ -473,6 +490,7 @@ $(function() {
             return;
         };
 
+        // scroll to bottom of page
         var bottom = function() {
             scrollContainer.stop();
             clearMapTags();
@@ -483,11 +501,13 @@ $(function() {
             return;
         };
 
+        // reload/refresh page
         var reload = function() {
             location.reload();
             return;
         };
 
+        // zoom in
         var zoom = function() {
             if (bladeRunnerMode) {
                 $('body').css({ '-webkit-filter': 'blur(5px)' });
@@ -500,6 +520,7 @@ $(function() {
             return;
         };
 
+        // zoom out
         var zoomOut = function() {
             $('body').css({ '-webkit-filter': 'blur(0px)' });
             $('html, body').animate(
@@ -510,6 +531,7 @@ $(function() {
             return;
         };
 
+        // reset to default zoom level (no zoom)
         var zoomNormal = function() {
             $('body').css({ '-webkit-filter': 'blur(0px)' });
             $('html, body').animate(
@@ -520,6 +542,7 @@ $(function() {
             return;
         };
 
+        // remove blur in Blade Runner mode...zoom, enhance. zoom, enhance.
         var enhance = function() {
             if (bladeRunnerMode) {
                 $('body').css({ '-webkit-filter': 'blur(0px)' });
@@ -527,6 +550,7 @@ $(function() {
             return;
         };
 
+        // bring up embedded help page
         var help = function() {
             if ($('#hfc-help').css('display') === 'none'){
                 $('#hfc-help').fadeIn(125);
@@ -538,6 +562,7 @@ $(function() {
             }
         };
 
+        // hides help page; used when extension is closed via "done" command
         var hideHelp = function() {
             if ($('#hfc-help').css('display') !== 'none') {
                 $('#hfc-help').fadeOut(125);
@@ -545,6 +570,7 @@ $(function() {
             }
         };
 
+        // reduces speed of scrolling for "keep scrolling up/down" commands
         var slower = function() {
             if (currentSpeed) {
                 currentSpeed += 250;
@@ -554,6 +580,7 @@ $(function() {
             }
         };
 
+        // increases speed of scrolling for "keep scrolling up/down" commands
         var faster = function() {
             if (currentSpeed) {
                 currentSpeed -= 250;
@@ -561,34 +588,129 @@ $(function() {
             if (currentSpeed <= 0) {
                 currentSpeed = 5;
             }
-            // console.log(currentSpeed);
             if (currentDirection) {
                 startScrolling( currentDirection, currentSpeed );
             }
         };
 
+        // stops scrolling, used in conjuction with "keep scrolling up/down" commands
         var stop = function() {
             scrollContainer.stop();
         };
 
+        // toggles Blade Runner mode for zoom functions
         var toggleBRMode = function() {
             bladeRunnerMode = !bladeRunnerMode;
         };
 
+        // starts page continuously scrolling down until it hits the end or is told to stop
         var keepScrollingDown = function() {
             startScrolling('down', scrollSpeed );
         };
 
+        // starts page continuously scrolling up until it hits the end or is told to stop
         var keepScrollingUp = function() {
             startScrolling('up', scrollSpeed );
         };
 
+        // starts page continuously scrolling right until it hits the end or is told to stop
         var keepScrollingRight = function() {
             console.log('not implemented');
         };
 
+        // starts page continuously scrolling left until it hits the end or is told to stop
         var keepScrollingLeft = function() {
             console.log('not implemented');
+        };
+
+        // play main youtube video
+        var play = function() {
+            checkMainVideo();
+            mainVideo.play();
+        };
+
+        // pause main youtube video
+        var pause = function() {
+            checkMainVideo();
+            mainVideo.pause();
+        };
+
+        // restart main youtube video
+        var restart = function() {
+            checkMainVideo();
+            mainVideo.currentTime = 0;
+        };
+
+        // increase volume on main youtube video
+        var increaseVolume = function() {
+            checkMainVideo();
+            if (mainVideo.volume > 0.8) {
+                mainVideo.volume = 1.0;
+            } else {
+                mainVideo.volume += 0.2;
+            }
+        };
+
+        // decrease volume on main youtube video
+        var decreaseVolume = function() {
+            checkMainVideo();
+            if (mainVideo.volume < 0.2) {
+                mainVideo.volume = 0;
+            } else {
+                mainVideo.volume -= 0.2;
+            }
+        };
+
+        // mute main youtube video
+        var muteVideo = function() {
+            checkMainVideo();
+            mainVideo.muted = true;
+        };
+
+        // unmute main youtube video
+        var unmuteVideo = function() {
+            checkMainVideo();
+            mainVideo.muted = false;
+        };
+
+        // skip forward 15 seconds or to end of main youtube video
+        var skipForward = function() {
+            checkMainVideo();
+            if (mainVideo.currentTime + 15 >= mainVideo.duration) {
+                mainVideo.currentTime = mainVideo.duration;
+            } else {
+                mainVideo.currentTime += 15;
+            }
+        };
+
+        // skip backward 15 seconds or to beginning of main youtube video
+        var skipBack = function() {
+            checkMainVideo();
+            if (mainVideo.currentTime - 15 <= 0) {
+                mainVideo.currentTime = 0;
+            } else {
+                mainVideo.currentTime -= 15;
+            }
+        };
+
+        // skip forward 60 seconds or to end of main youtube video
+        var jumpForward = function() {
+            checkMainVideo();
+            if (mainVideo.currentTime + 60 >= mainVideo.duration) {
+                mainVideo.currentTime = mainVideo.duration;
+            } else {
+                mainVideo.currentTime += 60;
+            }
+        };
+
+        // skip forward 5 minutes or to end of main youtube video
+        var leapForward = function() {
+            checkMainVideo();
+            if (mainVideo.currentTime + 300 >= mainVideo.duration) {
+                mainVideo.currentTime = mainVideo.duration;
+            } else {
+                mainVideo.currentTime += 300;
+            }
         };
 
         var key = {
@@ -603,7 +725,7 @@ $(function() {
             'town'          : down, // misheard word
             'up'            : up,
             'op'            : up,   // misheard word
-            'app'           : up,
+            'app'           : up,   // misheard word
             'right'         : right,
             'left'          : left,
             'fall'          : fall,
@@ -621,15 +743,30 @@ $(function() {
             'refresh'       : reload,
             'zoom'          : zoom,
             'resume'        : zoom, // misheard word
+            'zoomin'        : zoom, // misheard word
             'zoom in'       : zoom,
             'zoom out'      : zoomOut,
             'zoom normal'   : zoomNormal,
             'enhance'       : enhance,
             'help'          : help,
             'slower'        : slower,
+            'flower'        : slower, // misheard word
             'faster'        : faster,
             'stop'          : stop,
             'hidehelp'      : hideHelp,
+            'play'          : play,
+            'pause'         : pause,
+            'paws'          : pause, // misheard word
+            'pawn'          : pause, // misheard word
+            'mute'          : muteVideo,
+            'unmute'        : unmuteVideo,
+            'restart'       : restart,
+            'skip'          : skipForward,
+            'rewind'        : skipBack,
+            'jump'          : jumpForward,
+            'leap'          : leapForward,
+            'increase volume'       : increaseVolume,
+            'decrease volume'       : decreaseVolume,
             'blade runner mode'     : toggleBRMode,
             'keep scrolling down'   : keepScrollingDown,
             'keep scrolling up'     : keepScrollingUp,

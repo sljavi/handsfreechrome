@@ -28,12 +28,19 @@ $(function() {
     });
     
     var validSingleCommands = [
+        'play',     // unpauses a youtube video
+        'pause',    // pauses a youtube video
+        'paws',     // misheard word for "pause"
+        'pawn',     // misheard word for "pause"
+        'mute',     // mutes a youtube video
+        'unmute',   // unmutes a youtube video
+        'restart',  // restarts a youtube video
         'one',      // for map mode, since all other numbers are rendered as digits but these 10 as words
         'two',
-        'to',       // misheard word for "two"
+        'to',       // misheard word for "2"
         'three',
         'four',
-        'for',      // misheard word for "four"
+        'for',      // misheard word for "4"
         'five',
         'six',
         'sex',      // misheard word for "6"
@@ -68,6 +75,7 @@ $(function() {
         'refresh',  // refresh page
         'zoom',     // zoom in
         'resume',   // misheard word for "zoom"
+        'zoomin',   // misheard word for "zoom in"
         'enhance',  // only works in bladeRunnerMode; removes zoom blur
         'switch',   // changes to the next tab in the queue
         'exit',     // closes all Chrome windows
@@ -82,17 +90,25 @@ $(function() {
         'help',     // brings up help page, or hides it
         'minimize', // minimize main chrome window
         'maximize', // maximize main chrome window
-        'newtown'   // misheard word for "new tab"
+        'newtown',  // misheard word for "new tab"
+        'skip',     // seek forward 15 seconds in youtube video
+        'jump',     // seek forward 60 seconds in youtube video
+        'leap',     // seek forward 5 minutes in youtube video
+        'rewind',   // seek backward 30 seconds in youtube video
+        'silence',   // toggle tab mute on/off
+        'silent'    // misheard word for "silence"
     ];
     
     var validDoubleCommands = [
-        'full screen',  // toggle full screen mode
-        'zoom in',      // zoom in
-        'zoom out',     // zoom out WHOA WAIT WHAT DO YOU MEAN
-        'zoom normal',  // return to standard level of zoom
-        'new tab',      // opens a new tab
-        'close tab',    // closes current tab
-        'close time',   // misheard command for "close tab"
+        'full screen',      // toggle full screen mode
+        'zoom in',          // zoom in
+        'zoom out',         // zoom out WHOA WAIT WHAT DO YOU MEAN
+        'zoom normal',      // return to standard level of no zoom
+        'new tab',          // opens a new tab
+        'close tab',        // closes current tab
+        'close time',       // misheard command for "close tab"
+        'increase volume',  // increases volume on youtube video by 20%
+        'decrease volume',  // decreases volume on youtube video by 20%
         'keep showing',
         'stop showing',
     ];
@@ -116,14 +132,12 @@ $(function() {
         for (var i = 0; i < validTripleCommands.length; i++) {
             if (command === validTripleCommands[i] ||
                 threeCommands[0] + ' ' + threeCommands[1] === 'go to') {
-                // console.log(threeCommands.join(' '));
                 return 3;
             }
         }
         command = commandAliases[threeCommands.slice(0, 2).join(' ')] || threeCommands.slice(0, 2).join(' ');
         for (var i = 0; i < validDoubleCommands.length; i++) {
             if (command === validDoubleCommands[i]) {
-                // console.log(threeCommands.slice(0, 2).join(' '));
                 return 2;
             }
         }
@@ -147,13 +161,18 @@ $(function() {
     // handles spoken input, verifying validity before sending it to the extension
     var receiveInput = function(input) {
         if (!dictationMode) {
+            console.log(input);
             organizedInput = input.trim().split(' ');
             inputsArray = [];
+
+            // trim whitespace and transform to all lowercase before populating array
             for (var i = 0; i < organizedInput.length; i++) {
                 if ( !(organizedInput[i].trim() === '') ) {
                     inputsArray.push(organizedInput[i].trim().toLowerCase());
                 }
             }
+
+            // detect "go to" commands
             for (var i = 0; i < inputsArray.length; i++) {
                 m = inputsArray[i];
                 if ( typeof m === 'string' && (m.endsWith('.com') || m.endsWith('.gov') 
@@ -162,7 +181,9 @@ $(function() {
                     return;
                 }
             }
+
             var match = matchesValidCommands( inputsArray.slice(0, 3) );
+
             if ( !match ) {
                 return;
             } else {
@@ -184,10 +205,8 @@ $(function() {
                 return;
             }
         } else {
-            /*
-              Take input until the word "go" or "stop" or "next" is found.
-              Send all input to the background window.
-            */
+            // Take input until the word "go" or "stop" or "next" is found.
+            // Send all input to the background window.
             organizedInput = input.trim().split(' ');
             inputsArray = [];
             for (var i = 0; i < organizedInput.length; i++) {
@@ -283,7 +302,7 @@ $(function() {
                 lastInputAt = new Date().getTime();
                 var interimTranscript = '';
 
-                if (typeof event.results === 'undefined') {
+                if (event.results === undefined) {
                     recognition.onend = null;
                     recognition.stop();
                     alert('results were undefined');

@@ -112,6 +112,21 @@ var executeMessage = function( message, isDictationMessage ) {
                     return;
                 }
 
+                // toggle mute on active tab
+                if (message === 'silence' || message === 'silent') {
+                    var activeId = null;
+                    chrome.tabs.query(
+                        {windowId: window.id},
+                        function( allTabs ){
+                            allTabs.forEach(function(tab) {
+                                if (tab.active) {
+                                    chrome.tabs.update(tab.id, {muted: !tab.mutedInfo.muted});
+                                }
+                            });
+                        }
+                    );
+                }
+
                 if (message === 'full screen') {
                     if (window.state !== 'fullscreen') {
                         chrome.windows.update( window.id, { state: 'fullscreen' } );
