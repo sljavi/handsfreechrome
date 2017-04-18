@@ -13,7 +13,6 @@ v2.0 major goals:
 
 -improve map
 -add phonetic mode
--video controls
 -find
 -textarea bug
 
@@ -39,19 +38,11 @@ This should all be adjustable in a settings box, really.
 
 -make home command actually go to particular homepage
 
--if chrome says "did you mean this" automatically go back and display a message
--Actually I can't do that-- but what I can do is set up a ping system so that it opens the goto
-page in a new tab, then attempts to contact it, and if it works, copies its location to the current tab
-and closes the new tab.
-
 -----------
-
-
 
 "scroll reading" command for auto-slow speed
 
 split screen, create new tab if only one is open
-minimize, maximize
 for picking a tab-- prepend a number in every tab title, then pick by number, just like with map
 last tab - like back in history, for tabs...same at ctrl+tab
 downloads
