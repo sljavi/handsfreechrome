@@ -30,7 +30,7 @@ $(function() {
     // used for YouTube commands
     var mainVideo = document.getElementsByTagName('video')[0];
 
-    // the above variable seems to become undefined unpredictably for unknown reasons, so we reset before using it
+    // the above variable seems to become unpredictably undefined for unknown reasons, so we reset before using it
     var checkMainVideo = function() {
         mainVideo = mainVideo || document.getElementsByTagName('video')[0];
     };
