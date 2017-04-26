@@ -4,10 +4,10 @@ $(function() {
     var timeoutDuration = 180000;
     
     // dev id, different for every developer since it's randomly assigned by Chrome when loaded locally
-    // const extensionId = 'hjlgjkkmkialmidaegfgnnflmoglkkek';
+    const extensionId = 'hjlgjkkmkialmidaegfgnnflmoglkkek';
 
-    // prod id
-    const extensionId = 'ddgmnkioeodkdacpjblmihodjgmebnld';
+    // prod id -- replaces above value for production releases
+    // const extensionId = 'ddgmnkioeodkdacpjblmihodjgmebnld';
 
     chrome.runtime.sendMessage(extensionId, {getAliases: true},
                                function(response) {
