@@ -1,4 +1,6 @@
-The nature of this extension requires messages being communicated between 4 component scripts: input.js which is part of handsfreechrome.com/input.html (the input window), background.js (which operates invisibly in the background, belonging to no window), and two instances of control.js: one embedded in the input window, and one embedded in the web page of whichever active tab the user is actually interacting with.
+This document explains how the extension switches between control mode and dictation mode.
+
+The nature of this extension requires messages being communicated between 4 component scripts: input.js which is part of handsfreechrome.com/input (the input window), background.js (which operates invisibly in the background as part of the extension, belonging to no window), and two instances of control.js: one embedded in the input window, and one embedded in the web page of whichever active tab the user is actually interacting with.
 
 When a user clicks into an input form in that web page, that page's control.js observes this and activates dictation mode for itself. It sends a message to the chrome runtime propagating this information.
 

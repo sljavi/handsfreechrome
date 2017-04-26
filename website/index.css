@@ -25,12 +25,14 @@ a {
     margin-top: 40px;
     border-top: 1px solid #eee;
 }
+
 /* Main marketing message and sign up button */
 .jumbotron {
     text-align: center;
     background-color: transparent;
     padding-bottom: 25px;
 }
+
 .jumbotron .btn {
     padding: 14px 24px;
     font-size: 21px;
@@ -156,6 +158,17 @@ a {
 
 .category h3 {
 	color: #E9D699;
+}
+
+.main-content-div {
+	margin-left: 12%;
+	color: white;
+	width: 80%;
+	font-size: 16px;
+}
+
+.intro-text {
+	font-size: 16;
 }
 
 kbd {

@@ -2,8 +2,12 @@ $(function() {
 
     var commandAliases = {};
     var timeoutDuration = 180000;
-    var extensionId = 'hjlgjkkmkialmidaegfgnnflmoglkkek';
-    // prod id = 'ddgmnkioeodkdacpjblmihodjgmebnld'
+    
+    // dev id, different for every developer since it's randomly assigned by Chrome when loaded locally
+    // const extensionId = 'hjlgjkkmkialmidaegfgnnflmoglkkek';
+
+    // prod id
+    const extensionId = 'ddgmnkioeodkdacpjblmihodjgmebnld';
 
     chrome.runtime.sendMessage(extensionId, {getAliases: true},
                                function(response) {

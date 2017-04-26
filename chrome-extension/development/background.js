@@ -4,7 +4,8 @@ var timeOfLastRequest = 0;
 var dictationMode = false;
 var lastMessage = null;
 var inputDomain = DEV_MODE ? 'https://localhost:8000' : 'https://handsfreechrome.com';
-var inputWindowURL = inputDomain + '/html/input.html';
+// production uses .htaccess to hide subfolder and file ending in url
+var inputWindowURL = DEV_MODE ? inputDomain + '/html/input.html' : inputDomain + '/input';
 var keepShowing = false;
 
 // Open input.html in a separate window by default.

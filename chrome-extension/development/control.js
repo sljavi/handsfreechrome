@@ -1,7 +1,8 @@
 $(function() {
     var DEV_MODE = true;
     var inputDomain = DEV_MODE ? 'https://localhost:8000' : 'https://handsfreechrome.com';
-    var inputWindowURL = inputDomain + '/html/input.html';
+    // production uses .htaccess to hide subfolder and file ending in url
+    var inputWindowURL = DEV_MODE ? inputDomain + '/html/input.html' : inputDomain + '/input';
     var mapIsOn = false;
     var guideIsOn = false;
     var showIsOn = false;
@@ -30,7 +31,7 @@ $(function() {
     // used for YouTube commands
     var mainVideo = document.getElementsByTagName('video')[0];
 
-    // the above variable seems to become unpredictably undefined for unknown reasons, so we reset before using it
+    // `mainVideo` becomes unpredictably undefined for unknown reasons, so we reset before using it
     var checkMainVideo = function() {
         mainVideo = mainVideo || document.getElementsByTagName('video')[0];
     };
@@ -50,7 +51,7 @@ $(function() {
     // ctrl + space to turn extension on/off
     window.onkeydown = function(e) {
         if (e.ctrlKey === true && e.keyCode === 32) {
-            chrome.runtime.sendMessage({greeting: 'TOGGLE_EXTENSION_ON_OFF' });
+            chrome.runtime.sendMessage({ greeting: 'TOGGLE_EXTENSION_ON_OFF' });
             return !(e.keyCode === 32);
         }
     };
@@ -171,7 +172,7 @@ $(function() {
             }
         );
     };
-    
+
     // Switch from control mode to dictation mode. Inform background.js of the change, who in turn will inform input.js.
     var switchDictationModeOnAndPropagate = function() {
         dictationMode = true;
@@ -383,14 +384,14 @@ $(function() {
 
         // sends active tab straight to google.com, puts everything into dictation mode for easy googling
         var home = function() {
-            /*We want to start in dictation mode when someone says home, but we can't just
+            /* We want to start in dictation mode when someone says home, but we can't just
               switch mode right here because the control script is about to be reloaded when
               we switch to Google, so it would immediately be set back to control mode.
               So instead we add some arbitrary hashtags to the URL, which are valid but ignored,
               and tell the control script to automatically go into dictation mode if it finds itself
-              loading at that URL, where it would never otherwise be. That bit is the last thing in this file.*/
+              loading at that URL, where it would never otherwise be. That bit is the last thing in this file. */
             var needsRefresh = false;
-            if(location.hostname === 'www.google.com') {
+            if (location.hostname === 'www.google.com') {
                 needsRefresh = true;
             }
             window.location.href = 'https://www.google.com/###';

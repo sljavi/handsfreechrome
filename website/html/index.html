@@ -1,118 +1,101 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<title>Hands Free for Chrome</title>
-	<meta name="description" content="Hands Free for Chrome, a Chrome extension to browse the web using only your voice, free to download and use. A mic is required.">
-    <meta name="keywords" content="Chrome,Google Chrome,Voice,Hands Free,Control,Handicapped,Accessibility,Chrome Extension,Voice Control">
-	<meta charset="utf-8"/>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-	<link rel="icon" 
-  		  type="image/png" 
-  		  href="../icon16.png">
-  	<link rel="chrome-webstore-item" href="https://chrome.google.com/webstore/detail/ddgmnkioeodkdacpjblmihodjgmebnld">
-    <script src="../index.js"></script>
+    	<title>Hands Free for Chrome</title>
+    	<meta name="description" content="Hands Free for Chrome, a Chrome extension to browse the web using only your voice, free to download and use. A mic is required.">
+        <meta name="keywords" content="Chrome,Google Chrome,Voice,Hands Free,Control,Handicapped,Accessibility,Chrome Extension,Voice Control">
+    	<meta charset="utf-8"/>
+    	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    	<link rel="icon" 
+      		  type="image/png" 
+      		  href="../icon16.png">
+      	<link rel="chrome-webstore-item" href="https://chrome.google.com/webstore/detail/ddgmnkioeodkdacpjblmihodjgmebnld">
+        <script src="../index.js"></script>
 
-    <!-- Bootstrap core CSS --> 
-    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-    <script src="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="../index.css">
-</head>
-<body>
-<div id="fb-root"></div>
-    <script>
-        (function(d, s, id) {
-          var js, fjs = d.getElementsByTagName(s)[0];
-          if (d.getElementById(id)) return;
-          js = d.createElement(s); js.id = id;
-          js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
-          fjs.parentNode.insertBefore(js, fjs);
-        }(document, 'script', 'facebook-jssdk'));
-    </script>
-    <script>
-        !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
-    </script>
-    <div class="container">
-        <nav id="main-nav" class="navbar navbar-default" role="navigation">
-            <div class="container-fluid">
-                <!-- Brand and toggle get grouped for better mobile display -->
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#collapsing-navbar">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="index.html">Hands Free</a>
+        <!-- Bootstrap core CSS --> 
+        <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <script src="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="../index.css">
+    </head>
+    <body>
+        <div class="container">
+            <nav id="main-nav" class="navbar navbar-default" role="navigation">
+                <div class="container-fluid">
+                    <!-- Brand and toggle get grouped for better mobile display -->
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#collapsing-navbar">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="/">Hands Free</a>
+                    </div>
+
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                    <div class="collapse navbar-collapse" id="collapsing-navbar">
+                        <ul class="nav navbar-nav">
+                            <li><a href="/usage">Installation &amp; Usage</a>
+                            </li>
+                            <li><a href="/commands">Command Guide</a>
+                            </li>
+                            <li><a href="/development">Development</a>
+                            </li>
+                            <li><a href="/donate">Donate</a>
+                            </li>
+                            <li><a href="/contact">Contact</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- /.navbar-collapse -->
                 </div>
+                <!-- /.container-fluid -->
+            </nav>
 
-                <!-- Collect the nav links, forms, and other content for toggling -->
-                <div class="collapse navbar-collapse" id="collapsing-navbar">
-                    <ul class="nav navbar-nav">
-                        <li><a href="usage.html">Installation &amp; Usage</a>
-                        </li>
-                        <li><a href="commands.html">Command Guide</a>
-                        </li>
-                        <li><a href="development.html">Development</a>
-                        </li>
-                        <li><a href="donate.html">Donate</a>
-                        </li>
-                        <li><a href="contact.html">Contact</a>
-                        </li>
-                    </ul>
+            <div class="jumbotron">
+                <h1 style="color:white;">Hands Free for Chrome</h1>
+                <p style="color:white;" class="lead">A Chrome extension to browse the web using only your voice, free to download and use.</p>
+                <p>
+                    <a id="install-button" class="btn btn-lg btn-success" href="#" role="button">Add to Chrome</a>
+                </p>
+                <p class="flash" id="not-using-chrome">
+                    You're not using <a href="https://www.google.com/intl/en/chrome/browser/">Google Chrome</a>! Once you're in Chrome, come back to download Hands Free here, or get it from <a href="https://chrome.google.com/webstore/detail/hands-free-for-chrome/ddgmnkioeodkdacpjblmihodjgmebnld">the Chrome Web Store.</a>
+                </p>
+                <p class="flash quick-start">
+                    <strong>Quick Start Guide</strong><br>
+                    After installing Hands Free, restart Chrome, then open any webpage and hit Ctrl + Space.<br> Give the input window permission to use your mic. <br> Then just say <strong>help</strong>.
+                </p>
+                <p class="flash mac-warning">
+                    <span><strong>Are you using a Mac?</strong></span><br>
+                    In order to effectively use Hands Free on a Mac, first go to System Preferences, then to Sound, then to Input. If there's a little checkbox option that says "Use ambient noise reduction," make sure that it is <i>not</i> checked.
+                </p>
+                <br>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-12 main-content-div">
+    	            <p class="intro-text">
+    					Hands Free can scroll around, click things, navigate to particular webpages, go back or forward in your browsing history, enter text into forms, check and uncheck checkboxes, zoom in and out, open and close tabs, refresh the page, and more.
+    				</p>
+    				<br>
+    				<br>
+    				<p class="intro-text">
+    					This extension is for the Chrome web browser, which can be downloaded for free from <a href="https://www.google.com/intl/en/chrome/browser/">the Google Chrome website</a>.
+    				</p>
+
+    				<p class="intro-text">
+    					Hands Free is open source, and the code is <a href="www.github.com/aerovistae/handsfreechrome">available on GitHub</a>. If you would like to contribute to its development, take a look at the <a href="/development">development page</a>.
+    				</p>
                 </div>
-                <!-- /.navbar-collapse -->
             </div>
-            <!-- /.container-fluid -->
-        </nav>
 
-        <div class="jumbotron">
-            <h1 style="color:white;">Hands Free for Chrome</h1>
-            <p style="color:white;" class="lead">A Chrome extension to browse the web using only your voice, free to download and use.</p>
-            <p><a id="install-button" class="btn btn-lg btn-success" href="#" role="button">Add to Chrome</a>
-            </p>
-            <p class="flash" id="not-using-chrome">
-                You're not using <a href="https://www.google.com/intl/en/chrome/browser/">Google Chrome</a>! Once you're in Chrome, come back to download Hands Free here, or get it from <a href="https://chrome.google.com/webstore/detail/hands-free-for-chrome/ddgmnkioeodkdacpjblmihodjgmebnld">the Chrome Web Store.</a>
-            </p>
-            <p class="flash quick-start">
-                <strong>Quick Start Guide</strong><br>
-                After installing Hands Free, restart Chrome, then open any webpage and hit Ctrl + Space.<br> Give the input window permission to use your mic. <br> Then just say <strong>help</strong>.
-            </p>
-            <p class="flash mac-warning">
-                <span><strong>Are you using a Mac?</strong></span><br>
-                In order to effectively use Hands Free on a Mac, first go to System Preferences, then to Sound, then to Input. If there's a little checkbox option that says "Use ambient noise reduction," make sure that it is <i>not</i> checked.
-            </p>
-            <br>
-            <div class="social-media-container">
-            <div style="position:absolute;" class="fb-like" data-href="https://www.facebook.com/handsfreeforchrome" data-width="40" data-layout="button_count" data-action="like" data-show-faces="true" data-share="true"></div>
-            <a href="https://twitter.com/share" class="twitter-share-button" data-text="A Chrome extension to browse the web using only your voice, free to download and use." data-via="handsfreechrome">Tweet</a>
+            <div class="footer">
+                <p style="color:white; float:right;">&copy; 2017</p>
             </div>
+            
         </div>
-
-        <div class="row">
-            <div class="col-lg-12" style="margin-left:12%; color: white; width: 80%; text-">
-	            <p style="font-size:16px;">
-					Hands Free can scroll around, click things, navigate to particular webpages, go back or forward in your browsing history, enter text into forms, check and uncheck checkboxes, zoom in and out, open and close tabs, refresh the page, and more.
-				</p>
-				<br>
-				<br>
-				<p style="font-size:16px;">
-					This extension is for the Chrome web browser, which can be downloaded for free from <a href="https://www.google.com/intl/en/chrome/browser/">the Google Chrome website</a>.
-				</p>
-				<p style="font-size:16px;">
-					We <a href="https://pledgie.com/campaigns/24704">happily accept donations</a> if you would like to express your support or encourage further development.</p>
-
-				<p style="font-size:16px;">
-					This extension is (soon to be) open source. If you would like to contribute to its development, take a look at the development page.
-				</p>
-            </div>
-        </div>
-
-        <div class="footer">
-            <p style="color:white; float:right;">&copy; 2014</p>
-        </div>
-        
-    </div>
+    </body>
 </html>

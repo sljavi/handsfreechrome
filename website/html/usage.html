@@ -1,102 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<head>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    	<title>Hands Free for Chrome</title>
+    	<meta name="description" content="Hands Free for Chrome, a Chrome extension to browse the web using only your voice, free to download and use. A mic is required.">
+    	<meta charset="utf-8"/>
+    	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    	<link rel="icon" 
+      		  type="image/png" 
+      		  href="../icon16.png">
+      	<link rel="chrome-webstore-item" href="https://chrome.google.com/webstore/detail/ddgmnkioeodkdacpjblmihodjgmebnld">
 
-	<title>Hands Free for Chrome</title>
-	<meta name="description" content="Hands Free for Chrome, a Chrome extension to browse the web using only your voice, free to download and use. A mic is required.">
-	<meta charset="utf-8"/>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-	<link rel="icon" 
-  		  type="image/png" 
-  		  href="../icon16.png">
-  	<link rel="chrome-webstore-item" href="https://chrome.google.com/webstore/detail/ddgmnkioeodkdacpjblmihodjgmebnld">
+        <!-- Bootstrap core CSS -->
+        <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <script src="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="../index.css">
+    </head>
 
-    <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-    <script src="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="../index.css">
-</head>
+    <body>
+        <div class="container">
+                        <nav id="main-nav" class="navbar navbar-default" role="navigation">
+                <div class="container-fluid">
+                    <!-- Brand and toggle get grouped for better mobile display -->
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#collapsing-navbar">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="/">Hands Free</a>
+                    </div>
 
-<body>
-
-    <div class="container">
-
-        <nav id="main_nav" class="navbar navbar-default" role="navigation">
-            <div class="container-fluid">
-                <!-- Brand and toggle get grouped for better mobile display -->
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#collapsing-navbar">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="index.html">Hands Free</a>
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                    <div class="collapse navbar-collapse" id="collapsing-navbar">
+                        <ul class="nav navbar-nav">
+                            <li><a href="/usage">Installation &amp; Usage</a>
+                            </li>
+                            <li><a href="/commands">Command Guide</a>
+                            </li>
+                            <li><a href="/development">Development</a>
+                            </li>
+                            <li><a href="/donate">Donate</a>
+                            </li>
+                            <li><a href="/contact">Contact</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- /.navbar-collapse -->
                 </div>
+                <!-- /.container-fluid -->
+            </nav>
 
-                <!-- Collect the nav links, forms, and other content for toggling -->
-                <div class="collapse navbar-collapse" id="collapsing-navbar">
-                    <ul class="nav navbar-nav">
-                        <li><a href="usage.html">Installation &amp; Usage</a>
-                        </li>
-                        <li><a href="commands.html">Command Guide</a>
-                        </li>
-                        <li><a href="development.html">Development</a>
-                        </li>
-                        <li><a href="donate.html">Donate</a>
-                        </li>
-                        <li><a href="contact.html">Contact</a>
-                        </li>
-                    </ul>
+            <div class="row">
+                <div class="col-lg-12 main-content-div">
+                	<div class="category">
+    					<h3>Installation</h3>
+    					<br>
+    					<p>When you first add Hands Free to your Chrome browser, you'll be asked for various permissions which will allow the extension to do things like create and close tabs when commanded. Afterwards it may be necessary to restart the browser.</p>
+
+    					<p>You can then hit Ctrl + Space on any webpage to open the Hands Free input window. This is the window that listens to you and hears your commands. The first time it opens, it will ask you for permission to access your mic.</p>
+
+    					<p>The input window can also be opened by clicking on the newly added Hands Free icon in the upper right hand corner of your browser.</p>
+    					<br>
+    					<hr>
+    					<br>
+    					<h3>Usage Tips</h3>
+    					<ul>
+    						<br>
+    						<li>You can minimize the input window or leave it visible-- it makes no difference. You may find it useful to leave it visible so that you can see whether your command was correctly heard.</li>
+    						<br>
+    						<li>Hands Free does not support multiple windows-- you must use multiple tabs within a single window. Don't open any additional tabs in the input window.</li>
+    						<br>
+    						<li>Hands Free will prove extremely difficult to use in areas with any background noise, such as music or people talking. Background noise makes it very difficult for the voice recognition to understand your commands.</li>
+    						<br>
+    						<li>Hands Free turns itself off automatically after 3 minutes pass without receiving a new command. You can refresh the input window to turn it back on, or close the input window and open it again.</li>
+    						<br>
+    						<li>If you experience any trouble with Hands Free ignoring commands or not hearing you, try some combination of manually refreshing the page you're on and/or manually refreshing the input window. If all else fails, just restart Chrome.</li>
+    						<br>
+    						<li>Hands Free is only available in English at the present time, but in the future support will be added for many other languages.</li>
+    					</ul>
+    				</div>
                 </div>
-                <!-- /.navbar-collapse -->
             </div>
-            <!-- /.container-fluid -->
-        </nav>
-        <div id="donate" class="category">
 
-		</div>
-
-        <div class="row">
-            <div class="col-lg-12" style="margin-left:12%; color: white; width: 80%; font-size:16px;">
-            	<div class="category">
-					<h3>Installation</h3>
-					<br>
-					<p>When you first add Hands Free to your Chrome browser, you'll be asked for various permissions which will allow the extension to do things like create and close tabs when commanded. Afterwards it may be necessary to restart the browser.</p>
-
-					<p>You can then hit Ctrl + Space on any webpage to open the Hands Free input window. This is the window that listens to you and hears your commands. The first time it opens, it will ask you for permission to access your mic.</p>
-
-					<p>The input window can also be opened by clicking on the newly added Hands Free icon in the upper right hand corner of your browser.</p>
-					<br>
-					<hr>
-					<br>
-					<h3>Usage Tips</h3>
-					<ul>
-						<br>
-						<li>You can minimize the input window or leave it visible-- it makes no difference. You may find it useful to leave it visible so that you can see whether your command was correctly heard.</li>
-						<br>
-						<li>Hands Free does not support multiple windows-- you must use multiple tabs within a single window. Don't open any additional tabs in the input window.</li>
-						<br>
-						<li>Hands Free will prove extremely difficult to use in areas with any background noise, such as music or people talking. Background noise makes it very difficult for the voice recognition to understand your commands.</li>
-						<br>
-						<li>Hands Free turns itself off automatically after 3 minutes pass without receiving a new command. You can refresh the input window to turn it back on, or close the input window and open it again.</li>
-						<br>
-						<li>If you experience any trouble with Hands Free ignoring commands or not hearing you, try some combination of manually refreshing the page you're on and/or manually refreshing the input window. If all else fails, just restart Chrome.</li>
-						<br>
-						<li>Hands Free is only available in English at the present time, but in the future support will be added for many other languages.</li>
-					</ul>
-				</div>
+            <div class="footer">
+                <p style="color:white; float:right;">&copy; 2017</p>
             </div>
+
         </div>
-
-        <div class="footer">
-            <p style="color:white; float:right;">&copy; 2014</p>
-        </div>
-
-    </div>
-</body>
-
+    </body>
 </html>
