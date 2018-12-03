@@ -1,4 +1,4 @@
 *.pyc
-**/chrome-extension/production
-**/chrome-extension/production.zip
-**/chrome-extension/key.pem
+chrome-extension/production
+chrome-extension/production.zip
+chrome-extension/key.pem
