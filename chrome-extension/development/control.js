@@ -31,7 +31,8 @@ $(function() {
     // used for YouTube commands
     var mainVideo = document.getElementsByTagName('video')[0];
 
-    // `mainVideo` becomes unpredictably undefined for unknown reasons, so we reset before using it
+    // `mainVideo` becomes unpredictably undefined due to interference from youtube's JS code,
+    // so we reset before using it
     var checkMainVideo = function() {
         mainVideo = mainVideo || document.getElementsByTagName('video')[0];
     };
@@ -56,7 +57,7 @@ $(function() {
         }
     };
     
-    // embedded help page...non-compact but identical HTML in commands.html
+    // embedded help page...identical HTML but fully expanded can be found in commands.html
     $('body').append('<div id="hfc-help" style="display:none;"><h2>Hands Free Chrome Command Guide</h2><p>Say <kbd>help</kbd> to bring up a copy of this command guide.</p> <p style="font-style: italic">Note: the most common problem is a command being misheard by the speech engine. By observing the Hands Free input window, you can see what it thinks you said. This may help you learn the proper enunciations necessary in order to be understood more readily.</p> <p style="font-style: italic">Also note that the wording for many commands was chosen based on what the speech recognition engine recognized most consistently and accurately. Many common mishearings have been hardcoded to be recognized, so for instance when you say "pause" and it hears "paws," it will still work.</p> <h3>Scrolling</h3> <p>To scroll up a small amount, say <kbd>up</kbd>.<br> To scroll down a small amount, say <kbd>down</kbd>.<br> To scroll a small amount to the right, say <kbd>right</kbd>.<br> To scroll a small amount to the left, say <kbd>left</kbd>.</p> <p>To page up, say <kbd>rise</kbd>.<br> To page down, say <kbd>fall</kbd>.</p> <p>To scroll to the bottom of the page, say <kbd>bottom</kbd>.<br> To scroll to the top of the page, say <kbd>top</kbd>.</p> <p>To set the page scrolling continuously up, say <kbd>keep scrolling up</kbd>.<br> To set the page scrolling continuously down, say <kbd>keep scrolling down</kbd>.<br> To stop the page from continously scrolling, say <kbd>stop</kbd>.<br> To control the speed of scrolling, say <kbd>faster</kbd> or <kbd>slower</kbd>. The changes will be small, but you can issue these commands repeatedly for incremental gains.</p> <h3>Clicking</h3> <p>To see numbered tags alongside clickable elements on the page, say <kbd>map</kbd>. If <kbd>map</kbd> does not place a numbered tag next to the element you wish to click, try <kbd>guide</kbd> or <kbd>show</kbd> instead. These commands do the same thing, but they select different items for numbering. Using one after another will hide the previous command\'s tags before creating new ones.</p> <p>The tags will appear near the upper left corner of the corresponding item. Although the exact spacing can be unpredictable, a given number tag will always be to the immediate left of the element it corresponds to.</p> <p>To click a numbered element, simply speak the number.</p> <p>If you decide not to click anything, saying <kbd>map</kbd>/<kbd>guide</kbd>/<kbd>show</kbd> a second time will hide the number tags, as will using any of the scrolling commands.</p> <p><i>Note: There is currently no support for dropdown menus.</i></p> <h3>Dictation Mode</h3> <p>If you’ve clicked a text input, Hands Free will switch into dictation mode, and anything you say will be written as text into the selected text input.</p> <p>To turn off dictation mode and return to the normal control functionality, say <kbd>stop</kbd>.<br> To submit the textbox you’re typing in (the equivalent of pressing ‘enter’), say <kbd>go</kbd>. This is what you want when you finish typing in a searchbox, for example.<br> To move the cursor to the next input in the form (for example, from username to password), say <kbd>next</kbd>.<br> <br> To remove the last word you entered from the textbox, say <kbd>backspace</kbd>.</p> <h3>Navigation</h3> <p>To go to ANY website, say the name of the website on its own with the domain specified. There is no need to say “www.”<br> Examples: <kbd>google.com</kbd>, <kbd>en.wikipedia.org</kbd> (pronounced E-N-dot-wikipedia-dot-org), <kbd>mit.edu</kbd> (pronounced M-I-T-dot-E-D-U), <kbd>fr.wikipedia.org</kbd> (pronounced F-R-dot-wikipedia-dot-org)</p> <p>To go to a particular .com website, say <kbd>go to [website name]</kbd>. You can include the .com or omit it.<br> Examples: <kbd>go to google</kbd>, <kbd>go to google.com</kbd>, <kbd>go to amazon</kbd>, <kbd>go to facebook</kbd></p> <p style="font-style: italic">Note: there are some websites with longer names which will register erroneously with the engine. For example, there is no way to reach freecreditreport.com, which will be heard as “free credit report.com”, and will consequently send you to report.com.</p> <p>To go back one page in your history, say <kbd>back</kbd>.<br> To go forward one page in your history, say <kbd>forward</kbd>.</p> <p>To go to google.com, say <kbd>home</kbd>. This will also automatically put the extension into dictation mode, and is the fastest way to search for things.</p> <p style="font-style: italic">Note: Google can be used to indirectly reach almost any website that you can\'t navigate to directly via Hands Free. For instance, going to Google and searching for "free credit report.com" will correctly bring up as a result the actual "freecreditreport.com", which you can then click on.</p> <h3>Controlling Tabs</h3> <p>To open a new tab, say <kbd>new tab</kbd>.</p> <p style="font-style: italic">Note: There is another Chrome extension which will automatically direct new tabs to a page of your choosing. That extension can be found on <a href="https://chrome.google.com/webstore/detail/new-tab-redirect/icpgjfneehieebagbmdbhnlpiopdcmna?hl=en">the Chrome Web Store.</a></p> <p>To close the current tab, say <kbd>close tab</kbd>.<br> To switch the active tab to the next tab in the window, say <kbd>switch</kbd>.</p> <p>To toggle mute on the current tab (muting/unmuting the entire tab), say <kbd>silence</kbd>.</p> <h3>Controlling the Window</h3> <p>To enter or exit full screen mode, say <kbd>full screen</kbd>. All commands work just the same in full screen mode.<br> To minimize, say <kbd>minimize</kbd>.<br> To maximize, say <kbd>maximize</kbd>.</p> <p>To close all Chrome windows entirely, say <kbd>exit</kbd> or <kbd>quit</kbd>.</p> <h3>Zooming</h3> <p>To zoom in, say <kbd>zoom in</kbd><br> To zoom out, say <kbd>zoom out</kbd>.<br> To restore the zoom level to normal, say <kbd>zoom normal</kbd>.</p> <h3>Refreshing</h3> <p>To reload the page, say <kbd>reload</kbd> or <kbd>refresh</kbd>.</p> <h3>YouTube</h3> <p>These commands are only applicable if you are viewing a video on youtube.com. They may work on videos playing on other websites, but success is not guaranteed.</p> <p>To pause the video, say <kbd>pause</kbd>.<br> To unpause the video, say <kbd>play</kbd>.</p> <p>To seek forward 15 seconds in the video, say <kbd>skip</kbd>.<br> To seek forward 60 seconds in the video, say <kbd>jump</kbd>.<br> To seek forward 5 minutes in the video, say <kbd>leap</kbd>.<br> To seek backward 30 seconds in the video, say <kbd>rewind</kbd>.</p> <p>To increase the video\'s volume by 20% or to max (whichever comes first), say <kbd>increase volume</kbd>.<br> To decrease the video\'s volume by 20% or to minimum (whichever comes first), say <kbd>decrease volume</kbd>.</p> <p>To mute the video, say <kbd>mute</kbd>.<br> To unmute the video, say <kbd>unmute</kbd>.</p> <p>To restart the video, say <kbd>restart</kbd>.</p> <h3>Closing Hands Free</h3> <p>Lastly, to turn off Hands Free, say <kbd>done</kbd>.</p></div>');
     
     // styling for embedded help page
@@ -173,7 +174,8 @@ $(function() {
         );
     };
 
-    // Switch from control mode to dictation mode. Inform background.js of the change, who in turn will inform input.js.
+    // Switch from control mode to dictation mode. Inform background.js of the change,
+    // who will in turn pass the message on to input.js.
     var switchDictationModeOnAndPropagate = function() {
         dictationMode = true;
         chrome.runtime.sendMessage({ greeting: {dictModeOn: true} });
@@ -189,7 +191,7 @@ $(function() {
         }
     };
 
-    // make sure to switch all scripts out of dictation mode whenever a page changes or refreshes, to avoid bugs.
+    // make sure to switch all scripts out of dictation mode whenever a page changes or refreshes.
     // this is mainly to avoid unexpected behavior if user is using manual page manipulation in addition to voice
     window.onbeforeunload = function() {
         // have to distinguish between input window and main window so background.js knows who's left to inform
@@ -407,7 +409,6 @@ $(function() {
                 { scrollTop: amount }, 
                 { duration: 'slow', easing: 'swing' }
             );
-            return;
         };
 
         // scrolls up 200 pixels
@@ -419,7 +420,6 @@ $(function() {
                 { scrollTop: amount }, 
                 { duration: 'slow', easing: 'swing' }
             );
-            return;
         };
 
         // scrolls right 200 pixels
@@ -430,7 +430,6 @@ $(function() {
                 { scrollLeft: amount }, 
                 { duration: 'slow', easing: 'swing' }
             );
-            return;
         };
 
         // scrolls left 200 pixels
@@ -441,7 +440,6 @@ $(function() {
                 { scrollLeft: amount }, 
                 { duration: 'slow', easing: 'swing' }
             );
-            return;
         };
 
         // page down
@@ -453,7 +451,6 @@ $(function() {
                 { scrollTop: amount }, 
                 { duration: 'slow', easing: 'swing' }
             );
-            return;
         };
 
         // page up
@@ -465,19 +462,16 @@ $(function() {
                 { scrollTop: amount }, 
                 { duration: 'slow', easing: 'swing' }
             );
-            return;
         };
 
         // navigate to previous page in browser history
         var back = function() {
             window.history.back();
-            return;
         };
 
         // navigate to next page in browser history
         var forward = function() {
             window.history.forward();
-            return;
         };
 
         // scroll to top of page
@@ -488,7 +482,6 @@ $(function() {
                 { scrollTop: $('html,body').offset().top },
                 { duration: 'fast', easing: 'swing'}
             );
-            return;
         };
 
         // scroll to bottom of page
@@ -499,13 +492,11 @@ $(function() {
                 { scrollTop: scrollContainer[0].scrollHeight },
                 { duration: 'fast', easing: 'swing'}
             );
-            return;
         };
 
         // reload/refresh page
         var reload = function() {
             location.reload();
-            return;
         };
 
         // zoom in
@@ -518,7 +509,6 @@ $(function() {
                 { duration: 'slow', easing: 'linear' }
             );
             zoomLevel = zoomLevel + 0.2;
-            return;
         };
 
         // zoom out
@@ -529,7 +519,6 @@ $(function() {
                 { duration: 'slow', easing: 'swing' }
             );
             zoomLevel = zoomLevel - 0.2;
-            return;
         };
 
         // reset to default zoom level (no zoom)
@@ -540,7 +529,6 @@ $(function() {
                 { duration: 'slow', easing: 'swing' }
             );
             zoomLevel = 1.0;
-            return;
         };
 
         // remove blur in Blade Runner mode...zoom, enhance. zoom, enhance.
@@ -548,7 +536,6 @@ $(function() {
             if (bladeRunnerMode) {
                 $('body').css({ '-webkit-filter': 'blur(0px)' });
             }
-            return;
         };
 
         // bring up embedded help page
@@ -883,6 +870,8 @@ $(function() {
                     request = 'fall';
                 }
 
+                // outside of bladeRunnerMode, only 'zoom in/out/normal' are allowed....'zoom' is ignored.
+                // 'resume' is a misheard word for 'zoom', so it is also ignored.
                 if ( !bladeRunnerMode && (request === 'zoom' || request === 'resume') ) {
                     return;
                 }

@@ -6,7 +6,7 @@ $(function() {
     // dev id, different for every developer since it's randomly assigned by Chrome when loaded locally
     const extensionId = 'hjlgjkkmkialmidaegfgnnflmoglkkek';
 
-    // prod id -- replaces above value for production releases
+    // prod id -- replaces above value for production release
     // const extensionId = 'ddgmnkioeodkdacpjblmihodjgmebnld';
 
     chrome.runtime.sendMessage(extensionId, {getAliases: true},

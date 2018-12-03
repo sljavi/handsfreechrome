@@ -1,0 +1,88 @@
+--------------
+
+v1.0 major goals:
+
+-next bug
+-settings
+-command to move window from foreground to background and vice versa. is this possible? yes.
+-indication of whether we're in dictation or control mode
+
+------------
+
+v2.0 major goals:
+
+-improve map
+-add phonetic mode
+-find
+-textarea bug
+
+-----------
+
+v3.0 major goals:
+
+-tab map
+-bookmarks
+
+------------
+
+-auto-turn-on voice control (when extension is active) for yes/no message boxes
+-bookmarks map
+-reposition tags to allow readability
+
+Let other people tackle making this multi-lingual.
+
+This should all be adjustable in a settings box, really.
+
+-let people toggle whether a page that starts with the cursor in a form element
+ defaults to dictation mode or control mode
+
+-make home command actually go to particular homepage
+
+-----------
+
+"scroll reading" command for auto-slow speed
+
+split screen, create new tab if only one is open
+for picking a tab-- prepend a number in every tab title, then pick by number, just like with map
+last tab - like back in history, for tabs...same at ctrl+tab
+downloads
+history
+bookmarks
+find/search
+screenshot
+
+"next" could have unexpected results if it goes to an offscreen form.
+only allow it to work for currently visible forms, require a scroll down to continue
+
+
+--spell mode
+--get a better donate button
+--facebook chat support
+--gmail support
+--add an alternative to map/guide/show which paints a number next to all elements that are visible and don't have children...this should be everything that's clickable.
+
+
+Do this stuff next:
+
+.pyc gitignore not working?
+typeerror on homepage in production
+90 second bug
+visual indicator for dictation mode and highlight targeted element
+routing, get rid of /html/ and .html
+
+
+--dropdown support
+
+--visual indicator for dictation mode
+
+--when extension is active, show indicator when page is finished loading and is ready for commands -- put (page loading) in input area
+
+--somehow map chooses body as activeElement on google....maybe we should highlight the active element on dictation mode
+
+--what happens if i'm in dictation mode and open a new tab manually? need to handle that case. Control.js tells background.js whenever it loads, and background.js sends a message to all tabs CHROME_DICTATION_STOP.
+
+--somehow map chooses body as activeElement on google....maybe we should highlight the active element on dictation mode
+
+--make youtube walkthroughs
+
+--hire marketing person
