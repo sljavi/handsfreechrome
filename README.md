@@ -1,3 +1,6 @@
+This repo is no longer maintained, and its architecture, design choices, and commenting is highly questionable.
+
+
 Hands Free For Chrome
 =========
 
